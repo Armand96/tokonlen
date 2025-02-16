@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('stock');
             $table->integer('category_id');
             $table->integer('visited');
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

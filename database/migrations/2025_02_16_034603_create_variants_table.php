@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('additional_price', 10, 2);
             $table->integer('stock');
             $table->integer('visited');
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

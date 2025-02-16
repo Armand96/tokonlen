@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductImagesController;
-use App\Http\Controllers\ProductLinkController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\VariantController;
-use App\Http\Controllers\VariantImagesController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductImagesController;
+use App\Http\Controllers\Admin\ProductLinkController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VariantController;
+use App\Http\Controllers\Admin\VariantImagesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

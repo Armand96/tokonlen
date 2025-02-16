@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('parent_id');
             $table->string('image');
             $table->string('image_thumb');
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

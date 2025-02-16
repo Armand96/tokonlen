@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\LinkType;
+use App\Http\Controllers\Controller;
+use App\Models\ProductLink;
 use Illuminate\Http\Request;
 
-class LinkTypeController extends Controller
+class ProductLinkController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +35,7 @@ class LinkTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LinkType $linkType)
+    public function show(ProductLink $productLink)
     {
         //
     }
@@ -42,7 +43,7 @@ class LinkTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LinkType $linkType)
+    public function edit(ProductLink $productLink)
     {
         //
     }
@@ -50,7 +51,7 @@ class LinkTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LinkType $linkType)
+    public function update(Request $request, ProductLink $productLink)
     {
         //
     }
@@ -58,7 +59,7 @@ class LinkTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LinkType $linkType)
+    public function destroy(ProductLink $productLink)
     {
         //
     }
