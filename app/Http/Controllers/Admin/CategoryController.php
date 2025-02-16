@@ -30,7 +30,6 @@ class CategoryController extends Controller
         // paginate result
         $categories = $query->paginate($dataPerPage);
 
-
         return $categories;
     }
 
@@ -48,7 +47,7 @@ class CategoryController extends Controller
     public function store(CategoryCreateRequest $createCategory)
     {
         try {
-            if ($createCategory->hasFile('image')) {
+            if ($createCategory->hasFile('image_file')) {
                 $imageName = time() . '.' . $createCategory->image_file->extension();
                 $createCategory->image_file->storeAs('public/categories/', $imageName);
                 $createCategory->image = $imageName;
@@ -86,10 +85,10 @@ class CategoryController extends Controller
     public function update(CategoryUpdateRequest $updateCategory, Category $category)
     {
         try {
-            if ($updateCategory->hasFile('image')) {
+            if ($updateCategory->hasFile('image_file')) {
 
-                $isExist = Storage::disk('public')->exists("category/$category->iamge") ?? false;
-                if ($isExist) Storage::delete("public/category/$category->iamge");
+                $isExist = Storage::disk('public')->exists("category/$category->image") ?? false;
+                if ($isExist) Storage::delete("public/category/$category->image");
 
                 $imageName = time() . '.' . $updateCategory->image_file->extension();
                 $updateCategory->image_file->storeAs('public/categories/', $imageName);
@@ -100,7 +99,7 @@ class CategoryController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()));
+            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()), 500);
         }
     }
 
@@ -115,7 +114,7 @@ class CategoryController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()));
+            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()), 500);
         }
     }
 }

@@ -3,17 +3,37 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\ProductCreateReq;
+use App\Http\Requests\Product\ProductUpdateReq;
+use App\Http\Requests\ResponseFail;
+use App\Http\Requests\ResponseSuccess;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req)
     {
-        //
+        $dataPerPage = $req->data_per_page ? $req->data_per_page : 10;
+        $query = Product::query();
+
+        // filter by name
+        if ($req->has('name')) {
+            $query->where('name', 'like', '%' . $req->name . '%');
+        }
+        // filter by category
+        if ($req->has('category_id')) {
+            $query->where('category_id', '=', $req->category_id);
+        }
+
+        // paginate result
+        $categories = $query->paginate($dataPerPage);
+
+        return $categories;
     }
 
     /**
@@ -27,9 +47,16 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductCreateReq $request)
     {
-        //
+        try {
+            $product = Product::create($request);
+            return response()->json(new ResponseSuccess($product,"Success", "Success Create Product"));
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            //throw $th;
+            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()));
+        }
     }
 
     /**
@@ -37,7 +64,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return response()->json(new ResponseSuccess($product, "Success", "Success Get Product"));;
     }
 
     /**
@@ -51,9 +78,16 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductUpdateReq $request, Product $product)
     {
-        //
+        try {
+            $product->update($request);
+            return response()->json(new ResponseSuccess($product,"Success", "Success Update Product"));
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            //throw $th;
+            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()));
+        }
     }
 
     /**
@@ -61,6 +95,13 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        try {
+            $product->update(['is_active' => false]);
+            return response()->json(new ResponseSuccess($product,"Success", "Success Set Product To Inactive"));
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            //throw $th;
+            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()));
+        }
     }
 }
