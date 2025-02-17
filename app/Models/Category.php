@@ -13,6 +13,7 @@ class Category extends Model
         'slug',
         'image',
         'image_thumb',
+        'is_active'
     ];
 
     protected $hidden = [
@@ -25,7 +26,12 @@ class Category extends Model
         $this->attributes['name'] = $value;
         $slug = Str::slug($value);
 
-        $count = static::where('slug', 'LIKE', "$slug%")->count();
+        $count = static::where('slug', '=', "$slug%")->count();
         $this->attributes['slug'] = $count ? "{$slug}-{$count}" : $slug;
+    }
+
+    public function subCat()
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id');
     }
 }

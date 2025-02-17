@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Category\CategoryCreateRequest;
+use App\Http\Requests\Category\CategoryCreateReq;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Category\CategoryUpdateRequest;
+use App\Http\Requests\Category\CategoryUpdateReq;
 use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
 use App\Models\Category;
@@ -27,6 +27,8 @@ class CategoryController extends Controller
             $query->where('name', 'like', '%' . $req->name . '%');
         }
 
+        $query->where('parent_id', null)->with('subCat');
+
         // paginate result
         $categories = $query->paginate($dataPerPage);
 
@@ -44,22 +46,27 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CategoryCreateRequest $createCategory)
+    public function store(CategoryCreateReq $createCategory)
     {
+        $imageName = "";
         try {
+            $validatedData = $createCategory->validated();
+
             if ($createCategory->hasFile('image_file')) {
-                $imageName = time() . '.' . $createCategory->image_file->extension();
-                $createCategory->image_file->storeAs('public/categories/', $imageName);
-                $createCategory->image = $imageName;
+                $imageName = time() . '.' . $createCategory->file('image_file')->extension();
+                $createCategory->file('image_file')->storeAs('public/categories/', $imageName);
+                $validatedData['image'] = $imageName;
             } else {
-                $createCategory->image = '';
+                $validatedData['image'] = '';
             }
-            $category = Category::create($createCategory);
-            return response()->json(new ResponseSuccess($category,"Success", "Success Create Category"));
+            $category = Category::create($validatedData);
+            return response()->json(new ResponseSuccess($category,"Success","Success Create Category"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()));
+            $isExist = Storage::disk('public')->exists("category/$imageName") ?? false;
+            if ($isExist) Storage::delete("public/category/$imageName");
+            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
         }
     }
 
@@ -82,23 +89,28 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CategoryUpdateRequest $updateCategory, Category $category)
+    public function update(CategoryUpdateReq $updateCategory, Category $category)
     {
+        $imageName = "";
         try {
+            $validatedData = $updateCategory->validated();
+
             if ($updateCategory->hasFile('image_file')) {
 
                 $isExist = Storage::disk('public')->exists("category/$category->image") ?? false;
                 if ($isExist) Storage::delete("public/category/$category->image");
 
-                $imageName = time() . '.' . $updateCategory->image_file->extension();
-                $updateCategory->image_file->storeAs('public/categories/', $imageName);
-                $updateCategory->image = $imageName;
+                $imageName = time() . '.' . $updateCategory->file('image_file')->extension();
+                $updateCategory->file('image_file')->storeAs('public/categories/', $imageName);
+                $validatedData['image'] = $imageName;
             }
-            $updateCategory->update($updateCategory);
-            return response()->json(new ResponseSuccess($updateCategory,"Success", "Success Update Category"));
+            $category->update($validatedData);
+            return response()->json(new ResponseSuccess($category,"Success", "Success Update Category"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
+            $isExist = Storage::disk('public')->exists("category/$imageName") ?? false;
+            if ($isExist) Storage::delete("public/category/$imageName");
             return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()), 500);
         }
     }
