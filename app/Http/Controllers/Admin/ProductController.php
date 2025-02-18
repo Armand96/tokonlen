@@ -31,9 +31,9 @@ class ProductController extends Controller
         }
 
         // paginate result
-        $categories = $query->paginate($dataPerPage);
+        $products = $query->paginate($dataPerPage);
 
-        return $categories;
+        return $products;
     }
 
     /**

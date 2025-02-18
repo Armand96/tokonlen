@@ -64,8 +64,8 @@ class CategoryController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            $isExist = Storage::disk('public')->exists("category/$imageName") ?? false;
-            if ($isExist) Storage::delete("public/category/$imageName");
+            $isExist = Storage::disk('public')->exists("categories/$imageName") ?? false;
+            if ($isExist) Storage::delete("public/categories/$imageName");
             return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
         }
     }
@@ -97,8 +97,8 @@ class CategoryController extends Controller
 
             if ($updateCategory->hasFile('image_file')) {
 
-                $isExist = Storage::disk('public')->exists("category/$category->image") ?? false;
-                if ($isExist) Storage::delete("public/category/$category->image");
+                $isExist = Storage::disk('public')->exists("categories/$category->image") ?? false;
+                if ($isExist) Storage::delete("public/categories/$category->image");
 
                 $imageName = time() . '.' . $updateCategory->file('image_file')->extension();
                 $updateCategory->file('image_file')->storeAs('public/categories/', $imageName);
@@ -109,8 +109,6 @@ class CategoryController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            $isExist = Storage::disk('public')->exists("category/$imageName") ?? false;
-            if ($isExist) Storage::delete("public/category/$imageName");
             return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()), 500);
         }
     }

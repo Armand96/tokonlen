@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('link_types', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('image');
-            $table->string('image_thumb');
+            $table->string('image')->nullable();
+            $table->string('image_thumb')->nullable();
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

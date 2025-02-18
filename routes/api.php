@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\LinkTypeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\ProductLinkController;
@@ -20,6 +21,7 @@ Route::prefix('admin')->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('product', ProductController::class);
     Route::resource('product_images', ProductImageController::class);
+    Route::resource('link_type', LinkTypeController::class);
     Route::resource('product_link', ProductLinkController::class);
     Route::resource('variant', VariantController::class);
     Route::resource('variant_images', VariantImageController::class);
