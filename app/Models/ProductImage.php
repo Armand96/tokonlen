@@ -4,15 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Variant extends Model
+class ProductImage extends Model
 {
     protected $fillable = [
         'product_id',
-        'variant',
-        'size',
-        'additional_price',
-        'stock',
-        'visited',
+        'image',
+        'image_thumb',
+        'default',
     ];
 
     protected $hidden = [
@@ -23,10 +21,5 @@ class Variant extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'id', 'product_id');
-    }
-
-    public function images()
-    {
-        return $this->hasMany(VariantImage::class, 'variant_id', 'id');
     }
 }

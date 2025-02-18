@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VariantImages extends Model
+class ProductLinkVisit extends Model
 {
     protected $fillable = [
-        'variant_id',
-        'image',
-        'image_thumb',
-        'default',
+        'product_link_id',
+        'ip_address',
+        'user_agent',
     ];
 
     protected $hidden = [

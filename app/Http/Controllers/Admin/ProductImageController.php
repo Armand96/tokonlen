@@ -6,20 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductImageCreateReq;
 use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
-use App\Models\ProductImages;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
-class ProductImagesController extends Controller
+class ProductImageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $data = ProductImages::where('product_id', '=', $request->product_id);
+        $data = ProductImage::where('product_id', '=', $request->product_id);
         return response()->json(new ResponseSuccess($data, "Success", "Succes Get Product Images"));
     }
 
@@ -46,7 +46,7 @@ class ProductImagesController extends Controller
                     $request->image = $imageName;
                 }
 
-                $category = ProductImages::create($request);
+                $category = ProductImage::create($request);
                 return response()->json(new ResponseSuccess($category,"Success", "Success Upload Product Image"));
             } else {
                 return response()->json(new ResponseFail((object) null,"Bad Request", "Image File required"), 404);
@@ -61,15 +61,15 @@ class ProductImagesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ProductImages $productImages)
+    public function show(ProductImage $productImage)
     {
-        return response()->json(new ResponseSuccess($productImages, "Success", "Success Get Product Image"));
+        return response()->json(new ResponseSuccess($productImage, "Success", "Success Get Product Image"));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ProductImages $productImages)
+    public function edit(ProductImage $productImage)
     {
         throw new NotFoundResourceException();
     }
@@ -77,7 +77,7 @@ class ProductImagesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProductImages $productImages)
+    public function update(Request $request, ProductImage $productImage)
     {
         throw new NotFoundResourceException();
     }
@@ -85,11 +85,11 @@ class ProductImagesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductImages $productImages)
+    public function destroy(ProductImage $productImage)
     {
         try {
-            Storage::delete("public/category/$productImages->image");
-            return response()->json(new ResponseSuccess($productImages,"Success", "Success Delete Product Images"));
+            Storage::delete("public/category/$productImage->image");
+            return response()->json(new ResponseSuccess($productImage,"Success", "Success Delete Product Images"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
