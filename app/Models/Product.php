@@ -13,6 +13,7 @@ class Product extends Model
         'stock',
         'category_id',
         'visited',
+        'is_active'
     ];
 
     protected $hidden = [
@@ -28,6 +29,11 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
+    }
+
+    public function image()
+    {
+        return $this->hasOne(ProductImage::class, 'product_id', 'id')->where('default', true);
     }
 
     public function variant()

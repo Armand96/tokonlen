@@ -50,8 +50,9 @@ class ProductController extends Controller
     public function store(ProductCreateReq $request)
     {
         try {
-            $product = Product::create($request);
-            return response()->json(new ResponseSuccess($product,"Success", "Success Create Product"));
+            $validated = $request->validated();
+            $product = Product::create($validated);
+            return response()->json(new ResponseSuccess($product,"Success","Success Create Product"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
@@ -81,7 +82,8 @@ class ProductController extends Controller
     public function update(ProductUpdateReq $request, Product $product)
     {
         try {
-            $product->update($request);
+            $validated = $request->validated();
+            $product->update($validated);
             return response()->json(new ResponseSuccess($product,"Success", "Success Update Product"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());

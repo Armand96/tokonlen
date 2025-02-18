@@ -12,6 +12,7 @@ class ProductUpdateReq extends ApiRequest
     public int $stock;
     public int $category_id;
     public int $visited;
+    public bool $is_active;
 
     public function rules(): array
     {
@@ -21,6 +22,7 @@ class ProductUpdateReq extends ApiRequest
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
             'category_id' => 'required|numeric',
+            'is_active' => 'boolean',
         ];
     }
 }
