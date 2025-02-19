@@ -8,6 +8,7 @@ use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
@@ -17,10 +18,19 @@ class ProductImageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $req)
     {
-        $data = ProductImage::where('product_id', '=', $request->product_id);
-        return response()->json(new ResponseSuccess($data, "Success", "Succes Get Product Images"));
+        $dataPerPage = $req->data_per_page ? $req->data_per_page : 10;
+        $query = ProductImage::query();
+
+        // filter by category
+        if ($req->has('product_id')) {
+            $query->where('product_id', '=', $req->product_id);
+        }
+
+        // paginate result
+        $productImages = $query->paginate($dataPerPage);
+        return response()->json(new ResponseSuccess($productImages, "Success", "Succes Get Product Images"));
     }
 
     /**
@@ -36,24 +46,39 @@ class ProductImageController extends Controller
      */
     public function store(ProductImageCreateReq $request)
     {
+        $productImages = [];
+        $imagePaths = [];
         try {
+            DB::beginTransaction();
+            $productImage = array();
+            $validated = $request->validated();
+            // dd($validated);
             if ($request->hasFile('image_files')) {
                 $files = $request->file('image_files');
 
                 foreach ($files as $key => $file) {
-                    $imageName = time() . '.' . $request->image_file->extension();
-                    $request->image_file->storeAs('public/products/', $imageName);
-                    $request->image = $imageName;
+                    // dd($file);
+                    $imageName = time() . '_' . $key+1 . '.' . $file->extension();
+                    $file->storeAs('public/products/', $imageName);
+                    array_push($imagePaths, $imageName);
+                    $validated['image'] = $imageName;
+                    $validated['image_thumb'] = $imageName;
+                    $productImage = ProductImage::create($validated);
+                    array_push($productImages, $productImage);
                 }
-
-                $category = ProductImage::create($request);
-                return response()->json(new ResponseSuccess($category,"Success", "Success Upload Product Image"));
+                DB::commit();
+                return response()->json(new ResponseSuccess($productImages,"Success", "Success Upload Product Images"));
             } else {
                 return response()->json(new ResponseFail((object) null,"Bad Request", "Image File required"), 404);
             }
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
+            DB::rollBack();
             //throw $th;
+            foreach ($imagePaths as $key => $value) {
+                $isExist = Storage::disk('public')->exists("products/$value") ?? false;
+                if ($isExist) Storage::delete("public/products/$value");
+            }
             return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
         }
     }
@@ -88,7 +113,8 @@ class ProductImageController extends Controller
     public function destroy(ProductImage $productImage)
     {
         try {
-            Storage::delete("public/category/$productImage->image");
+            $productImage->delete();
+            Storage::delete("public/products/$productImage->image");
             return response()->json(new ResponseSuccess($productImage,"Success", "Success Delete Product Images"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
