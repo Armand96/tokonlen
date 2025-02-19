@@ -65,7 +65,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()->json(new ResponseSuccess($product, "Success", "Success Get Product"));;
+        return response()->json(new ResponseSuccess($product, "Success", "Success Get Product"));
     }
 
     /**

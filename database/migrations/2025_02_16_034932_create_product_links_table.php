@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('product_links', function (Blueprint $table) {
             $table->id();
             $table->integer('product_id');
-            $table->string('name', 100);
             $table->string('link', 100);
             $table->integer('link_type_id');
             $table->timestamps();
