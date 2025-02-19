@@ -8,7 +8,7 @@ class ProductCreateReq extends ApiRequest
 {
     public string $name;
     public string $description;
-    public int $price;
+    public float $price;
     public int $stock;
     public int $category_id;
     public int $visited;

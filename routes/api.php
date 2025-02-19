@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\LinkTypeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\ProductLinkController;
+use App\Http\Controllers\Admin\ProductLinkVisitController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\Admin\VariantImageController;
@@ -23,6 +24,7 @@ Route::prefix('admin')->group(function () {
     Route::resource('product_images', ProductImageController::class);
     Route::resource('link_type', LinkTypeController::class);
     Route::resource('product_link', ProductLinkController::class);
+    Route::resource('product_link_visit', ProductLinkVisitController::class);
     Route::resource('variant', VariantController::class);
     Route::resource('variant_images', VariantImageController::class);
 });

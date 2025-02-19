@@ -13,6 +13,7 @@ class Variant extends Model
         'additional_price',
         'stock',
         'visited',
+        'is_active',
     ];
 
     protected $hidden = [
