@@ -23,7 +23,9 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ProductSeeder::class,
             LinkTypeSeeder::class,
-            VariantSeeder::class
+            VariantSeeder::class,
+            ProductImageSeeder::class,
+            VariantImageSeeder::class
         ]);
     }
 }

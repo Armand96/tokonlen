@@ -23,7 +23,7 @@ class ProductImageController extends Controller
         $dataPerPage = $req->data_per_page ? $req->data_per_page : 10;
         $query = ProductImage::query();
 
-        // filter by category
+        // filter by product_id
         if ($req->has('product_id')) {
             $query->where('product_id', '=', $req->product_id);
         }
@@ -115,7 +115,7 @@ class ProductImageController extends Controller
         try {
             $productImage->delete();
             Storage::delete("public/products/$productImage->image");
-            return response()->json(new ResponseSuccess($productImage,"Success", "Success Delete Product Images"));
+            return response()->json(new ResponseSuccess($productImage,"Success", "Success Delete Product Image"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
