@@ -14,6 +14,6 @@ Route::get('/', function () {
 });
 
 Route::get("/testreact", function () {
-    return view("react.testreact");
+    return view("react.mainApp");
 });
 
