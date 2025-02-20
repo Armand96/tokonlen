@@ -1,7 +1,7 @@
 const fs = require("fs-extra");
 const path = require("path");
 
-const source = path.join(__dirname, "out"); // Hasil export Next.js
+const source = path.join(__dirname, "dist"); // Hasil export Next.js
 const destination = path.join(__dirname, "../../public/mainApp"); // Folder tujuan di Laravel
 
 (async () => {
