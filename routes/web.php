@@ -9,11 +9,11 @@
 // use App\Http\Controllers\Admin\VariantImagesController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get("/testreact", function () {
+Route::get("/", function () {
     return view("react.mainApp");
 });
 
