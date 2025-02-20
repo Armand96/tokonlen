@@ -1,8 +1,5 @@
-'use client'
-
-// CompareContext.tsx
 import React, { createContext, useContext, useState, useReducer, useEffect } from 'react';
-import { ProductType } from '@/type/ProductType';
+import { ProductType } from '../type/ProductType';
 
 interface CompareItem extends ProductType {
 }
