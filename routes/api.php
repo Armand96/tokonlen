@@ -12,10 +12,20 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\Admin\VariantImageController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
+Route::post('/login', [UserController::class, 'login']);
+
+// Protected routes (Require authentication)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return response()->json($request->user());
+    });
+
+    Route::post('/logout', function (Request $request) {
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'Logged out successfully!']);
+    });
+});
 
 Route::prefix('admin')->group(function () {
     Route::resource('user', UserController::class);
