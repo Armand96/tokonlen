@@ -13,7 +13,19 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get("/", function () {
-    return view("react.mainApp");
-});
+// Route::get("/", function () {
+//     return view("react.mainApp");
+// });
 
+
+use Illuminate\Support\Facades\File;
+
+Route::get('/{any?}', function ($any = null) {
+    $filePath = public_path($any ? "{$any}.html" : "index.html");
+
+    if (File::exists($filePath)) {
+        return File::get($filePath);
+    }
+
+    abort(404);
+})->where('any', '.*');
