@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_links', function (Blueprint $table) {
+        Schema::create('product_link_visits', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id');
-            $table->string('link', 100);
-            $table->integer('link_type_id');
+            $table->integer('product_link_id');
+            $table->string('ip_address', 50);
+            $table->string('user_agent', 100);
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_links');
+        Schema::dropIfExists('product_link_visits');
     }
 };

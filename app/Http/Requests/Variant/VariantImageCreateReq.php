@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Product;
+namespace App\Http\Requests\Variant;
 
 use App\Http\Requests\ApiRequest;
 
-class ProductImageCreateReq extends ApiRequest
+class VariantImageCreateReq extends ApiRequest
 {
-    public int $product_id;
+    public int $variant_id;
     public mixed $image_files;
     public string $image;
     public string $image_thumb;
@@ -15,7 +15,7 @@ class ProductImageCreateReq extends ApiRequest
     public function rules(): array
     {
         return [
-            'product_id' => 'required|numeric',
+            'variant_id' => 'required|numeric',
             'image_files' => 'required',
             'image_files.*' => 'image',
         ];

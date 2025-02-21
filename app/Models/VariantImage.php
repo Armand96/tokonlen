@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProductImages extends Model
+class VariantImage extends Model
 {
     protected $fillable = [
-        'product_id',
+        'variant_id',
         'image',
         'image_thumb',
         'default',
@@ -17,4 +17,9 @@ class ProductImages extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function variant()
+    {
+        return $this->belongsTo(Variant::class, 'id', 'variant_id');
+    }
 }

@@ -4,16 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Variant extends Model
+class Discount extends Model
 {
     protected $fillable = [
         'product_id',
-        'variant',
-        'size',
-        'additional_price',
-        'stock',
-        'visited',
-        'is_active',
+        'variant_id',
+        'discount_percentage',
+        'discount_amount',
+        'start_date',
+        'end_date',
     ];
 
     protected $hidden = [
@@ -26,8 +25,8 @@ class Variant extends Model
         return $this->belongsTo(Product::class, 'id', 'product_id');
     }
 
-    public function images()
+    public function variant()
     {
-        return $this->hasMany(VariantImage::class, 'variant_id', 'id');
+        return $this->belongsTo(Variant::class, 'id', 'variant_id');
     }
 }

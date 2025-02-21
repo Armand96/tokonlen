@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Discount\DiscountCreateReq;
+use App\Http\Requests\Discount\DiscountUpdateReq;
 use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
-use App\Http\Requests\Variant\VariantCreateReq;
-use App\Http\Requests\Variant\VariantUpdateReq;
-use App\Models\Variant;
+use App\Models\Discount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class VariantController extends Controller
+class DiscountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,25 +19,20 @@ class VariantController extends Controller
     public function index(Request $req)
     {
         $dataPerPage = $req->data_per_page ? $req->data_per_page : 10;
-        $query = Variant::query();
+        $query = Discount::query();
 
-        // filter by variant
-        if ($req->has('variant')) {
-            $query->where('variant', 'like', '%' . $req->variant . '%');
-        }
-        // filter by size
-        if ($req->has('size')) {
-            $query->where('size', 'like', '%' . $req->size . '%');
-        }
-        // filter by product_id
+        // filter by product
         if ($req->has('product_id')) {
-            $query->where('product_id', '=', $req->product_id);
+            $query->where('product_id', 'like', '%' . $req->product_id . '%')->with('product');
+        }
+        if ($req->has('variant_id')) {
+            $query->where('variant_id', 'like', '%' . $req->variant_id . '%')->with(['variant', 'product']);
         }
 
         // paginate result
-        $variants = $query->paginate($dataPerPage);
+        $discounts = $query->paginate($dataPerPage);
 
-        return $variants;
+        return $discounts;
     }
 
     /**
@@ -51,12 +46,12 @@ class VariantController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(VariantCreateReq $request)
+    public function store(DiscountCreateReq $request)
     {
         try {
             $validated = $request->validated();
-            $variant = Variant::create($validated);
-            return response()->json(new ResponseSuccess($variant,"Success","Success Create Variant"));
+            $discount = Discount::create($validated);
+            return response()->json(new ResponseSuccess($discount,"Success","Success Create Product Link"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
@@ -67,15 +62,15 @@ class VariantController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Variant $variant)
+    public function show(Discount $discount)
     {
-        return response()->json(new ResponseSuccess($variant, "Success", "Success Get Variant"));
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Variant $variant)
+    public function edit(Discount $discount)
     {
         //
     }
@@ -83,12 +78,12 @@ class VariantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(VariantUpdateReq $request, Variant $variant)
+    public function update(DiscountUpdateReq $request, Discount $discount)
     {
         try {
             $validated = $request->validated();
-            $variant->update($validated);
-            return response()->json(new ResponseSuccess($variant,"Success","Success Update Variant"));
+            $discount->update($validated);
+            return response()->json(new ResponseSuccess($discount,"Success","Success Update Product Link"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
@@ -99,15 +94,15 @@ class VariantController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Variant $variant)
+    public function destroy(Discount $discount)
     {
         try {
-            $variant->update(['is_active' => false]);
-            return response()->json(new ResponseSuccess($variant,"Success", "Success Set Variant To Inactive"));
+            $discount->delete();
+            return response()->json(new ResponseSuccess($discount,"Success","Success Delete Product Link"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()));
+            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()));
         }
     }
 }
