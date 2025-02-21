@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('price',10, 2);
             $table->integer('stock')->default(0);
             $table->string('brand', 100);
-            $table->date('release_date')->default(DB::raw('CURRENT_DATE'));
+            $table->date('release_date')->useCurrent();
             $table->integer('category_id');
             $table->integer('visited')->default(0);
             $table->boolean('is_active')->default(false);
