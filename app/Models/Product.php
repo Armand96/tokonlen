@@ -13,6 +13,8 @@ class Product extends Model
         'stock',
         'category_id',
         'visited',
+        'release_date',
+        'brand',
         'is_active'
     ];
 

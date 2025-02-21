@@ -13,6 +13,6 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::insert("INSERT INTO `tokonlen`.`products` (`id`, `name`, `description`, `price`, `stock`, `category_id`, `visited`, `is_active`, `created_at`, `updated_at`) VALUES (1, 'Gucci Suits', 'Gucci Suit For Male', 500000.00, 1, 2, 0, 1, '2025-02-18 05:05:28', '2025-02-18 06:45:26');");
+        DB::insert("INSERT INTO `tokonlen`.`products` (`id`, `name`, `description`, `price`, `stock`, `brand`, `release_date`, `category_id`, `visited`, `is_active`, `created_at`, `updated_at`) VALUES (1, 'Gucci Suits', 'Gucci Suit For Male', 500000.00, 1, 'Gucci', 'Release Date' 2, 0, 1, '2025-02-18 05:05:28', '2025-02-18 06:45:26')");
     }
 }
