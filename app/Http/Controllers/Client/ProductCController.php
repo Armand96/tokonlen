@@ -24,8 +24,9 @@ class ProductCController extends Controller
         }
 
         $query->where('is_active', true);
-        $categories = $query->get();
-        return response()->json(new ResponseSuccess($categories, "Success", "Success Get Products"));
+        $products = $query->paginate(9);
+        return $products;
+        // return response()->json(new ResponseSuccess($products, "Success", "Success Get Products"));
     }
 
     public function getOneActiveProductWithProducts(Product $product)
