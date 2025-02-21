@@ -44,4 +44,8 @@ class Category extends Model
     {
         return $this->hasMany(Product::class, 'category_id', 'id');
     }
+
+    public function isLeaf() {
+        return !$this->children()->exists(); // Returns true if no children
+    }
 }
