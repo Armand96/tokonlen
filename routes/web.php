@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
 
 Route::get('/{any?}', function ($any = null) {
-    $filePath = public_path($any ? "{$any}.html" : "index.html");
+    $filePath = public_path($any ? "/mainApp/{$any}.html" : "/mainApp/index.html");
 
     if (File::exists($filePath)) {
         return File::get($filePath);

@@ -1,14 +1,14 @@
 import MenuOne from '@/components/Header/Menu/MenuOne'
-import SliderOne from '@/components/Slider/SliderOne'
-import WhatNewOne from '@/components/Home1/WhatNewOne'
+import Slider from '@/components/Slider/Slider'
+import WhatNewOne from '@/components/Home/WhatNewOne'
 import productData from '@/data/Product.json'
-import Collection from '@/components/Home1/Collection'
-import TabFeatures from '@/components/Home1/TabFeatures'
-import Banner from '@/components/Home1/Banner'
-import Benefit from '@/components/Home1/Benefit'
+import Collection from '@/components/Home/Collection'
+import TabFeatures from '@/components/Home/TabFeatures'
+import Banner from '@/components/Home/Banner'
+import Benefit from '@/components/Home/Benefit'
 import testimonialData from '@/data/Testimonial.json'
-import Testimonial from '@/components/Home1/Testimonial'
-import Brand from '@/components/Home1/Brand'
+import Testimonial from '@/components/Home/Testimonial'
+import Brand from '@/components/Home/Brand'
 import Footer from '@/components/Footer/Footer'
 
 export default function Home() {
@@ -16,7 +16,7 @@ export default function Home() {
     <>
       <div id="header" className='relative w-full'>
         <MenuOne props="bg-transparent" />
-        <SliderOne />
+        <Slider />
       </div>
       <WhatNewOne data={productData} start={0} limit={4} />
       <Collection />
