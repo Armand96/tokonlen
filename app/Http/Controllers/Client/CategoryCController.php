@@ -33,7 +33,7 @@ class CategoryCController extends Controller
                 $category->with('product');
             }
             $category->first();
-            return response()->json(new ResponseSuccess($category, "Success", "Success Get Categorie"));
+            return response()->json(new ResponseSuccess($category, "Success", "Success Get Category"));
         }
         else return response()->json(new ResponseFail((object) null, "Error", "Not Found"), 404);
     }

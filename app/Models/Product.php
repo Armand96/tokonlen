@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -22,6 +23,15 @@ class Product extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = $value;
+        $slug = Str::slug($value);
+
+        $count = static::where('slug', '=', "$slug%")->count();
+        $this->attributes['slug'] = $count ? "{$slug}-{$count}" : $slug;
+    }
 
     public function category()
     {
