@@ -21,6 +21,16 @@ class Category extends Model
         'updated_at',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'id'; // Default lookup field is `id`
+    }
+
+    public function resolveRouteBinding($value, $field = null): ?Model
+    {
+        return $this->where('id', $value)->orWhere('slug', $value)->first();
+    }
+
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;
@@ -37,15 +47,15 @@ class Category extends Model
 
     public function parentCat()
     {
-        return $this->belongsTo(Category::class, 'id', 'parent_id');
+        return $this->belongsTo(Category::class, 'parent_id', 'id');
     }
 
-    public function proudcts()
+    public function products()
     {
         return $this->hasMany(Product::class, 'category_id', 'id');
     }
 
     public function isLeaf() {
-        return !$this->children()->exists(); // Returns true if no children
+        return !$this->subCat()->exists(); // Returns true if no children
     }
 }

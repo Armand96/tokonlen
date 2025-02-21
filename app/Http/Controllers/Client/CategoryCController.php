@@ -26,15 +26,7 @@ class CategoryCController extends Controller
 
     public function getOneActiveCategoryWithProducts(Category $category)
     {
-        // $category = Category::where('is_active', true)->with('subCat')->get();
-        if($category) {
-            $category->with('subCat');
-            if($category->isLeaf()) {
-                $category->with('product');
-            }
-            $category->first();
-            return response()->json(new ResponseSuccess($category, "Success", "Success Get Category"));
-        }
+        if($category) return response()->json(new ResponseSuccess($category->where('id', $category->id)->with(['subCat', 'products'])->first(), "Success", "Success Get Category"));
         else return response()->json(new ResponseFail((object) null, "Error", "Not Found"), 404);
     }
 

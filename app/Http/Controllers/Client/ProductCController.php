@@ -30,10 +30,7 @@ class ProductCController extends Controller
 
     public function getOneActiveProductWithProducts(Product $product)
     {
-        if($product) {
-            $product->with(['images', 'variant', 'links'])->first();
-            return response()->json(new ResponseSuccess($product, "Success", "Success Get Product"));
-        }
+        if($product) return response()->json(new ResponseSuccess($product->with(['images', 'variant.images', 'links'])->first(), "Success", "Success Get Product"));
         else return response()->json(new ResponseFail((object) null, "Error", "Not Found"), 404);
     }
 }

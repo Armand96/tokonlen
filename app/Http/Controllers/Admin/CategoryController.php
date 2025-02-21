@@ -75,7 +75,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json(new ResponseSuccess($category->with('subCat')->first(), "Success", "Success Get Category"));
+        return response()->json(new ResponseSuccess($category->where('id', $category->id)->with('subCat')->first(), "Success", "Success Get Category"));
     }
 
     /**
