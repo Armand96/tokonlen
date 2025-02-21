@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ProductLinkVisitController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\Admin\VariantImageController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Requests\ResponseFail;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -43,4 +44,5 @@ Route::prefix('admin')
     Route::resource('product_link_visit', ProductLinkVisitController::class);
     Route::resource('variant', VariantController::class);
     Route::resource('variant_images', VariantImageController::class);
+    Route::resource('discount', DiscountController::class);
 });
