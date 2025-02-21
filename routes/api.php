@@ -11,12 +11,16 @@ use App\Http\Controllers\Admin\ProductLinkVisitController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\Admin\VariantImageController;
-
+use App\Http\Requests\ResponseFail;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 Route::post('/login', [UserController::class, 'login']);
+Route::get('/unauthorized', function(){
+    return response()->json(new ResponseFail(null, "Error", "Unauthorized"), 401);
+})->name('login');
 
 // Protected routes (Require authentication)
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         return response()->json($request->user());
     });
@@ -27,7 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')
+    // ->middleware('auth:sanctum')
+    ->group(function () {
     Route::resource('user', UserController::class);
     Route::resource('category', CategoryController::class);
     Route::resource('product', ProductController::class);
