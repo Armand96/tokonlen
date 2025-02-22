@@ -15,7 +15,7 @@ class SearchController extends Controller
         $words = $request->input('words') ? $request->input('words') : "";
         if($words != "") {
             $categories = Category::where('name', 'like', '%'.$words.'%')->get();
-            $products = Product::where('name', 'like', '%'.$words.'%')->with(['image'])->get();
+            $products = Product::where('name', 'like', '%'.$words.'%')->with(['image', 'variant'])->get();
             $data = array(
                 'categories' => $categories,
                 'products' => $products
