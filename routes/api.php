@@ -16,6 +16,7 @@ use App\Http\Controllers\Client\CategoryCController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Client\BannerCController;
 use App\Http\Controllers\Client\ProductCController;
+use App\Http\Controllers\Client\SearchController;
 use App\Http\Requests\ResponseFail;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -63,4 +64,5 @@ Route::prefix('admin')
     Route::get('banner', [BannerCController::class, 'getListActiveBanner'])->name('banner.list');
     Route::get('banner/{banner}', [BannerCController::class, 'getOneActiveBanner'])->name('banner.one');
 
+    Route::get('search', [SearchController::class, 'search']);
 // });

@@ -14,8 +14,15 @@ class SearchController extends Controller
     {
         $words = $request->input('words') ? $request->input('words') : "";
         if($words != "") {
-            $categories = Category::where('name', 'like', '%'.$words.'%')->get();
-            $products = Product::where('name', 'like', '%'.$words.'%')->with(['image', 'variant'])->get();
+            $categories = Category::where('name', 'like', '%'.$words.'%')
+            ->orWhereHas('products', function($qry) use ($words) {
+                $qry->where('name', 'like', '%'.$words.'%');
+            })->get();
+            $products = Product::where('name', 'like', '%'.$words.'%')
+            ->orWhereHas('category', function($qry) use ($words) {
+                $qry->where('name', 'like', '%'.$words.'%');
+            })
+            ->with(['image', 'variant'])->get();
             $data = array(
                 'categories' => $categories,
                 'products' => $products
