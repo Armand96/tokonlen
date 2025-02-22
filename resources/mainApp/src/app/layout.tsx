@@ -12,13 +12,11 @@ import { countdownTime } from '@/store/countdownTime'
 import { Suspense } from 'react'
 import Loading from '@/components/Other/Loading'
 
-const serverTimeLeft: CountdownTimeType = countdownTime();
-
 const instrument = Instrument_Sans({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Anvogue',
-  description: 'Multipurpose eCommerce Template',
+  title: 'Zhindaya',
+  description: 'biggest umkm pashion store in indonesia',
 }
 
 export default function RootLayout({
