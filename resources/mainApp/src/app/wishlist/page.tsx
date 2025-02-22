@@ -71,7 +71,6 @@ const Wishlist = () => {
         }];
     }
 
-    // Tạo một bản sao của mảng đã lọc để sắp xếp
     let sortedData = [...filteredData];
 
     if (sortOption === 'soldQuantityHighToLow') {

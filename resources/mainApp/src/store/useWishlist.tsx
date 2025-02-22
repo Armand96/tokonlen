@@ -1,4 +1,3 @@
-// useWishlist.ts
 import { useState } from 'react';
 import { ProductType } from '@/type/ProductType';
 

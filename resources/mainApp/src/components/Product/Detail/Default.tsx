@@ -253,10 +253,6 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                     )}
                                 </div>
                             </div>
-                            <div className="flex items-center mt-3">
-                                <Rate currentRate={productMain.rate} size={14} />
-                                <span className='caption1 text-secondary'>(1.234 reviews)</span>
-                            </div>
                             <div className="flex items-center gap-3 flex-wrap mt-5 pb-6 border-b border-line">
                                 <div className="product-price heading5">${productMain.price}.00</div>
                                 <div className='w-px h-4 bg-line'></div>
@@ -269,7 +265,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                 <div className='desc text-secondary mt-3'>{productMain.description}</div>
                             </div>
                             <div className="list-action mt-6">
-                                <div className="choose-color">
+                                {/* <div className="choose-color">
                                     <div className="text-title">Colors: <span className='text-title color'>{activeColor}</span></div>
                                     <div className="list-color flex items-center gap-2 flex-wrap mt-3">
                                         {productMain.variation.map((item, index) => (
@@ -294,7 +290,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="choose-size mt-5">
                                     <div className="heading flex items-center justify-between">
                                         <div className="text-title">Size: <span className='text-title size'>{activeSize}</span></div>
@@ -302,7 +298,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             className="caption1 size-guide text-red underline cursor-pointer"
                                             onClick={handleOpenSizeGuide}
                                         >
-                                            Size Guide
+                                           Saran Ukuran
                                         </div>
                                         <ModalSizeguide data={productMain} isOpen={openSizeGuide} onClose={handleCloseSizeGuide} />
                                     </div>
@@ -386,7 +382,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         <div className="text-secondary">{productMain.type}</div>
                                     </div>
                                 </div>
-                                <div className="list-payment mt-7">
+                                {/* <div className="list-payment mt-7">
                                     <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative max-md:w-2/3 max-sm:w-full">
                                         <div className="heading6 px-5 bg-white absolute -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">Guranteed safe checkout</div>
                                         <div className="list grid grid-cols-6">
@@ -446,7 +442,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="get-it mt-6 pb-8 border-b border-line">
                                 <div className="heading5">Get it today</div>
@@ -651,357 +647,6 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="review-block md:py-20 py-10 bg-surface">
-                    <div className="container">
-                        <div className="heading flex items-center justify-between flex-wrap gap-4">
-                            <div className="heading4">Customer Review</div>
-                            <Link href={'#form-review'} className='button-main bg-white text-black border border-black'>Write Reviews</Link>
-                        </div>
-                        <div className="top-overview flex justify-between py-6 max-md:flex-col gap-y-6">
-                            <div className="rating lg:w-1/4 md:w-[30%] lg:pr-[75px] md:pr-[35px]">
-                                <div className="heading flex items-center justify-center flex-wrap gap-3 gap-y-4">
-                                    <div className="text-display">4.6</div>
-                                    <div className='flex flex-col items-center'>
-                                        <Rate currentRate={5} size={18} />
-                                        <div className='text-secondary text-center mt-1'>(1,968 Ratings)</div>
-                                    </div>
-                                </div>
-                                <div className="list-rating mt-3">
-                                    <div className="item flex items-center justify-between gap-1.5">
-                                        <div className="flex items-center gap-1">
-                                            <div className="caption1">5</div>
-                                            <Icon.Star size={14} weight='fill' />
-                                        </div>
-                                        <div className="progress bg-line relative w-3/4 h-2">
-                                            <div className="progress-percent absolute bg-yellow w-[50%] h-full left-0 top-0"></div>
-                                        </div>
-                                        <div className="caption1">50%</div>
-                                    </div>
-                                    <div className="item flex items-center justify-between gap-1.5 mt-1">
-                                        <div className="flex items-center gap-1">
-                                            <div className="caption1">4</div>
-                                            <Icon.Star size={14} weight='fill' />
-                                        </div>
-                                        <div className="progress bg-line relative w-3/4 h-2">
-                                            <div className="progress-percent absolute bg-yellow w-[20%] h-full left-0 top-0"></div>
-                                        </div>
-                                        <div className="caption1">20%</div>
-                                    </div>
-                                    <div className="item flex items-center justify-between gap-1.5 mt-1">
-                                        <div className="flex items-center gap-1">
-                                            <div className="caption1">3</div>
-                                            <Icon.Star size={14} weight='fill' />
-                                        </div>
-                                        <div className="progress bg-line relative w-3/4 h-2">
-                                            <div className="progress-percent absolute bg-yellow w-[10%] h-full left-0 top-0"></div>
-                                        </div>
-                                        <div className="caption1">10%</div>
-                                    </div>
-                                    <div className="item flex items-center justify-between gap-1.5 mt-1">
-                                        <div className="flex items-center gap-1">
-                                            <div className="caption1">2</div>
-                                            <Icon.Star size={14} weight='fill' />
-                                        </div>
-                                        <div className="progress bg-line relative w-3/4 h-2">
-                                            <div className="progress-percent absolute bg-yellow w-[10%] h-full left-0 top-0"></div>
-                                        </div>
-                                        <div className="caption1">10%</div>
-                                    </div>
-                                    <div className="item flex items-center justify-between gap-1.5 mt-1">
-                                        <div className="flex items-center gap-2">
-                                            <div className="caption1">1</div>
-                                            <Icon.Star size={14} weight='fill' />
-                                        </div>
-                                        <div className="progress bg-line relative w-3/4 h-2">
-                                            <div className="progress-percent absolute bg-yellow w-[10%] h-full left-0 top-0"></div>
-                                        </div>
-                                        <div className="caption1">10%</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="list-img lg:w-3/4 md:w-[70%] lg:pl-[15px] md:pl-[15px]">
-                                <div className="heading5">All Image (128)</div>
-                                <div className="list md:mt-6 mt-3">
-                                    <Swiper
-                                        spaceBetween={16}
-                                        slidesPerView={3}
-                                        modules={[Navigation]}
-                                        breakpoints={{
-                                            576: {
-                                                slidesPerView: 4,
-                                                spaceBetween: 16,
-                                            },
-                                            640: {
-                                                slidesPerView: 5,
-                                                spaceBetween: 16,
-                                            },
-                                            768: {
-                                                slidesPerView: 4,
-                                                spaceBetween: 16,
-                                            },
-                                            992: {
-                                                slidesPerView: 5,
-                                                spaceBetween: 20,
-                                            },
-                                            1100: {
-                                                slidesPerView: 5,
-                                                spaceBetween: 20,
-                                            },
-                                            1290: {
-                                                slidesPerView: 7,
-                                                spaceBetween: 20,
-                                            },
-                                        }}
-                                    >
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                    </Swiper>
-                                </div>
-                                <div className="sorting flex items-center flex-wrap md:gap-5 gap-3 gap-y-3 mt-6">
-                                    <div className="text-button">Sort by</div>
-                                    <div className="item bg-white px-4 py-1 border border-line rounded-full">Newest</div>
-                                    <div className="item bg-white px-4 py-1 border border-line rounded-full">5 Star</div>
-                                    <div className="item bg-white px-4 py-1 border border-line rounded-full">4 Star</div>
-                                    <div className="item bg-white px-4 py-1 border border-line rounded-full">3 Star</div>
-                                    <div className="item bg-white px-4 py-1 border border-line rounded-full">2 Star</div>
-                                    <div className="item bg-white px-4 py-1 border border-line rounded-full">1 Star</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="list-review">
-                            <div className="item flex max-lg:flex-col gap-y-4 w-full py-6 border-t border-line">
-                                <div className="left lg:w-1/4 w-full lg:pr-[15px]">
-                                    <div className="list-img-review flex gap-2">
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                    </div>
-                                    <div className="user mt-3">
-                                        <div className="text-title">Tony Nguyen</div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="text-secondary2">1 days ago</div>
-                                            <div className="text-secondary2">-</div>
-                                            <div className="text-secondary2"><span>Yellow</span> / <span>XL</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="right lg:w-3/4 w-full lg:pl-[15px]">
-                                    <Rate currentRate={5} size={16} />
-                                    <div className="heading5 mt-3">Unbeatable Style and Quality: A Fashion Brand That Delivers</div>
-                                    <div className="body1 mt-3">I can{String.raw`'t`} get enough of the fashion pieces from this brand. They have a great selection for every occasion and the prices are reasonable. The shipping is fast and the items always arrive in perfect condition.</div>
-                                    <div className="action mt-3">
-                                        <div className="flex items-center gap-4">
-                                            <div className="like-btn flex items-center gap-1 cursor-pointer">
-                                                <Icon.HandsClapping size={18} />
-                                                <div className="text-button">20</div>
-                                            </div>
-                                            <Link href={'#form-review'} className="reply-btn text-button text-secondary cursor-pointer hover:text-black">Reply</Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="item flex max-lg:flex-col gap-y-4 w-full py-6 border-t border-line">
-                                <div className="left lg:w-1/4 w-full lg:pr-[15px]">
-                                    <div className="list-img-review flex gap-2">
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                    </div>
-                                    <div className="user mt-3">
-                                        <div className="text-title">Tony Nguyen</div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="text-secondary2">1 days ago</div>
-                                            <div className="text-secondary2">-</div>
-                                            <div className="text-secondary2"><span>Yellow</span> / <span>XL</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="right lg:w-3/4 w-full lg:pl-[15px]">
-                                    <Rate currentRate={5} size={16} />
-                                    <div className="heading5 mt-3">Exceptional Fashion: The Perfect Blend of Style and Durability</div>
-                                    <div className="body1 mt-3">The fashion brand{String.raw`'s`} online shopping experience is seamless. The website is user-friendly, the product images are clear, and the checkout process is quick.</div>
-                                    <div className="action mt-3">
-                                        <div className="flex items-center gap-4">
-                                            <div className="like-btn flex items-center gap-1 cursor-pointer">
-                                                <Icon.HandsClapping size={18} />
-                                                <div className="text-button">20</div>
-                                            </div>
-                                            <Link href={'#form-review'} className="reply-btn text-button text-secondary cursor-pointer hover:text-black">Reply</Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="item flex max-lg:flex-col gap-y-4 w-full py-6 border-t border-line">
-                                <div className="left lg:w-1/4 w-full lg:pr-[15px]">
-                                    <div className="list-img-review flex gap-2">
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                    </div>
-                                    <div className="user mt-3">
-                                        <div className="text-title">Tony Nguyen</div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="text-secondary2">1 days ago</div>
-                                            <div className="text-secondary2">-</div>
-                                            <div className="text-secondary2"><span>Yellow</span> / <span>XL</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="right lg:w-3/4 w-full lg:pl-[15px]">
-                                    <Rate currentRate={5} size={16} />
-                                    <div className="heading5 mt-3">Elevate Your Wardrobe: Stunning Dresses That Make a Statement</div>
-                                    <div className="body1 mt-3">I love how sustainable and ethically conscious this fashion brand is. They prioritize eco-friendly materials and fair trade practices, which makes me feel good about supporting them.</div>
-                                    <div className="action mt-3">
-                                        <div className="flex items-center gap-4">
-                                            <div className="like-btn flex items-center gap-1 cursor-pointer">
-                                                <Icon.HandsClapping size={18} />
-                                                <div className="text-button">20</div>
-                                            </div>
-                                            <Link href={'#form-review'} className="reply-btn text-button text-secondary cursor-pointer hover:text-black">Reply</Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="text-button more-review-btn text-center mt-2 underline">View More Comments</div>
-                        </div>
-                        <div id="form-review" className='form-review pt-6'>
-                            <div className="heading4">Leave A comment</div>
-                            <form className="grid sm:grid-cols-2 gap-4 gap-y-5 mt-6">
-                                <div className="name ">
-                                    <input className="border-line px-4 pt-3 pb-3 w-full rounded-lg" id="username" type="text" placeholder="Your Name *" required />
-                                </div>
-                                <div className="mail ">
-                                    <input className="border-line px-4 pt-3 pb-3 w-full rounded-lg" id="email" type="email" placeholder="Your Email *" required />
-                                </div>
-                                <div className="col-span-full message">
-                                    <textarea className="border border-line px-4 py-3 w-full rounded-lg" id="message" name="message" placeholder="Your message *" required></textarea>
-                                </div>
-                                <div className="col-span-full flex items-start -mt-2 gap-2">
-                                    <input type="checkbox" id="saveAccount" name="saveAccount" className='mt-1.5' />
-                                    <label className="" htmlFor="saveAccount">Save my name, email, and website in this browser for the next time I comment.</label>
-                                </div>
-                                <div className="col-span-full sm:pt-3">
-                                    <button className='button-main bg-white text-black border border-black'>Submit Reviews</button>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
