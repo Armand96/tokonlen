@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\Admin\VariantImageController;
 use App\Http\Controllers\Client\CategoryCController;
 use App\Http\Controllers\Admin\DiscountController;
+use App\Http\Controllers\Client\BannerCController;
 use App\Http\Controllers\Client\ProductCController;
 use App\Http\Requests\ResponseFail;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -58,4 +59,8 @@ Route::prefix('admin')
     // PRODUCT
     Route::get('product', [ProductCController::class, 'getListActiveProduct'])->name('product.list');
     Route::get('product/{product}', [ProductCController::class, 'getOneActiveProductWithProducts'])->name('product.one');
+    // BANNER
+    Route::get('banner', [BannerCController::class, 'getListActiveBanner'])->name('banner.list');
+    Route::get('banner/{banner}', [BannerCController::class, 'getOneActiveBanner'])->name('banner.one');
+
 // });
