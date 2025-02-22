@@ -55,7 +55,7 @@ class Product extends Model
 
     public function image()
     {
-        return $this->hasOne(ProductImage::class, 'product_id', 'id')->where('default', true);
+        return $this->hasOne(ProductImage::class, 'product_id', 'id')->orderBy('default')->limit(1);
     }
 
     public function variant()
