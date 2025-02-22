@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BannerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
@@ -47,6 +48,7 @@ Route::prefix('admin')
     Route::resource('variant', VariantController::class);
     Route::resource('variant_images', VariantImageController::class);
     Route::resource('discount', DiscountController::class);
+    Route::resource('banner', BannerController::class);
 });
 
 // Route::group(function() {
