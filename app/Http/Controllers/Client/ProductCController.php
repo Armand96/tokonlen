@@ -13,6 +13,7 @@ class ProductCController extends Controller
     public function getListActiveProduct(Request $req)
     {
         $query = Product::query();
+        $data_per_page = $req->input('data_per_page') ? $req->input('data_per_page') : 10;
 
         // filter by name
         if ($req->has('name')) {
@@ -23,8 +24,8 @@ class ProductCController extends Controller
             $query->where('category_id', '=', $req->category_id);
         }
 
-        $query->where('is_active', true);
-        $products = $query->paginate(9);
+        $query->where('is_active', true)->with('image');
+        $products = $query->paginate($data_per_page);
         return $products;
         // return response()->json(new ResponseSuccess($products, "Success", "Success Get Products"));
     }
