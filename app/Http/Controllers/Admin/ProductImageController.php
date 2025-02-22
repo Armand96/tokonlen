@@ -59,10 +59,10 @@ class ProductImageController extends Controller
                 foreach ($files as $key => $file) {
                     // dd($file);
                     $imageName = time() . '_' . $key+1 . '.' . $file->extension();
-                    $file->storeAs('public/products/', $imageName);
-                    array_push($imagePaths, $imageName);
-                    $validated['image'] = $imageName;
-                    $validated['image_thumb'] = $imageName;
+                    $path = $file->storeAs('products', $imageName, 'public');
+                    array_push($imagePaths, $path);
+                    $validated['image'] = $path;
+                    $validated['image_thumb'] = $path;
                     $productImage = ProductImage::create($validated);
                     array_push($productImages, $productImage);
                 }
@@ -76,8 +76,8 @@ class ProductImageController extends Controller
             DB::rollBack();
             //throw $th;
             foreach ($imagePaths as $key => $value) {
-                $isExist = Storage::disk('public')->exists("products/$value") ?? false;
-                if ($isExist) Storage::delete("public/products/$value");
+                $isExist = Storage::disk('public')->exists($value) ?? false;
+                if ($isExist) Storage::disk('public')->delete($value);
             }
             return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
         }
@@ -114,7 +114,7 @@ class ProductImageController extends Controller
     {
         try {
             $productImage->delete();
-            Storage::delete("public/products/$productImage->image");
+            Storage::disk('public')->delete($productImage->image);
             return response()->json(new ResponseSuccess($productImage,"Success", "Success Delete Product Image"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());

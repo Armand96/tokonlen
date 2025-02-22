@@ -52,7 +52,7 @@ class LinkTypeController extends Controller
 
             if ($request->hasFile('image_file')) {
                 $imageName = time() . '.' . $request->file('image_file')->extension();
-                $request->file('image_file')->storeAs('public/link_type/', $imageName);
+                $path = $request->file('image_file')->storeAs('link_type', $imageName, 'public');
                 $validatedData['image'] = $imageName;
             } else {
                 $validatedData['image'] = '';
@@ -62,8 +62,8 @@ class LinkTypeController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            $isExist = Storage::disk('public')->exists("link_type/$imageName") ?? false;
-            if ($isExist) Storage::delete("public/link_type/$imageName");
+            $isExist = Storage::disk('public')->exists($imageName) ?? false;
+            if ($isExist) Storage::delete($imageName);
             return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
         }
     }
@@ -95,11 +95,11 @@ class LinkTypeController extends Controller
 
             if ($request->hasFile('image_file')) {
 
-                $isExist = Storage::disk('public')->exists("link_type/$linkType->image") ?? false;
-                if ($isExist) Storage::delete("public/link_type/$linkType->image");
+                $isExist = Storage::disk('public')->exists($linkType->image) ?? false;
+                if ($isExist) Storage::disk('public')->delete($linkType->image);
 
                 $imageName = time() . '.' . $request->file('image_file')->extension();
-                $request->file('image_file')->storeAs('public/link_type/', $imageName);
+                $request->file('image_file')->storeAs('link_type', $imageName, 'public');
                 $validatedData['image'] = $imageName;
             } else {
                 $validatedData['image'] = '';
