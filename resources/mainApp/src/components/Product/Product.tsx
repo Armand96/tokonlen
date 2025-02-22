@@ -53,31 +53,14 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
     };
 
     const handleAddToWishlist = () => {
-        // if product existed in wishlit, remove from wishlist and set state to false
         if (wishlistState.wishlistArray.some(item => item.id === data.id)) {
             removeFromWishlist(data.id);
         } else {
-            // else, add to wishlist and set state to true
             addToWishlist(data);
         }
         openModalWishlist();
     };
 
-    const handleAddToCompare = () => {
-        // if product existed in wishlit, remove from wishlist and set state to false
-        if (compareState.compareArray.length < 3) {
-            if (compareState.compareArray.some(item => item.id === data.id)) {
-                removeFromCompare(data.id);
-            } else {
-                // else, add to wishlist and set state to true
-                addToCompare(data);
-            }
-        } else {
-            alert('Compare up to 3 products')
-        }
-
-        openModalCompare();
-    };
 
     const handleQuickviewOpen = () => {
         openQuickview(data)
@@ -109,7 +92,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                             )}
                             {style === 'style-1' || style === 'style-3' || style === 'style-4' ? (
                                 <div className="list-action-right absolute top-3 right-3 max-lg:hidden">
-                                    {style === 'style-4' && (
+                                    {/* {style === 'style-4' && (
                                         <div
                                             className={`add-cart-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative mb-2 ${compareState.compareArray.some(item => item.id === data.id) ? 'active' : ''}`}
                                             onClick={e => {
@@ -120,7 +103,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                             <div className="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm">Add To Cart</div>
                                             <Icon.ShoppingBagOpen size={20} />
                                         </div>
-                                    )}
+                                    )} */}
                                     <div
                                         className={`add-wishlist-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative ${wishlistState.wishlistArray.some(item => item.id === data.id) ? 'active' : ''}`}
                                         onClick={(e) => {
@@ -139,17 +122,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                             </>
                                         )}
                                     </div>
-                                    <div
-                                        className={`compare-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative mt-2 ${compareState.compareArray.some(item => item.id === data.id) ? 'active' : ''}`}
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            handleAddToCompare()
-                                        }}
-                                    >
-                                        <div className="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm">Compare Product</div>
-                                        <Icon.Repeat size={18} className='compare-icon' />
-                                        <Icon.CheckCircle size={20} className='checked-icon' />
-                                    </div>
+                                  
                                     {style === 'style-3' || style === 'style-4' ? (
                                         <div
                                             className={`quick-view-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative mt-2 ${compareState.compareArray.some(item => item.id === data.id) ? 'active' : ''}`}
@@ -310,17 +283,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                                 </>
                                             )}
                                         </div>
-                                        <div
-                                            className={`compare-btn w-9 h-9 flex items-center justify-center rounded-full bg-white duration-300 relative ${compareState.compareArray.some(item => item.id === data.id) ? 'active' : ''}`}
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                handleAddToCompare()
-                                            }}
-                                        >
-                                            <div className="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm">Compare Product</div>
-                                            <Icon.Repeat size={18} className='compare-icon' />
-                                            <Icon.CheckCircle size={20} className='checked-icon' />
-                                        </div>
+                                     
                                         <div
                                             className={`quick-view-btn w-9 h-9 flex items-center justify-center rounded-full bg-white duration-300 relative ${compareState.compareArray.some(item => item.id === data.id) ? 'active' : ''}`}
                                             onClick={(e) => {
@@ -406,7 +369,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                 </div>
                             </div>
                             <div className="product-name text-title duration-300">{data.name}</div>
-                            {data.variation.length > 0 && data.action === 'add to cart' && (
+                            {/* {data.variation.length > 0 && data.action === 'add to cart' && (
                                 <div className="list-color py-2 max-md:hidden flex items-center gap-2 flex-wrap duration-500">
                                     {data.variation.map((item, index) => (
                                         <div
@@ -421,8 +384,8 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                         </div>
                                     ))}
                                 </div>
-                            )}
-                            {data.variation.length > 0 && data.action === 'quick shop' && (
+                            )} */}
+                            {data.variation.length > 0 && (
                                 <div className="list-color-image max-md:hidden flex items-center gap-2 flex-wrap duration-500">
                                     {data.variation.map((item, index) => (
                                         <div
@@ -558,7 +521,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                                     </div>
                                                 )}
                                             </div>
-                                            {data.variation.length > 0 && data.action === 'add to cart' ? (
+                                            {/* {data.variation.length > 0 && data.action === 'add to cart' ? (
                                                 <div className="list-color max-md:hidden py-2 mt-5 mb-1 flex items-center gap-3 flex-wrap duration-300">
                                                     {data.variation.map((item, index) => (
                                                         <div
@@ -570,7 +533,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                                         </div>
                                                     ))}
                                                 </div>
-                                            ) : (
+                                            ) : ( */}
                                                 <>
                                                     {data.variation.length > 0 && data.action === 'quick shop' ? (
                                                         <>
@@ -603,7 +566,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                                         <></>
                                                     )}
                                                 </>
-                                            )}
+                                            {/* )} */}
                                             <div className='text-secondary desc mt-5 max-sm:hidden'>{data.description}</div>
                                         </div>
                                         <div className="action w-fit flex flex-col items-center justify-center">
@@ -635,17 +598,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                                         </>
                                                     )}
                                                 </div>
-                                                <div
-                                                    className={`compare-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative ${compareState.compareArray.some(item => item.id === data.id) ? 'active' : ''}`}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        handleAddToCompare()
-                                                    }}
-                                                >
-                                                    <div className="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm">Compare Product</div>
-                                                    <Icon.ArrowsCounterClockwise size={18} className='compare-icon' />
-                                                    <Icon.CheckCircle size={20} className='checked-icon' />
-                                                </div>
+                                             
                                                 <div
                                                     className="quick-view-btn-list w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative"
                                                     onClick={(e) => {
@@ -691,16 +644,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                     </>
                                 )}
                             </span>
-                            <span
-                                className={`compare-btn w-8 h-8 bg-white flex items-center justify-center rounded-full box-shadow-sm duration-300 ${compareState.compareArray.some(item => item.id === data.id) ? 'active' : ''}`}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleAddToCompare()
-                                }}
-                            >
-                                <Icon.Repeat size={18} className='compare-icon' />
-                                <Icon.CheckCircle size={20} className='checked-icon' />
-                            </span>
+                       
                             <span
                                 className="quick-view-btn w-8 h-8 bg-white flex items-center justify-center rounded-full box-shadow-sm duration-300"
                                 onClick={(e) => {

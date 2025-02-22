@@ -72,103 +72,30 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                         </div>
                         <div className="left flex items-center gap-16">
                             <Link href={'/'} className='flex items-center max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2'>
-                                <div className="heading4">Testing</div>
+                                <div className="heading4">Zhindaya</div>
                             </Link>
                             <div className="menu-main h-full max-lg:hidden">
                                 <ul className='flex items-center gap-8 h-full'>
-                                    <li className='h-full relative'>
+                                    <li className='h-full'>
                                         <Link
                                             href="#!"
-                                            className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === '/' ? 'active' : ''}`}
+                                            className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === '/laki-laki' ? 'active' : ''}`}
                                         >
-                                            Categories
+                                            Pakaian Laki Laki
                                         </Link>
-                                        <div className="sub-menu py-3 px-5 -left-10 w-max absolute grid grid-cols-3 gap-5 bg-white rounded-b-xl">
-                                            <ul>
-                                                <li>
-                                                    <Link href="/" className={`link text-secondary duration-300`}>
-                                                       Baju 1
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                    Baju 2
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                       Baju 3
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                    Baju 4
-                                                    </Link>
-                                                </li>
-                                            </ul>
-                                            <ul>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                      celana 5
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                      celana 6
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                      celana 7
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                      celana 8
-                                                    </Link>
-                                                </li>
-                                            </ul>
-                                            <ul>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                      Baju renang A
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                      Baju renang B
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                      Baju renang C
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                      Baju renang D
-                                                    </Link>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li className='h-full'>
-                                        <Link href="#!" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
-                                            Baju
-                                        </Link>
-                                        <div className="mega-menu absolute top-[74px] left-0 bg-white w-screen">
+                                        <div className="sub-menu absolute top-[74px]  bg-white">
                                             <div className="container">
                                                 <div className="flex justify-between py-8">
-                                                    <div className="nav-link basis-2/3 grid grid-cols-4 gap-y-8">
+                                                    <div className="nav-link basis-2/3 grid grid-cols-1 gap-y-8">
                                                         <div className="nav-item">
-                                                            <div className="text-button-uppercase pb-2">For Men</div>
+                                                            <div className="text-button-uppercase pb-2">Baju</div>
                                                             <ul>
                                                                 <li>
                                                                     <div
                                                                         onClick={() => handleGenderClick('men')}
                                                                         className={`link text-secondary duration-300 cursor-pointer`}
                                                                     >
-                                                                       diskon 50 Ribu
+                                                                        diskon 50 Ribu
                                                                     </div>
                                                                 </li>
                                                                 <li>
@@ -195,145 +122,194 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                                                                         Shirt | Sweatshirts
                                                                     </div>
                                                                 </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className="nav-item">
+                                                            <div className="text-button-uppercase pb-2">Celana</div>
+                                                            <ul>
                                                                 <li>
                                                                     <div
                                                                         onClick={() => handleGenderClick('men')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer view-all-btn`}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
                                                                     >
-                                                                        View All
+                                                                        diskon 50 Ribu
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleTypeClick('outerwear')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        Outerwear | Coats
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleTypeClick('sweater')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        Sweaters | Cardigans
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleTypeClick('shirt')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        Shirt | Sweatshirts
                                                                     </div>
                                                                 </li>
                                                             </ul>
-                                                        </div>
-                                                        <div className="nav-item">
-                                                            <div className="text-button-uppercase pb-2">For Women</div>
-                                                            <ul>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleGenderClick('women')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Starting From 60% Off
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('dress')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Dresses | Jumpsuits
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('t-shirt')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        T-shirts | Sweatshirts
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('accessories')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Accessories | Jewelry
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleGenderClick('women')}
-                                                                        className={`link text-secondary duration-300 view-all-btn`}
-                                                                    >
-                                                                        View All
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div className="nav-item">
-                                                            <div className="text-button-uppercase pb-2">For Kid</div>
-                                                            <ul>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('bed')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Kids Bed
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('toy')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Boy{String.raw`'s`} Toy
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('blanket')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Baby Blanket
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('clothing')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Newborn Clothing
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleCategoryClick('toys-kid')}
-                                                                        className={`link text-secondary duration-300 view-all-btn`}
-                                                                    >
-                                                                        View All
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div className="banner-ads-block pl-2.5 basis-1/3">
-                                                        <div className="banner-ads-item bg-linear rounded-2xl relative overflow-hidden cursor-pointer" onClick={() => handleTypeClick('swimwear')}>
-                                                            <div className="text-content py-14 pl-8 relative z-[1]">
-                                                                <div className="text-button-uppercase text-white bg-red px-2 py-0.5 inline-block rounded-sm">Save $10</div>
-                                                                <div className="heading6 mt-2">Dive into Savings <br />on Swimwear</div>
-                                                                <div className="body1 mt-3 text-secondary">
-                                                                    Starting at <span className='text-red'>$59.99</span>
-                                                                </div>
-                                                            </div>
-                                                            <Image
-                                                                src={Baju2}
-                                                                width={200}
-                                                                height={100}
-                                                                alt='bg-img'
-                                                                className='basis-1/3 absolute right-0 top-0 duration-700'
-                                                            />
-                                                        </div>
-                                                        <div className="banner-ads-item bg-linear rounded-2xl relative overflow-hidden cursor-pointer mt-8" onClick={() => handleTypeClick('accessories')}>
-                                                            <div className="text-content py-14 pl-8 relative z-[1]">
-                                                                <div className="text-button-uppercase text-white bg-red px-2 py-0.5 inline-block rounded-sm">Save $10</div>
-                                                                <div className="heading6 mt-2">20% off <br />accessories</div>
-                                                                <div className="body1 mt-3 text-secondary">
-                                                                    Starting at <span className='text-red'>$59.99</span>
-                                                                </div>
-                                                            </div>
-                                                            <Image
-                                                                src={Baju}
-                                                                width={200}
-                                                                height={100}
-                                                                alt='bg-img'
-                                                                className='basis-1/3 absolute right-0 top-0 duration-700'
-                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </li>
+                                    <li className='h-full'>
+                                        <Link
+                                            href="#!"
+                                            className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === '/laki-laki' ? 'active' : ''}`}
+                                        >
+                                            Pakaian Prempuan
+                                        </Link>
+                                        <div className="sub-menu absolute top-[74px]  bg-white">
+                                            <div className="container">
+                                                <div className="flex justify-between py-8">
+                                                    <div className="nav-link basis-2/3 grid grid-cols-1 gap-y-8">
+                                                        <div className="nav-item">
+                                                            <div className="text-button-uppercase pb-2">Baju</div>
+                                                            <ul>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleGenderClick('men')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        diskon 50 Ribu
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleTypeClick('outerwear')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        Outerwear | Coats
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleTypeClick('sweater')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        Sweaters | Cardigans
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleTypeClick('shirt')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        Shirt | Sweatshirts
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className="nav-item">
+                                                            <div className="text-button-uppercase pb-2">Celana</div>
+                                                            <ul>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleGenderClick('men')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        diskon 50 Ribu
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleTypeClick('outerwear')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        Outerwear | Coats
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleTypeClick('sweater')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        Sweaters | Cardigans
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div
+                                                                        onClick={() => handleTypeClick('shirt')}
+                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                    >
+                                                                        Shirt | Sweatshirts
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className='h-full relative '>
+                                        <Link
+                                            href="#!"
+                                            className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === '/prempuan' ? 'active' : ''}`}
+                                        >
+                                            Kategori
+                                        </Link>
+                                        <div className="sub-menu py-3 px-5 -left-6 top-14 absolute grid grid-cols-1 gap-5 w-[150px] bg-white rounded-b-xl">
+                                            <ul>
+                                                <li>
+                                                    <Link href="/" className={`link text-secondary duration-300`}>
+                                                        Baju
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
+                                                        Celana
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
+                                                        Kaos Kaki
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
+                                                        Baju Renang
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
+                                                        Baju Tidur
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
+                                                        Dakimakura
+                                                    </Link>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+
+                                    <li className='h-full'>
+                                        <Link href="#!" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
+                                            Tentang Kami
+                                        </Link>
+                                    </li>
+                                    <li className='h-full'>
+                                        <Link href="#!" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
+                                            Aksesoris
+                                        </Link>
+                                    </li>
+
                                 </ul>
                             </div>
                         </div>
@@ -363,7 +339,7 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                                 >
                                     <Icon.X size={14} />
                                 </div>
-                                <Link href={'/'} className='logo text-3xl font-semibold text-center'>Anvogue</Link>
+                                <Link href={'/'} className='logo text-3xl font-semibold text-center'>Zhindaya</Link>
                             </div>
                             <div className="form-search relative mt-2">
                                 <Icon.MagnifyingGlass size={20} className='absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer' />
@@ -375,7 +351,7 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                                         className={`${openSubNavMobile === 1 ? 'open' : ''}`}
                                         onClick={() => handleOpenSubNavMobile(1)}
                                     >
-                                        <a href={'#!'} className={`text-xl font-semibold flex items-center justify-between`}>Demo
+                                        <a href={'#!'} className={`text-xl font-semibold flex items-center justify-between`}> Pakaian Laki Laki
                                             <span className='text-right'>
                                                 <Icon.CaretRight size={20} />
                                             </span>
@@ -446,12 +422,214 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                                                         </Link>
                                                     </li>
                                                 </ul>
-                                               
+
                                             </div>
                                         </div>
                                     </li>
                                 </ul>
+                                <ul className='mt-6'>
+                                    <li
+                                        className={`${openSubNavMobile === 2 ? 'open' : ''}`}
+                                        onClick={() => handleOpenSubNavMobile(2)}
+                                    >
+                                        <a href={'#!'} className={`text-xl font-semibold flex items-center justify-between`}> Pakaian Prempuan
+                                            <span className='text-right'>
+                                                <Icon.CaretRight size={20} />
+                                            </span>
+                                        </a>
+                                        <div className="sub-nav-mobile">
+                                            <div
+                                                className="back-btn flex items-center gap-3"
+                                                onClick={() => handleOpenSubNavMobile(1)}
+                                            >
+                                                <Icon.CaretLeft />
+                                                Back
+                                            </div>
+                                            <div className="list-nav-item w-full grid grid-cols-2 pt-2 pb-6">
+                                                <ul>
+                                                    <li>
+                                                        <Link href="/" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
+                                                            Home Fashion 1
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion2" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion2' ? 'active' : ''}`}>
+                                                            Home Fashion 2
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion3" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion3' ? 'active' : ''}`}>
+                                                            Home Fashion 3
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion4" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion4' ? 'active' : ''}`}>
+                                                            Home Fashion 4
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion5" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion5' ? 'active' : ''}`}>
+                                                            Home Fashion 5
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion6" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion6' ? 'active' : ''}`}>
+                                                            Home Fashion 6
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion7" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion7' ? 'active' : ''}`}>
+                                                            Home Fashion 7
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion8" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion8' ? 'active' : ''}`}>
+                                                            Home Fashion 8
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion9" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion9' ? 'active' : ''}`}>
+                                                            Home Fashion 9
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion10" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion10' ? 'active' : ''}`}>
+                                                            Home Fashion 10
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion11" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion11' ? 'active' : ''}`}>
+                                                            Home Fashion 11
+                                                        </Link>
+                                                    </li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul className='mt-6'>
+                                    <li
+                                        className={`${openSubNavMobile === 3 ? 'open' : ''}`}
+                                        onClick={() => handleOpenSubNavMobile(3)}
+                                    >
+                                        <a href={'#!'} className={`text-xl font-semibold flex items-center justify-between`}> Pakaian Prempuan
+                                            <span className='text-right'>
+                                                <Icon.CaretRight size={20} />
+                                            </span>
+                                        </a>
+                                        <div className="sub-nav-mobile">
+                                            <div
+                                                className="back-btn flex items-center gap-3"
+                                                onClick={() => handleOpenSubNavMobile(1)}
+                                            >
+                                                <Icon.CaretLeft />
+                                                Kategori
+                                            </div>
+                                            <div className="list-nav-item w-full grid grid-cols-2 pt-2 pb-6">
+                                                <ul>
+                                                    <li>
+                                                        <Link href="/" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
+                                                            Home Fashion 1
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion2" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion2' ? 'active' : ''}`}>
+                                                            Home Fashion 2
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion3" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion3' ? 'active' : ''}`}>
+                                                            Home Fashion 3
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion4" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion4' ? 'active' : ''}`}>
+                                                            Home Fashion 4
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion5" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion5' ? 'active' : ''}`}>
+                                                            Home Fashion 5
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion6" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion6' ? 'active' : ''}`}>
+                                                            Home Fashion 6
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion7" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion7' ? 'active' : ''}`}>
+                                                            Home Fashion 7
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion8" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion8' ? 'active' : ''}`}>
+                                                            Home Fashion 8
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion9" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion9' ? 'active' : ''}`}>
+                                                            Home Fashion 9
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion10" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion10' ? 'active' : ''}`}>
+                                                            Home Fashion 10
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link href="/homepages/fashion11" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion11' ? 'active' : ''}`}>
+                                                            Home Fashion 11
+                                                        </Link>
+                                                    </li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul className='mt-6'>
+                                    <li
+                                        className={`${openSubNavMobile === 4 ? 'open' : ''}`}
+                                        onClick={() => handleOpenSubNavMobile(4)}
+                                    >
+                                        <a href={'/about-us'} className={`text-xl font-semibold flex items-center justify-between`}>
+                                        Tentang Kami
+                                            <span className='text-right'>
+                                                <Icon.CaretRight size={20} />
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul className='mt-6'>
+                                    <li
+                                        className={`${openSubNavMobile === 4 ? 'open' : ''}`}
+                                        onClick={() => handleOpenSubNavMobile(4)}
+                                    >
+                                        <a href={'/about-us'} className={`text-xl font-semibold flex items-center justify-between`}>
+                                        Aksesoris
+                                            <span className='text-right'>
+                                                <Icon.CaretRight size={20} />
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul className='mt-6'>
+                                    <li
+                                        className={`${openSubNavMobile === 5 ? 'open' : ''}`}
+                                        onClick={() => handleOpenSubNavMobile(5)}
+                                    >
+                                        <a href={'/wishlist'} className={`text-xl font-semibold flex items-center justify-between`}>
+                                        Wishlist
+                                            <span className='text-right'>
+                                                <Icon.CaretRight size={20} />
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
+
                         </div>
                     </div>
                 </div>
