@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.0.14",
+    "axios": "^1.7.9",
     "framer-motion": "^10.17.4",
     "fs-extra": "^11.3.0",
     "next": "14.0.3",

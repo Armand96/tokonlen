@@ -1,25 +1,20 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { usePathname } from 'next/navigation';
-import useLoginPopup from '@/store/useLoginPopup';
 import useMenuMobile from '@/store/useMenuMobile';
-import { useModalCartContext } from '@/context/ModalCartContext';
 import { useModalWishlistContext } from '@/context/ModalWishlistContext';
 import { useModalSearchContext } from '@/context/ModalSearchContext';
-import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
-import Baju from '@/images/dumny/baju-2.jpg'
-import Baju2 from '@/images/dumny/baju-3.jpg'
+import FetchData from '@/services/FetchData';
 
 interface Props {
     props: string;
 }
 
-const MenuOne: React.FC<Props> = ({ props }) => {
+const MenuOne: React.FC<Props> = ({ props, }) => {
     const router = useRouter()
     const pathname = usePathname()
     let [selectedType, setSelectedType] = useState<string | null>()
@@ -27,10 +22,18 @@ const MenuOne: React.FC<Props> = ({ props }) => {
     const [openSubNavMobile, setOpenSubNavMobile] = useState<number | null>(null)
     const { openModalWishlist } = useModalWishlistContext()
     const { openModalSearch } = useModalSearchContext()
+    const [categories, setCategories] = useState<any[]>([])
 
     const handleOpenSubNavMobile = (index: number) => {
         setOpenSubNavMobile(openSubNavMobile === index ? null : index)
     }
+
+    useEffect(() => {
+        FetchData.GetNavbar().then((res) => {
+            console.log(res)
+            setCategories(res.data)
+        })
+    }, [])
 
     const [fixedHeader, setFixedHeader] = useState(false)
     const [lastScrollPosition, setLastScrollPosition] = useState(0);
@@ -76,186 +79,38 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                             </Link>
                             <div className="menu-main h-full max-lg:hidden">
                                 <ul className='flex items-center gap-8 h-full'>
-                                    <li className='h-full'>
-                                        <Link
-                                            href="#!"
-                                            className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === '/laki-laki' ? 'active' : ''}`}
-                                        >
-                                            Pakaian Laki Laki
-                                        </Link>
-                                        <div className="sub-menu absolute top-[74px]  bg-white">
-                                            <div className="container">
-                                                <div className="flex justify-between py-8">
-                                                    <div className="nav-link basis-2/3 grid grid-cols-1 gap-y-8">
-                                                        <div className="nav-item">
-                                                            <div className="text-button-uppercase pb-2">Baju</div>
-                                                            <ul>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleGenderClick('men')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        diskon 50 Ribu
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('outerwear')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Outerwear | Coats
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('sweater')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Sweaters | Cardigans
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('shirt')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Shirt | Sweatshirts
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div className="nav-item">
-                                                            <div className="text-button-uppercase pb-2">Celana</div>
-                                                            <ul>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleGenderClick('men')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        diskon 50 Ribu
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('outerwear')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Outerwear | Coats
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('sweater')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Sweaters | Cardigans
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('shirt')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Shirt | Sweatshirts
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
+                                    {
+                                        categories?.slice(0, 5).map((category, index) => (
+                                            <li className='h-full' key={index}>
+                                                <Link
+                                                    href="#!"
+                                                    className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === category?.name ? 'active' : ''}`}
+                                                >
+                                                    {category?.name}
+                                                </Link>
+                                                <div className="sub-menu absolute top-[74px]  bg-white">
+                                                    <div className="container">
+                                                        <div className="flex justify-between py-8">
+                                                            <div className="nav-link grid gap-y-8">
+                                                                {
+                                                                    category?.sub_cat?.map((child: any, index: string) => (
+                                                                        <div className="nav-item" key={index}>
+                                                                            <div
+                                                                                onClick={() => handleTypeClick('shirt')}
+                                                                                className={`link text-secondary duration-300 cursor-pointer`}
+                                                                            >
+                                                                                {child?.name}
+                                                                            </div>
+                                                                        </div>
+                                                                    ))
+                                                                }
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li className='h-full'>
-                                        <Link
-                                            href="#!"
-                                            className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === '/laki-laki' ? 'active' : ''}`}
-                                        >
-                                            Pakaian Prempuan
-                                        </Link>
-                                        <div className="sub-menu absolute top-[74px]  bg-white">
-                                            <div className="container">
-                                                <div className="flex justify-between py-8">
-                                                    <div className="nav-link basis-2/3 grid grid-cols-1 gap-y-8">
-                                                        <div className="nav-item">
-                                                            <div className="text-button-uppercase pb-2">Baju</div>
-                                                            <ul>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleGenderClick('men')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        diskon 50 Ribu
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('outerwear')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Outerwear | Coats
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('sweater')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Sweaters | Cardigans
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('shirt')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Shirt | Sweatshirts
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div className="nav-item">
-                                                            <div className="text-button-uppercase pb-2">Celana</div>
-                                                            <ul>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleGenderClick('men')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        diskon 50 Ribu
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('outerwear')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Outerwear | Coats
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('sweater')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Sweaters | Cardigans
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div
-                                                                        onClick={() => handleTypeClick('shirt')}
-                                                                        className={`link text-secondary duration-300 cursor-pointer`}
-                                                                    >
-                                                                        Shirt | Sweatshirts
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
+                                            </li>
+                                        ))
+                                    }
                                     <li className='h-full relative '>
                                         <Link
                                             href="#!"
@@ -263,42 +118,20 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                                         >
                                             Kategori
                                         </Link>
-                                        <div className="sub-menu py-3 px-5 -left-6 top-14 absolute grid grid-cols-1 gap-5 w-[150px] bg-white rounded-b-xl">
+                                        <div className="sub-menu py-3 px-5 -left-6 top-14 absolute grid grid-cols-1 gap-5 w-[190px]  bg-white rounded-b-xl">
                                             <ul>
-                                                <li>
-                                                    <Link href="/" className={`link text-secondary duration-300`}>
-                                                        Baju
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                        Celana
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                        Kaos Kaki
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                        Baju Renang
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                        Baju Tidur
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/shop/breadcrumb" className='link text-secondary duration-300'>
-                                                        Dakimakura
-                                                    </Link>
-                                                </li>
+                                                {
+                                                    categories?.map((category, index) => (
+                                                        <li key={index}>
+                                                            <Link href="/" className={`link text-secondary duration-300`}>
+                                                                {category?.name}
+                                                            </Link>
+                                                        </li>
+                                                    ))
+                                                }
                                             </ul>
                                         </div>
                                     </li>
-
                                     <li className='h-full'>
                                         <Link href="#!" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
                                             Tentang Kami
@@ -306,10 +139,9 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                                     </li>
                                     <li className='h-full'>
                                         <Link href="#!" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
-                                            Aksesoris
+                                           Kontak Kami
                                         </Link>
                                     </li>
-
                                 </ul>
                             </div>
                         </div>
@@ -317,11 +149,6 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                             <div className="max-md:hidden search-icon flex items-center cursor-pointer relative">
                                 <Icon.MagnifyingGlass size={24} color='black' onClick={openModalSearch} />
                                 <div className="line absolute bg-line w-px h-6 -right-6"></div>
-                            </div>
-                            <div className="list-action flex items-center gap-4">
-                                <div className="max-md:hidden wishlist-icon flex items-center cursor-pointer" onClick={openModalWishlist}>
-                                    <Icon.Heart size={24} color='black' />
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -595,7 +422,7 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                                         onClick={() => handleOpenSubNavMobile(4)}
                                     >
                                         <a href={'/about-us'} className={`text-xl font-semibold flex items-center justify-between`}>
-                                        Tentang Kami
+                                            Tentang Kami
                                             <span className='text-right'>
                                                 <Icon.CaretRight size={20} />
                                             </span>
@@ -608,7 +435,7 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                                         onClick={() => handleOpenSubNavMobile(4)}
                                     >
                                         <a href={'/about-us'} className={`text-xl font-semibold flex items-center justify-between`}>
-                                        Aksesoris
+                                            Aksesoris
                                             <span className='text-right'>
                                                 <Icon.CaretRight size={20} />
                                             </span>
@@ -621,7 +448,7 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                                         onClick={() => handleOpenSubNavMobile(5)}
                                     >
                                         <a href={'/wishlist'} className={`text-xl font-semibold flex items-center justify-between`}>
-                                        Wishlist
+                                            Wishlist
                                             <span className='text-right'>
                                                 <Icon.CaretRight size={20} />
                                             </span>

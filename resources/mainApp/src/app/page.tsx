@@ -11,16 +11,18 @@ import Testimonial from '@/components/Home/Testimonial'
 import Brand from '@/components/Home/Brand'
 import Footer from '@/components/Footer/Footer'
 
-export default function Home() {
+export default async function Home() {
+ 
+
+
   return (
     <>
       <div id="header" className='relative w-full'>
-        <MenuOne props="bg-transparent" />
+        <MenuOne  props="bg-transparent" />
         <Slider />
       </div>
       <WhatNewOne data={productData} start={0} limit={4} />
       <Collection />
-    
       <Benefit props="md:py-20 py-10" />
       <Testimonial data={testimonialData} limit={6} />
       <Brand />
@@ -28,3 +30,4 @@ export default function Home() {
     </>
   )
 }
+

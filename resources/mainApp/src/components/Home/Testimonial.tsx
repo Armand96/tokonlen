@@ -18,7 +18,7 @@ const Testimonial: React.FC<Props> = ({ data, limit }) => {
             <div className="testimonial-block md:py-20 py-10 bg-surface">
                 <div className="container">
                     <div className="heading3 text-center">
-                        What People Are Saying
+                       Testimoni
                     </div>
 
                     <div className="list-testimonial pagination-mt40 md:mt-10 mt-6">

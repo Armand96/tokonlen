@@ -27,6 +27,7 @@ const ModalSearch = () => {
                     className={`modal-search-main md:p-10 p-6 rounded-[32px] ${isModalOpen ? 'open' : ''}`}
                     onClick={(e) => { e.stopPropagation() }}
                 >
+                    <div className="heading5 mb-4">Search</div>
                     <div className="form-search relative">
                         <Icon.MagnifyingGlass
                             className='absolute heading5 right-6 top-1/2 -translate-y-1/2 cursor-pointer'
@@ -43,7 +44,7 @@ const ModalSearch = () => {
                             onKeyDown={(e) => e.key === 'Enter' && handleSearch(searchKeyword)}
                         />
                     </div>
-                    <div className="keyword mt-8">
+                    {/* <div className="keyword mt-8">
                         <div className="heading5">Feature keywords Today</div>
                         <div className="list-keyword flex items-center flex-wrap gap-3 mt-4">
                             <div
@@ -79,7 +80,7 @@ const ModalSearch = () => {
                                 <Product key={product.id} data={product} type='grid' style={''} />
                             ))}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </>
