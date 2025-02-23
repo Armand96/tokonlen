@@ -7,6 +7,7 @@ use App\Http\Requests\ApiRequest;
 class BannerCreateReq extends ApiRequest
 {
     public string $name;
+    public string $caption;
     public mixed $image_file;
     public string $image;
     public bool $is_active;
@@ -15,6 +16,7 @@ class BannerCreateReq extends ApiRequest
     {
         return [
             'name' => 'required|string|max:100',
+            'caption' => 'required|string',
             'image_file' => 'required|image',
             'image' => 'string',
             'is_active' => 'boolean'
