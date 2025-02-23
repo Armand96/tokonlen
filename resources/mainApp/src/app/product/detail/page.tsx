@@ -14,7 +14,7 @@ const ProductDefault = () => {
     const searchParams = useSearchParams()
     let productId = searchParams.get('id')
 
-    if (productId === null) {
+    if (!productId) {
         productId = '1'
     }
 
@@ -22,7 +22,7 @@ const ProductDefault = () => {
         <>
             <div id="header" className='relative w-full'>
                 <MenuOne props="bg-white" />
-                <BreadcrumbProduct data={productData} productPage='default' productId={productId} />
+                <BreadcrumbProduct data={productData} productPage='detail' productId={null} />
             </div>
             <Default data={productData} productId={productId} />
             <Footer />

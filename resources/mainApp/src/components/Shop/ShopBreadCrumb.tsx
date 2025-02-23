@@ -5,7 +5,6 @@ import Link from 'next/link'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { ProductType } from '@/type/ProductType'
 import Product from '../Product/Product';
-import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css'
 import HandlePagination from '../Other/HandlePagination';
 import FetchData from '@/services/FetchData';
@@ -31,18 +30,25 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
     const [currentPage, setCurrentPage] = useState(0);
     const [listCategories, setListCategories] = useState<any>([])
     const [loading, setLoading] = useState(true)
+    const [produk, setProduk] = useState<any>([])
     const productsPerPage = productPerPage;
     const offset = currentPage * productsPerPage;
     const router = useRouter()
+    
 
 
     useEffect(() => {
         setLoading(true)
-        FetchData.GetCategories().then((res) => {
+    FetchData.GetCategories().then((res) => {
             setListCategories(res?.data)
-            setLoading(false)
+            let filterFromSlug = res?.data?.filter((x: any) => x.slug == category)[0]
+            console.log(filterFromSlug)
+            FetchData.GetProduk(`${filterFromSlug ? `?category_id=${filterFromSlug?.id}` : ""} `).then((res) => {
+                setProduk(res)
+                setLoading(false)
+            })
         })
-    },[])
+    },[category,type])
 
     const handleShowOnlySale = () => {
         setShowOnlySale(toggleSelect => !toggleSelect)
@@ -55,7 +61,6 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
 
     const handleType = (category: string, type: string | null) => {
         router.push(`/shop/breadcrumb?type=${type}&category=${category}`);
-        setCurrentPage(0);
     }
 
     const handleSize = (size: string) => {
@@ -63,17 +68,6 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
         setCurrentPage(0);
     }
 
-    const handlePriceChange = (values: number | number[]) => {
-        if (Array.isArray(values)) {
-            setPriceRange({ min: values[0], max: values[1] });
-            setCurrentPage(0);
-        }
-    };
-
-    const handleColor = (color: string) => {
-        setColor((prevColor) => (prevColor === color ? null : color))
-        setCurrentPage(0);
-    }
 
     const handleBrand = (brand: string) => {
         setBrand((prevBrand) => (prevBrand === brand ? null : brand));
@@ -303,31 +297,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="filter-price pb-8 border-b border-line mt-8">
-                                <div className="heading6">Price Range</div>
-                                <Slider
-                                    range
-                                    defaultValue={[0, 100]}
-                                    min={0}
-                                    max={100}
-                                    onChange={handlePriceChange}
-                                    className='mt-5'
-                                />
-                                <div className="price-block flex items-center justify-between flex-wrap mt-4">
-                                    <div className="min flex items-center gap-1">
-                                        <div>Min price:</div>
-                                        <div className='price-min'>$
-                                            <span>{priceRange.min}</span>
-                                        </div>
-                                    </div>
-                                    <div className="min flex items-center gap-1">
-                                        <div>Max price:</div>
-                                        <div className='price-max'>$
-                                            <span>{priceRange.max}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
+                          
                            
                             <div className="filter-brand mt-8">
                                 <div className="heading6">Brands</div>
@@ -406,7 +376,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
 
                             <div className="list-filtered flex items-center gap-3 mt-4">
                                 <div className="total-product">
-                                    {totalProducts}
+                                    {produk?.total}
                                     <span className='text-secondary pl-1'>Products Found</span>
                                 </div>
                                 {
@@ -452,16 +422,13 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                             </div>
 
                             <div className="list-product hide-product-sold grid lg:grid-cols-3 grid-cols-2 sm:gap-[30px] gap-[20px] mt-7">
-                                {currentProducts.map((item) => (
-                                    item.id === 'no-data' ? (
-                                        <div key={item.id} className="no-data-product">No products match the selected criteria.</div>
-                                    ) : (
-                                        <Product key={item.id} data={item} type='grid' style={''} />
-                                    )
-                                ))}
+                                {produk ? produk?.data?.map((item: any, index: string) => (
+                                        <Product key={index} data={item} type='grid' style={''} />
+                                )) :  <div  className="no-data-product">Produk tidak ditemukan</div>}
+                                                                       
                             </div>
 
-                            {pageCount > 1 && (
+                            {produk?.last_page > 1 && (
                                 <div className="list-pagination flex items-center md:mt-10 mt-7">
                                     <HandlePagination pageCount={pageCount} onPageChange={handlePageChange} />
                                 </div>

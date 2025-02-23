@@ -46,9 +46,9 @@ const SliderOne = () => {
                                 <div className="slider-item h-full w-full relative">
                                     <div className="container w-full h-full flex items-center relative">
                                         <div className="text-content basis-1/2">
-                                            <div className="text-sub-display">Sale! Up To 50% Off!</div>
+                                            <div className="text-sub-display">{item?.caption}</div>
                                             <div className="text-display md:mt-5 mt-2">{item?.name}</div>
-                                            <Link href='/shop/breadcrumb' className="button-main md:mt-8 mt-3">Beli sekarang</Link>
+                                            {/* <Link href='/shop/breadcrumb' className="button-main md:mt-8 mt-3">Beli sekarang</Link> */}
                                         </div>
                                         <div className="sub-img md:absolute  md:w-1/2 h-[calc(90% - 120px)] lg:h-[90%] w-[200px] 2xl:-right-[60px] -right-[10px] md:-right-[0] bottom-0">
                                             <Image

@@ -1,19 +1,29 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
 import { useRouter } from 'next/navigation';
 import Baju from '@/images/dumny/baju-3.jpg'
+import FetchData from '@/services/FetchData';
+import Helpers from '@/Helpers/Helpers';
 
 const Collection = () => {
     const router = useRouter()
+        const [listCategories, setListCategories] = useState<any>([])
+    
 
     const handleTypeClick = (type: string) => {
-        router.push(`/shop/breadcrumb?type=${type}`);
+        router.push(`/shop/breadcrumb?category=${type}`);
     };
+
+    useEffect(() => {
+        FetchData.GetCategories().then((res) => {
+            setListCategories(res?.data)
+        })
+    },[])
 
     return (
         <>
@@ -44,84 +54,24 @@ const Collection = () => {
                         }}
                         className='h-full'
                     >
-                        <SwiperSlide>
-                            <div className="collection-item block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick('swimwear')}>
+                     {
+                        listCategories.map((item: any, index: number) => (
+                            <SwiperSlide key={index}>
+                            <div className="collection-item block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick(item?.slug)}>
                                 <div className="bg-img">
                                     <Image
-                                        src={Baju}
+                                        src={Helpers.GetImage(item?.image)}
                                         width={1000}
                                         height={600}
-                                        alt='swimwear'
+                                        alt={item?.name}
                                     />
                                 </div>
-                                <div className="collection-name heading5 text-center sm:bottom-8 bottom-4 lg:w-[200px] md:w-[160px] w-[100px] md:py-3 py-1.5 bg-white rounded-xl duration-500">swimwear</div>
+                                <div className="collection-name heading5 text-center sm:bottom-8 bottom-4 lg:w-[200px] md:w-[160px] w-[100px] md:py-3 py-1.5 bg-white rounded-xl duration-500">{item?.name}</div>
                             </div>
                         </SwiperSlide>
-                        <SwiperSlide>
-                            <div className="collection-item block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick('top')}>
-                                <div className="bg-img">
-                                    <Image
-                                        src={Baju}
-                                        width={1000}
-                                        height={600}
-                                        alt='top'
-                                    />
-                                </div>
-                                <div className="collection-name heading5 text-center sm:bottom-8 bottom-4 lg:w-[200px] md:w-[160px] w-[100px] md:py-3 py-1.5 bg-white rounded-xl duration-500">top</div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <div className="collection-item block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick('sets')}>
-                                <div className="bg-img">
-                                    <Image
-                                        src={Baju}
-                                        width={1000}
-                                        height={600}
-                                        alt='sets'
-                                    />
-                                </div>
-                                <div className="collection-name heading5 text-center sm:bottom-8 bottom-4 lg:w-[200px] md:w-[160px] w-[100px] md:py-3 py-1.5 bg-white rounded-xl duration-500">sets</div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <div className="collection-item block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick('outerwear')}>
-                                <div className="bg-img">
-                                    <Image
-                                        src={Baju}
-                                        width={1000}
-                                        height={600}
-                                        alt='outerwear'
-                                    />
-                                </div>
-                                <div className="collection-name heading5 text-center sm:bottom-8 bottom-4 lg:w-[200px] md:w-[160px] w-[100px] md:py-3 py-1.5 bg-white rounded-xl duration-500">outerwear</div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <div className="collection-item block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick('underwear')}>
-                                <div className="bg-img">
-                                    <Image
-                                        src={Baju}
-                                        width={1000}
-                                        height={600}
-                                        alt='underwear'
-                                    />
-                                </div>
-                                <div className="collection-name heading5 text-center sm:bottom-8 bottom-4 lg:w-[200px] md:w-[160px] w-[100px] md:py-3 py-1.5 bg-white rounded-xl duration-500">underwear</div>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <div className="collection-item block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick('t-shirt')}>
-                                <div className="bg-img">
-                                    <Image
-                                        src={Baju}
-                                        width={1000}
-                                        height={600}
-                                        alt='t-shirt'
-                                    />
-                                </div>
-                                <div className="collection-name heading5 text-center sm:bottom-8 bottom-4 lg:w-[200px] md:w-[160px] w-[100px] md:py-3 py-1.5 bg-white rounded-xl duration-500">t-shirt</div>
-                            </div>
-                        </SwiperSlide>
+                        ))
+                     }
+                      
                     </Swiper>
                 </div>
             </div>

@@ -8,7 +8,15 @@ const FetchData = {
     GetBanners: async (params: string = '' ) => {
         const res = await apiService.getData(`api/banner${params}`);
         return res.data;
-    }
+    },
+    GetProduk: async (params: string = '' ) => {
+        const res = await apiService.getData(`api/product${params}`);
+        return res.data;
+    },
+    SearchAll: async (params: string = '' ) => {
+        const res = await apiService.getData(`api/product${params}`);
+        return res.data;
+    },
 };
 
 export default FetchData
