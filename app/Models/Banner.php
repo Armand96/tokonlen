@@ -11,7 +11,8 @@ class Banner extends Model
         'name',
         'slug',
         'image',
-        'is_acative'
+        'caption',
+        'is_active'
     ];
 
     protected $hidden = [
