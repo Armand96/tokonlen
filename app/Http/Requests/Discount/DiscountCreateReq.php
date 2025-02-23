@@ -17,7 +17,7 @@ class DiscountCreateReq extends ApiRequest
     {
         return [
             'product_id' => 'required|numeric',
-            'variant_id' => 'required|numeric',
+            'variant_id' => 'numeric',
             'discount_percentage' => 'numeric',
             'discount_amount' => 'numeric',
             'start_date' => 'required|string',
