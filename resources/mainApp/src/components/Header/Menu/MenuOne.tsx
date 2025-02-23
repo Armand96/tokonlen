@@ -179,7 +179,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                                 className={`${openSubNavMobile === index ? 'open  bg-white ' : ''}`}
                                                 onClick={() => handleOpenSubNavMobile(index)}
                                             >
-                                                <a href={'#!'} className={`text-xl font-semibold flex items-center justify-between`}> {category?.name}
+                                                <a href={`#`} className={`text-xl font-semibold flex items-center justify-between`}> {category?.name}
                                                     <span className='text-right'>
                                                         <Icon.CaretRight size={20} />
                                                     </span>
@@ -197,7 +197,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                                             {
                                                                 category?.sub_cat?.map((item: any, index: string) => (
                                                                     <li key={index}>
-                                                                        <Link href="/" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
+                                                                        <Link href={`/shop/breadcrumb?type=${item?.slug}&category=${category?.slug}`} className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
                                                                             {item?.name}
                                                                         </Link>
                                                                     </li>
