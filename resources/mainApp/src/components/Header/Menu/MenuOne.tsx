@@ -51,9 +51,6 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
         };
     }, [lastScrollPosition]);
 
-    const handleGenderClick = (gender: string) => {
-        router.push(`/shop/breadcrumb?gender=${gender}`);
-    };
 
     // const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown';
     // console.log("test",userAgent)

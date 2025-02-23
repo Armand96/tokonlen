@@ -22,6 +22,7 @@ import FetchData from '@/services/FetchData';
 import Helpers from '@/Helpers/Helpers'
 import Loading from '@/components/Other/Loading'
 
+
 SwiperCore.use([Navigation, Thumbs]);
 
 interface Props {
@@ -66,12 +67,14 @@ const Default: React.FC<Props> = ({ data, productId }) => {
         Promise.all([FetchData.GetProduk(`/${productId}`),FetchData.GetCategories()]).then((res) => {
                 setProduk(res[0]?.data)
                 setCategories(res[1]?.data)
+                document.title = `${res[0]?.data?.name} - Zhindaya ` ; 
                 FetchData.GetProduk(`?category_id=${res[1]?.data?.filter((x: any) => x.id == res[0]?.data?.category_id)[0]?.id}`).then((res) => {
                     setRelatedProduk(res?.data)
                 })
                 setLoading(false)
             })
     },[])
+
 
     const handleActiveSize = (item: string) => {
         setActiveSize(item)

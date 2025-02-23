@@ -10,6 +10,7 @@ import Footer from '@/components/Footer/Footer'
 import { ProductType } from '@/type/ProductType'
 import productData from '@/data/Product.json'
 
+
 const ProductDefault = () => {
     const searchParams = useSearchParams()
     let productId = searchParams.get('id')
