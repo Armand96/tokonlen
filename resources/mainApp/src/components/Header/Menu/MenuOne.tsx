@@ -29,8 +29,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
     }
 
     useEffect(() => {
-        FetchData.GetNavbar().then((res) => {
-            console.log(res)
+        FetchData.GetCategories().then((res) => {
             setCategories(res.data)
         })
     }, [])
@@ -56,13 +55,11 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
         router.push(`/shop/breadcrumb?gender=${gender}`);
     };
 
-    const handleCategoryClick = (category: string) => {
-        router.push(`/shop/breadcrumb?category=${category}`);
-    };
 
-    const handleTypeClick = (type: string) => {
+
+    const handleTypeClick = (type: string, category: string) => {
         setSelectedType(type)
-        router.push(`/shop/breadcrumb?type=${type}`);
+        router.push(`/shop/breadcrumb?type=${type}&category=${category}`);
     };
 
     return (
@@ -96,7 +93,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                                                     category?.sub_cat?.map((child: any, index: string) => (
                                                                         <div className="nav-item" key={index}>
                                                                             <div
-                                                                                onClick={() => handleTypeClick('shirt')}
+                                                                                onClick={() => handleTypeClick(child?.slug, category?.slug)}
                                                                                 className={`link text-secondary duration-300 cursor-pointer`}
                                                                             >
                                                                                 {child?.name}
@@ -139,7 +136,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                     </li>
                                     <li className='h-full'>
                                         <Link href="#!" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
-                                           Kontak Kami
+                                            Kontak Kami
                                         </Link>
                                     </li>
                                 </ul>
@@ -172,290 +169,116 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                 <Icon.MagnifyingGlass size={20} className='absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer' />
                                 <input type="text" placeholder='What are you looking for?' className=' h-12 rounded-lg border border-line text-sm w-full pl-10 pr-4' />
                             </div>
-                            <div className="list-nav mt-6">
-                                <ul>
-                                    <li
-                                        className={`${openSubNavMobile === 1 ? 'open' : ''}`}
-                                        onClick={() => handleOpenSubNavMobile(1)}
-                                    >
-                                        <a href={'#!'} className={`text-xl font-semibold flex items-center justify-between`}> Pakaian Laki Laki
-                                            <span className='text-right'>
-                                                <Icon.CaretRight size={20} />
-                                            </span>
-                                        </a>
-                                        <div className="sub-nav-mobile">
-                                            <div
-                                                className="back-btn flex items-center gap-3"
-                                                onClick={() => handleOpenSubNavMobile(1)}
+                            {
+                                categories?.slice(0, 5).map((category, index) => (
+                                    <div className="list-nav mt-6" key={index}>
+                                        <ul>
+                                            <li
+                                                className={`${openSubNavMobile === index ? 'open  bg-white ' : ''}`}
+                                                onClick={() => handleOpenSubNavMobile(index)}
                                             >
-                                                <Icon.CaretLeft />
-                                                Back
-                                            </div>
-                                            <div className="list-nav-item w-full grid grid-cols-2 pt-2 pb-6">
-                                                <ul>
-                                                    <li>
-                                                        <Link href="/" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
-                                                            Home Fashion 1
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion2" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion2' ? 'active' : ''}`}>
-                                                            Home Fashion 2
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion3" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion3' ? 'active' : ''}`}>
-                                                            Home Fashion 3
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion4" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion4' ? 'active' : ''}`}>
-                                                            Home Fashion 4
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion5" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion5' ? 'active' : ''}`}>
-                                                            Home Fashion 5
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion6" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion6' ? 'active' : ''}`}>
-                                                            Home Fashion 6
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion7" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion7' ? 'active' : ''}`}>
-                                                            Home Fashion 7
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion8" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion8' ? 'active' : ''}`}>
-                                                            Home Fashion 8
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion9" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion9' ? 'active' : ''}`}>
-                                                            Home Fashion 9
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion10" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion10' ? 'active' : ''}`}>
-                                                            Home Fashion 10
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion11" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion11' ? 'active' : ''}`}>
-                                                            Home Fashion 11
-                                                        </Link>
-                                                    </li>
-                                                </ul>
+                                                <a href={'#!'} className={`text-xl font-semibold flex items-center justify-between`}> {category?.name}
+                                                    <span className='text-right'>
+                                                        <Icon.CaretRight size={20} />
+                                                    </span>
+                                                </a>
+                                                <div className="sub-nav-mobile">
+                                                    <div
+                                                        className="back-btn flex items-center gap-3"
+                                                        onClick={() => handleOpenSubNavMobile(index)}
+                                                    >
+                                                        <Icon.CaretLeft />
+                                                        Back
+                                                    </div>
+                                                    <div className="list-nav-item w-full  grid grid-cols-2 pt-2 pb-6">
+                                                        <ul>
+                                                            {
+                                                                category?.sub_cat?.map((item: any, index: string) => (
+                                                                    <li key={index}>
+                                                                        <Link href="/" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
+                                                                            {item?.name}
+                                                                        </Link>
+                                                                    </li>
+                                                                ))
+                                                            }
 
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <ul className='mt-6'>
-                                    <li
-                                        className={`${openSubNavMobile === 2 ? 'open' : ''}`}
-                                        onClick={() => handleOpenSubNavMobile(2)}
-                                    >
-                                        <a href={'#!'} className={`text-xl font-semibold flex items-center justify-between`}> Pakaian Prempuan
-                                            <span className='text-right'>
-                                                <Icon.CaretRight size={20} />
-                                            </span>
-                                        </a>
-                                        <div className="sub-nav-mobile">
-                                            <div
-                                                className="back-btn flex items-center gap-3"
-                                                onClick={() => handleOpenSubNavMobile(1)}
-                                            >
-                                                <Icon.CaretLeft />
-                                                Back
-                                            </div>
-                                            <div className="list-nav-item w-full grid grid-cols-2 pt-2 pb-6">
-                                                <ul>
-                                                    <li>
-                                                        <Link href="/" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
-                                                            Home Fashion 1
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion2" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion2' ? 'active' : ''}`}>
-                                                            Home Fashion 2
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion3" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion3' ? 'active' : ''}`}>
-                                                            Home Fashion 3
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion4" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion4' ? 'active' : ''}`}>
-                                                            Home Fashion 4
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion5" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion5' ? 'active' : ''}`}>
-                                                            Home Fashion 5
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion6" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion6' ? 'active' : ''}`}>
-                                                            Home Fashion 6
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion7" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion7' ? 'active' : ''}`}>
-                                                            Home Fashion 7
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion8" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion8' ? 'active' : ''}`}>
-                                                            Home Fashion 8
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion9" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion9' ? 'active' : ''}`}>
-                                                            Home Fashion 9
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion10" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion10' ? 'active' : ''}`}>
-                                                            Home Fashion 10
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion11" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion11' ? 'active' : ''}`}>
-                                                            Home Fashion 11
-                                                        </Link>
-                                                    </li>
-                                                </ul>
+                                                        </ul>
 
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <ul className='mt-6'>
-                                    <li
-                                        className={`${openSubNavMobile === 3 ? 'open' : ''}`}
-                                        onClick={() => handleOpenSubNavMobile(3)}
-                                    >
-                                        <a href={'#!'} className={`text-xl font-semibold flex items-center justify-between`}> Pakaian Prempuan
-                                            <span className='text-right'>
-                                                <Icon.CaretRight size={20} />
-                                            </span>
-                                        </a>
-                                        <div className="sub-nav-mobile">
-                                            <div
-                                                className="back-btn flex items-center gap-3"
-                                                onClick={() => handleOpenSubNavMobile(1)}
-                                            >
-                                                <Icon.CaretLeft />
-                                                Kategori
-                                            </div>
-                                            <div className="list-nav-item w-full grid grid-cols-2 pt-2 pb-6">
-                                                <ul>
-                                                    <li>
-                                                        <Link href="/" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
-                                                            Home Fashion 1
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion2" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion2' ? 'active' : ''}`}>
-                                                            Home Fashion 2
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion3" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion3' ? 'active' : ''}`}>
-                                                            Home Fashion 3
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion4" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion4' ? 'active' : ''}`}>
-                                                            Home Fashion 4
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion5" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion5' ? 'active' : ''}`}>
-                                                            Home Fashion 5
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion6" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion6' ? 'active' : ''}`}>
-                                                            Home Fashion 6
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion7" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion7' ? 'active' : ''}`}>
-                                                            Home Fashion 7
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion8" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion8' ? 'active' : ''}`}>
-                                                            Home Fashion 8
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion9" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion9' ? 'active' : ''}`}>
-                                                            Home Fashion 9
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion10" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion10' ? 'active' : ''}`}>
-                                                            Home Fashion 10
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/homepages/fashion11" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/homepages/fashion11' ? 'active' : ''}`}>
-                                                            Home Fashion 11
-                                                        </Link>
-                                                    </li>
-                                                </ul>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                ))
+                            }
+                            {
+                                <div className="list-nav mt-6" >
+                                    <ul>
+                                        <li
+                                            className={`${openSubNavMobile === categories.length + 1 ? 'open  bg-white ' : ''}`}
+                                            onClick={() => handleOpenSubNavMobile(categories.length + 1)}
+                                        >
+                                            <a href={'#!'} className={`text-xl font-semibold flex items-center justify-between`}> Kategori
+                                                <span className='text-right'>
+                                                    <Icon.CaretRight size={20} />
+                                                </span>
+                                            </a>
+                                            <div className="sub-nav-mobile">
+                                                <div
+                                                    className="back-btn flex items-center gap-3"
+                                                    onClick={() => handleOpenSubNavMobile(categories.length + 1)}
+                                                >
+                                                    <Icon.CaretLeft />
+                                                    Back
+                                                </div>
+                                                <div className="list-nav-item w-full  grid grid-cols-2 pt-2 pb-6">
+                                                    <ul>
+                                                        {
+                                                            categories?.map((item: any, index: number) => (
+                                                                <li key={index}>
+                                                                    <Link href="/" className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
+                                                                        {item?.name}
+                                                                    </Link>
+                                                                </li>
+                                                            ))
+                                                        }
 
+                                                    </ul>
+
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <ul className='mt-6'>
-                                    <li
-                                        className={`${openSubNavMobile === 4 ? 'open' : ''}`}
-                                        onClick={() => handleOpenSubNavMobile(4)}
-                                    >
-                                        <a href={'/about-us'} className={`text-xl font-semibold flex items-center justify-between`}>
-                                            Tentang Kami
-                                            <span className='text-right'>
-                                                <Icon.CaretRight size={20} />
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <ul className='mt-6'>
-                                    <li
-                                        className={`${openSubNavMobile === 4 ? 'open' : ''}`}
-                                        onClick={() => handleOpenSubNavMobile(4)}
-                                    >
-                                        <a href={'/about-us'} className={`text-xl font-semibold flex items-center justify-between`}>
-                                            Aksesoris
-                                            <span className='text-right'>
-                                                <Icon.CaretRight size={20} />
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <ul className='mt-6'>
-                                    <li
-                                        className={`${openSubNavMobile === 5 ? 'open' : ''}`}
-                                        onClick={() => handleOpenSubNavMobile(5)}
-                                    >
-                                        <a href={'/wishlist'} className={`text-xl font-semibold flex items-center justify-between`}>
-                                            Wishlist
-                                            <span className='text-right'>
-                                                <Icon.CaretRight size={20} />
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+
+                            <ul className='mt-6 "list-nav'>
+                                <li
+                                    className={`${openSubNavMobile === categories?.length + 2 ? 'open' : ''}`}
+                                    onClick={() => handleOpenSubNavMobile(categories?.length + 2)}
+                                >
+                                    <a href={'/wishlist'} className={`text-xl font-semibold flex items-center justify-between`}>
+                                        Contact Kami
+                                        <span className='text-right'>
+                                            <Icon.CaretRight size={20} />
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <ul className='mt-6 "list-nav'>
+                                <li
+                                    className={`${openSubNavMobile === categories?.length + 3 ? 'open' : ''}`}
+                                    onClick={() => handleOpenSubNavMobile(categories?.length + 3)}
+                                >
+                                    <a href={'/wishlist'} className={`text-xl font-semibold flex items-center justify-between`}>
+                                       Tentang Kami
+                                        <span className='text-right'>
+                                            <Icon.CaretRight size={20} />
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
 
                         </div>
                     </div>
