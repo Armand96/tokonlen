@@ -55,6 +55,8 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
         router.push(`/shop/breadcrumb?gender=${gender}`);
     };
 
+    // const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown';
+    // console.log("test",userAgent)
 
 
     const handleTypeClick = (type: string, category: string) => {
