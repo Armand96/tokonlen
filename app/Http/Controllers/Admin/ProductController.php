@@ -31,7 +31,7 @@ class ProductController extends Controller
         }
 
         // paginate result
-        $products = $query->paginate($dataPerPage);
+        $products = $query->orderBy('id', 'desc')->paginate($dataPerPage);
 
         return $products;
     }
