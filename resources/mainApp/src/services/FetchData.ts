@@ -1,7 +1,7 @@
 import apiService from "./api"
 
 const FetchData = {
-    GetNavbar: async () => {
+    GetCategories: async () => {
         const res = await apiService.getData(`api/category`);
         return res.data;
     }

@@ -7,7 +7,7 @@ import Shopbreadcrumb from '@/components/Shop/ShopBreadCrumb'
 import productData from '@/data/Product.json'
 import Footer from '@/components/Footer/Footer'
 
-export default function breadcrumb() {
+export default function Breadcrumb() {
     const searchParams = useSearchParams()
     let [type,setType] = useState<string | null | undefined>()
     let datatype = searchParams.get('type')

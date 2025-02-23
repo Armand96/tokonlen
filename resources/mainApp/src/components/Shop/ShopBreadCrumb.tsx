@@ -8,6 +8,9 @@ import Product from '../Product/Product';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css'
 import HandlePagination from '../Other/HandlePagination';
+import FetchData from '@/services/FetchData';
+import Loading from '../Other/Loading';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     data: Array<ProductType>
@@ -26,8 +29,20 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
     const [brand, setBrand] = useState<string | null>()
     const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 100 });
     const [currentPage, setCurrentPage] = useState(0);
+    const [listCategories, setListCategories] = useState<any>([])
+    const [loading, setLoading] = useState(true)
     const productsPerPage = productPerPage;
     const offset = currentPage * productsPerPage;
+    const router = useRouter()
+
+
+    useEffect(() => {
+        setLoading(true)
+        FetchData.GetCategories().then((res) => {
+            setListCategories(res?.data)
+            setLoading(false)
+        })
+    },[])
 
     const handleShowOnlySale = () => {
         setShowOnlySale(toggleSelect => !toggleSelect)
@@ -38,8 +53,8 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
         setCurrentPage(0);
     };
 
-    const handleType = (type: string | null) => {
-        setType((prevType) => (prevType === type ? null : type))
+    const handleType = (category: string, type: string | null) => {
+        router.push(`/shop/breadcrumb?type=${type}&category=${category}`);
         setCurrentPage(0);
     }
 
@@ -63,6 +78,11 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
     const handleBrand = (brand: string) => {
         setBrand((prevBrand) => (prevBrand === brand ? null : brand));
         setCurrentPage(0);
+    }
+
+
+    const generateText = () => {
+        return dataType?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     }
 
 
@@ -205,31 +225,31 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
         setBrand(null);
         setPriceRange({ min: 0, max: 100 });
         setCurrentPage(0);
-        handleType(null)
     };
 
     return (
         <>
+            { loading && <Loading />}
             <div className="breadcrumb-block style-img">
                 <div className="breadcrumb-main bg-linear overflow-hidden">
                     <div className="container lg:pt-[134px] pt-24 pb-10 relative">
                         <div className="main-content w-full h-full flex flex-col items-center justify-center relative z-[1]">
                             <div className="text-content">
-                                <div className="heading2 text-center">{dataType === null ? 'Shop' : dataType}</div>
+                                <div className="heading2 text-center">{!dataType ? 'Shop' : generateText()}</div>
                                 <div className="link flex items-center justify-center gap-1 caption1 mt-3">
                                     <Link href={'/'}>Homepage</Link>
                                     <Icon.CaretRight size={14} className='text-secondary2' />
-                                    <div className='text-secondary2 capitalize'>{dataType === null ? 'Shop' : dataType}</div>
+                                    <div className='text-secondary2 capitalize'>{!dataType ? 'Shop' : generateText()}</div>
                                 </div>
                             </div>
                             <div className="list-tab flex flex-wrap items-center justify-center gap-y-5 gap-8 lg:mt-[70px] mt-12 overflow-hidden">
-                                {['t-shirt', 'dress', 'top', 'swimwear', 'shirt'].map((item, index) => (
+                            {listCategories.map((item: any, index: string) => (
                                     <div
                                         key={index}
-                                        className={`tab-item text-button-uppercase cursor-pointer has-line-before line-2px ${dataType === item ? 'active' : ''}`}
-                                        onClick={() => handleType(item)}
+                                        className={`tab-item text-button-uppercase cursor-pointer has-line-before line-2px ${category === item?.slug ? 'active' : ''}`}
+                                        onClick={() => handleType(item?.slug, '')}
                                     >
-                                        {item}
+                                        {item?.name}
                                     </div>
                                 ))}
                             </div>
@@ -245,18 +265,20 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                             <div className="filter-type pb-8 border-b border-line">
                                 <div className="heading6">Products Type</div>
                                 <div className="list-type mt-4">
-                                    {['t-shirt', 'dress', 'top', 'swimwear', 'shirt', 'underwear', 'sets', 'accessories'].map((item, index) => (
-                                        <div
+                                    {listCategories.filter((y: any) => y.slug == category).map((item: any, index: string) => {
+                                       return item?.sub_cat?.map((x: any) => (
+                                            <div
                                             key={index}
-                                            className={`item flex items-center justify-between cursor-pointer ${dataType === item ? 'active' : ''}`}
-                                            onClick={() => handleType(item)}
+                                            className={`item flex items-center justify-between cursor-pointer ${x === item ? 'active' : ''}`}
+                                            onClick={() => handleType(category!, x?.slug)}
                                         >
-                                            <div className='text-secondary has-line-before hover:text-black capitalize'>{item}</div>
+                                            <div className='text-secondary has-line-before hover:text-black capitalize'>{item?.name}</div>
                                             <div className='text-secondary2'>
-                                                ({data.filter(dataItem => dataItem.type === item && dataItem.category === 'fashion').length})
+                                            {x?.name}
                                             </div>
                                         </div>
-                                    ))}
+                                        ))
+                                    })}
                                 </div>
                             </div>
                             <div className="filter-size pb-8 border-b border-line mt-8">
@@ -281,7 +303,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                     </div>
                                 </div>
                             </div>
-                            <div className="filter-price pb-8 border-b border-line mt-8">
+                            {/* <div className="filter-price pb-8 border-b border-line mt-8">
                                 <div className="heading6">Price Range</div>
                                 <Slider
                                     range
@@ -305,61 +327,8 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="filter-color pb-8 border-b border-line mt-8">
-                                <div className="heading6">colors</div>
-                                <div className="list-color flex items-center flex-wrap gap-3 gap-y-4 mt-4">
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'pink' ? 'active' : ''}`}
-                                        onClick={() => handleColor('pink')}
-                                    >
-                                        <div className="color bg-[#F4C5BF] w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">pink</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'red' ? 'active' : ''}`}
-                                        onClick={() => handleColor('red')}
-                                    >
-                                        <div className="color bg-red w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">red</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'green' ? 'active' : ''}`}
-                                        onClick={() => handleColor('green')}
-                                    >
-                                        <div className="color bg-green w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">green</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'yellow' ? 'active' : ''}`}
-                                        onClick={() => handleColor('yellow')}
-                                    >
-                                        <div className="color bg-yellow w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">yellow</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'purple' ? 'active' : ''}`}
-                                        onClick={() => handleColor('purple')}
-                                    >
-                                        <div className="color bg-purple w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">purple</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'black' ? 'active' : ''}`}
-                                        onClick={() => handleColor('black')}
-                                    >
-                                        <div className="color bg-black w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">black</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'white' ? 'active' : ''}`}
-                                        onClick={() => handleColor('white')}
-                                    >
-                                        <div className="color bg-[#F6EFDD] w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">white</div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> */}
+                           
                             <div className="filter-brand mt-8">
                                 <div className="heading6">Brands</div>
                                 <div className="list-brand mt-4">

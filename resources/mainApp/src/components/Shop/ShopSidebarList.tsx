@@ -5,17 +5,20 @@ import Link from 'next/link'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { ProductType } from '@/type/ProductType'
 import Product from '../Product/Product';
-import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css'
 import HandlePagination from '../Other/HandlePagination';
+import FetchData from '@/services/FetchData';
+import Loading from '../Other/Loading';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     data: Array<ProductType>;
     productPerPage: number
     dataType: string | null
+    category: string | null
 }
 
-const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType }) => {
+const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType, category }) => {
     const [type, setType] = useState<string | null>(dataType)
     const [showOnlySale, setShowOnlySale] = useState(false)
     const [sortOption, setSortOption] = useState('');
@@ -26,10 +29,26 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType }) =>
     const [currentPage, setCurrentPage] = useState(0);
     const productsPerPage = productPerPage;
     const offset = currentPage * productsPerPage;
+    const [listCategories, setListCategories] = useState<any>([])
+    const [loading, setLoading] = useState(true)
+    const router = useRouter()
 
-    const handleType = (type: string) => {
-        setType((prevType) => (prevType === type ? null : type))
+
+    useEffect(() => {
+        setLoading(true)
+        FetchData.GetCategories().then((res) => {
+            setListCategories(res?.data)
+            setLoading(false)
+        })
+    },[])
+
+
+
+    const handleType = (category: string, type: string | null) => {
+        setLoading(true)
+        router.push(`/shop/breadcrumb?type=${type}&category=${category}`);
         setCurrentPage(0);
+        setLoading(false)
     }
 
     const handleShowOnlySale = () => {
@@ -195,8 +214,17 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType }) =>
         setType(dataType);
     };
 
+    const generateText = () => {
+        return dataType?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    }
+
+
+
     return (
         <>
+        {
+            loading && <Loading />
+        }
             <div className="breadcrumb-block style-img">
                 <div className="breadcrumb-main bg-linear overflow-hidden">
                     <div className="container lg:pt-[134px] pt-24 pb-10 relative">
@@ -210,13 +238,13 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType }) =>
                                 </div>
                             </div>
                             <div className="list-tab flex flex-wrap items-center justify-center gap-y-5 gap-8 lg:mt-[70px] mt-12 overflow-hidden">
-                                {['t-shirt', 'dress', 'top', 'swimwear', 'shirt'].map((item, index) => (
+                            {listCategories.map((item: any, index: string) => (
                                     <div
                                         key={index}
-                                        className={`tab-item text-button-uppercase cursor-pointer has-line-before line-2px ${dataType === item ? 'active' : ''}`}
-                                        onClick={() => handleType(item)}
+                                        className={`tab-item text-button-uppercase cursor-pointer has-line-before line-2px ${category === item?.slug ? 'active' : ''}`}
+                                        onClick={() => handleType(item?.slug, '')}
                                     >
-                                        {item}
+                                        {item?.name}
                                     </div>
                                 ))}
                             </div>
@@ -229,21 +257,23 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType }) =>
                 <div className="container">
                     <div className="flex max-md:flex-wrap max-md:flex-col-reverse gap-y-8">
                         <div className="sidebar lg:w-1/4 md:w-1/3 w-full md:pr-12">
-                            <div className="filter-type pb-8 border-b border-line">
+                        <div className="filter-type pb-8 border-b border-line">
                                 <div className="heading6">Products Type</div>
                                 <div className="list-type mt-4">
-                                    {['t-shirt', 'dress', 'top', 'swimwear', 'shirt', 'underwear', 'sets', 'accessories'].map((item, index) => (
-                                        <div
+                                    {listCategories.filter((y: any) => y.slug == category).map((item: any, index: string) => {
+                                       return item?.sub_cat?.map((x: any) => (
+                                            <div
                                             key={index}
-                                            className={`item flex items-center justify-between cursor-pointer ${dataType === item ? 'active' : ''}`}
-                                            onClick={() => handleType(item)}
+                                            className={`item flex items-center justify-between cursor-pointer ${x === item ? 'active' : ''}`}
+                                            onClick={() => handleType(category!, x?.slug)}
                                         >
-                                            <div className='text-secondary has-line-before hover:text-black capitalize'>{item}</div>
+                                            <div className='text-secondary has-line-before hover:text-black capitalize'>{item?.name}</div>
                                             <div className='text-secondary2'>
-                                                ({data.filter(dataItem => dataItem.type === item && dataItem.category === 'fashion').length})
+                                            {x?.name}
                                             </div>
                                         </div>
-                                    ))}
+                                        ))
+                                    })}
                                 </div>
                             </div>
                             <div className="filter-size pb-8 border-b border-line mt-8">
@@ -268,7 +298,7 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType }) =>
                                     </div>
                                 </div>
                             </div>
-                            <div className="filter-price pb-8 border-b border-line mt-8">
+                            {/* <div className="filter-price pb-8 border-b border-line mt-8">
                                 <div className="heading6">Price Range</div>
                                 <Slider
                                     range
@@ -292,61 +322,7 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType }) =>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="filter-color pb-8 border-b border-line mt-8">
-                                <div className="heading6">colors</div>
-                                <div className="list-color flex items-center flex-wrap gap-3 gap-y-4 mt-4">
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'pink' ? 'active' : ''}`}
-                                        onClick={() => handleColor('pink')}
-                                    >
-                                        <div className="color bg-[#F4C5BF] w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">pink</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'red' ? 'active' : ''}`}
-                                        onClick={() => handleColor('red')}
-                                    >
-                                        <div className="color bg-red w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">red</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'green' ? 'active' : ''}`}
-                                        onClick={() => handleColor('green')}
-                                    >
-                                        <div className="color bg-green w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">green</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'yellow' ? 'active' : ''}`}
-                                        onClick={() => handleColor('yellow')}
-                                    >
-                                        <div className="color bg-yellow w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">yellow</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'purple' ? 'active' : ''}`}
-                                        onClick={() => handleColor('purple')}
-                                    >
-                                        <div className="color bg-purple w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">purple</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'black' ? 'active' : ''}`}
-                                        onClick={() => handleColor('black')}
-                                    >
-                                        <div className="color bg-black w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">black</div>
-                                    </div>
-                                    <div
-                                        className={`color-item px-3 py-[5px] flex items-center justify-center gap-2 rounded-full border border-line ${color === 'white' ? 'active' : ''}`}
-                                        onClick={() => handleColor('white')}
-                                    >
-                                        <div className="color bg-[#F6EFDD] w-5 h-5 rounded-full"></div>
-                                        <div className="caption1 capitalize">white</div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> */}
                             <div className="filter-brand mt-8">
                                 <div className="heading6">Brands</div>
                                 <div className="list-brand mt-4">
