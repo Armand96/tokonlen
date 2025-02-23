@@ -22,7 +22,7 @@ class SearchController extends Controller
             ->orWhereHas('category', function($qry) use ($words) {
                 $qry->where('name', 'like', '%'.$words.'%');
             })
-            ->with(['image', 'variant', 'discount'])->get();
+            ->with(['image', 'variant.images', 'discount'])->get();
             $data = array(
                 'categories' => $categories,
                 'products' => $products
