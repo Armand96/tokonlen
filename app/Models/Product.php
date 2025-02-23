@@ -19,6 +19,8 @@ class Product extends Model
         'is_active'
     ];
 
+    protected $appends = ['final_price', 'discount_price'];
+
     protected $hidden = [
         'created_at',
         'updated_at'
@@ -72,6 +74,30 @@ class Product extends Model
     {
         return $this->hasOne(Discount::class, 'product_id', 'id')
         ->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
+    }
+
+    public function getFinalPriceAttribute()
+    {
+        if ($this->discount) {
+            if($this->discount->discount_percentage > 0) {
+                return (float) $this->price - ((float) $this->price * ((float)$this->discount->discount_percentage / 100));
+            } else {
+                return (float) $this->price - (float) $this->discount->discount_amount;
+            }
+        }
+        return $this->price;
+    }
+
+    public function getDiscountPriceAttribute()
+    {
+        if($this->discount) {
+            if($this->discount->discount_percentage > 0) {
+                return (float) $this->price * ((float) $this->discount->discount_percentage / 100);
+            } else {
+                return (float) $this->discount->discount_amount;
+            }
+        }
+        return 0;
     }
 
 }
