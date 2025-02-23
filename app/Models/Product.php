@@ -68,4 +68,10 @@ class Product extends Model
         return $this->hasMany(ProductLink::class, 'product_id', 'id');
     }
 
+    public function discount()
+    {
+        return $this->hasOne(Discount::class, 'product_id', 'id')
+        ->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
+    }
+
 }

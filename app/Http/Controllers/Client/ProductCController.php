@@ -7,11 +7,13 @@ use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductCController extends Controller
 {
     public function getListActiveProduct(Request $req)
     {
+        // DB::enableQueryLog();
         $query = Product::query();
         $data_per_page = $req->input('data_per_page') ? $req->input('data_per_page') : 10;
 
@@ -24,8 +26,9 @@ class ProductCController extends Controller
             $query->where('category_id', '=', $req->category_id);
         }
 
-        $query->where('is_active', true)->with('image');
+        $query->where('is_active', true)->with(['image', 'discount']);
         $products = $query->paginate($data_per_page);
+        // dd(DB::getQueryLog());
         return $products;
         // return response()->json(new ResponseSuccess($products, "Success", "Success Get Products"));
     }
@@ -34,7 +37,7 @@ class ProductCController extends Controller
     {
         if ($product) return response()->json(
             new ResponseSuccess(
-                $product->with(['images', 'variant.images', 'links'])
+                $product->with(['images', 'variant.images', 'links', 'discount'])
                     ->where('is_active', true)->where('id', $product->id)->first(),
                 "Success",
                 "Success Get Product"
