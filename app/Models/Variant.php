@@ -21,6 +21,8 @@ class Variant extends Model
         'updated_at'
     ];
 
+    protected $appends = ['final_price', 'discount_price'];
+
     public function product()
     {
         return $this->belongsTo(Product::class, 'id', 'product_id');
