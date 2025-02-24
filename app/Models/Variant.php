@@ -33,6 +33,11 @@ class Variant extends Model
         return $this->hasMany(VariantImage::class, 'variant_id', 'id');
     }
 
+    public function image()
+    {
+        return $this->hasOne(VariantImage::class, 'variant_id', 'id')->orderBy('default')->limit(1);
+    }
+
     public function discount()
     {
         return $this->hasOne(Discount::class, 'variant_id', 'id')
