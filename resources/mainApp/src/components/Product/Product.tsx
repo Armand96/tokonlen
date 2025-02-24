@@ -14,6 +14,7 @@ import { useModalQuickviewContext } from '@/context/ModalQuickviewContext'
 import { useRouter } from 'next/navigation'
 import Baju from '@/images/dumny/baju-2.jpg'
 import Helpers from '@/Helpers/Helpers';
+import dayjs from 'dayjs';
 
 
 interface ProductProps {
@@ -62,7 +63,8 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                 <div className={`product-item grid-type ${style}`}>
                     <div onClick={() => handleDetailProduct(data.id)} className="product-main cursor-pointer block">
                         <div className="product-thumb bg-white relative overflow-hidden rounded-2xl">
-                            {data.new && (
+                           
+                            {(dayjs(data?.release_date).diff(dayjs(), "day") < -14) && (
                                 <div className="product-tag text-button-uppercase bg-green px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
                                     New
                                 </div>
