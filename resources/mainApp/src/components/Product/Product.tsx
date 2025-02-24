@@ -69,9 +69,14 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                     New
                                 </div>
                             )}
-                            {data.sale && (
+                               {(data?.stock < 1) && (
+                                <div className="product-tag text-button-uppercase bg-black text-white px-3 py-0.5 inline-block rounded-full absolute top-3 right-3 z-[1]">
+                                    Stock Habis
+                                </div>
+                            )}
+                            {(data?.final_price !== data?.price)  && (
                                 <div className="product-tag text-button-uppercase text-white bg-red px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
-                                    Sale
+                                    Promo
                                 </div>
                             )}
                             <div className="product-img w-full h-full aspect-[3/4]">
@@ -84,7 +89,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                                 height={500}
                                                 alt={data.name}
                                                 priority={true}
-                                                className='w-full h-full object-cover duration-700'
+                                                    className={`w-full h-full object-cover duration-700 ${data?.stock < 1 ? ' filter grayscale' : ""} `}
                                             />
                                         {/* }
                                     </>
@@ -216,16 +221,21 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                             <div className="product-item list-type">
                                 <div className="product-main cursor-pointer flex lg:items-center sm:justify-between gap-7 max-lg:gap-5">
                                     <div onClick={() => handleDetailProduct(data.id)} className="product-thumb bg-white relative overflow-hidden rounded-2xl block max-sm:w-1/2">
-                                        {data.new && (
-                                            <div className="product-tag text-button-uppercase bg-green px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
-                                                New
-                                            </div>
-                                        )}
-                                        {data.sale && (
-                                            <div className="product-tag text-button-uppercase text-white bg-red px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
-                                                Sale
-                                            </div>
-                                        )}
+                                    {(dayjs(data?.release_date).diff(dayjs(), "day") > -14) && (
+                                <div className="product-tag text-button-uppercase bg-green px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
+                                    New
+                                </div>
+                            )}
+                               {(data?.stock < 1) && (
+                                <div className="product-tag text-button-uppercase bg-black text-white px-3 py-0.5 inline-block rounded-full absolute top-3 right-3 z-[1]">
+                                    Stock Habis
+                                </div>
+                            )}
+                            {(data?.final_price !== data?.price)  && (
+                                <div className="product-tag text-button-uppercase text-white bg-red px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
+                                    Promo
+                                </div>
+                            )}
                                         <div className="product-img w-full aspect-[3/4] rounded-2xl overflow-hidden">
                                             {data.thumbImage.map((img: any, index: number) => (
                                                 <Image
@@ -235,8 +245,8 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                                     height={500}
                                                     priority={true}
                                                     alt={data.name}
-                                                    className='w-full h-full object-cover duration-700'
-                                                />
+                                                    className={`w-full h-full object-cover duration-700 ${data?.stock < 1 ? ' filter grayscale' : ""} `}
+                                                    />
                                             ))}
                                         </div>
                                       

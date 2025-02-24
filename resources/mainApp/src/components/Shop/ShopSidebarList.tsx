@@ -32,15 +32,20 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType, cate
     const [listCategories, setListCategories] = useState<any>([])
     const [loading, setLoading] = useState(true)
     const router = useRouter()
+    const [produk, setProduk] = useState<any>([])
 
 
     useEffect(() => {
         setLoading(true)
-        FetchData.GetCategories().then((res) => {
+    FetchData.GetCategories().then((res) => {
             setListCategories(res?.data)
-            setLoading(false)
+            let filterFromSlug = res?.data?.filter((x: any) => x.slug == category)[0]
+            FetchData.GetProduk(`${filterFromSlug ? `?category_id=${filterFromSlug?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc"} `).then((res) => {
+                setProduk(res)
+                setLoading(false)
+            })
         })
-    },[])
+    },[category,type])
 
 
 
@@ -66,17 +71,8 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType, cate
         setCurrentPage(0);
     }
 
-    const handlePriceChange = (values: number | number[]) => {
-        if (Array.isArray(values)) {
-            setPriceRange({ min: values[0], max: values[1] });
-            setCurrentPage(0);
-        }
-    };
 
-    const handleColor = (color: string) => {
-        setColor((prevColor) => (prevColor === color ? null : color))
-        setCurrentPage(0);
-    }
+
 
     const handleBrand = (brand: string) => {
         setBrand((prevBrand) => (prevBrand === brand ? null : brand));
@@ -230,8 +226,8 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType, cate
                     <div className="container lg:pt-[134px] pt-24 pb-10 relative">
                         <div className="main-content w-full h-full flex flex-col items-center justify-center relative z-[1]">
                             <div className="text-content">
-                                <div className="heading2 text-center">{dataType === null ? 'Shop' : dataType}</div>
-                                <div className="link flex items-center justify-center gap-1 caption1 mt-3">
+                            <div className="heading2 text-center">{!dataType ? 'Shop' : generateText()}</div>
+                            <div className="link flex items-center justify-center gap-1 caption1 mt-3">
                                     <Link href={'/'}>Homepage</Link>
                                     <Icon.CaretRight size={14} className='text-secondary2' />
                                     <div className='text-secondary2 capitalize'>{dataType === null ? 'Shop' : dataType}</div>
@@ -352,7 +348,7 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType, cate
                             <div className="filter-heading flex items-center justify-between gap-5 flex-wrap">
                                 <div className="left flex has-line items-center flex-wrap gap-5">
                                     <div className="choose-layout flex items-center gap-2">
-                                        <Link href={'/shop/breadcrumb'} className="item three-col w-8 h-8 border border-line rounded flex items-center justify-center cursor-pointer">
+                                        <Link href={`/shop/breadcrumb?type=${dataType || ""}&category=${category || ""}`} className="item three-col w-8 h-8 border border-line rounded flex items-center justify-center cursor-pointer">
                                             <div className='flex items-center gap-0.5'>
                                                 <span className='w-[3px] h-4 bg-secondary2 rounded-sm'></span>
                                                 <span className='w-[3px] h-4 bg-secondary2 rounded-sm'></span>
@@ -401,8 +397,9 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType, cate
 
                             <div className="list-filtered flex items-center gap-3 mt-4">
                                 <div className="total-product">
-                                    {totalProducts}
-                                    <span className='text-secondary pl-1'>Products Found</span>
+                                {produk?.total}
+
+                                <span className='text-secondary pl-1'>Products Found</span>
                                 </div>
                                 {
                                     (selectedType || selectedSize || selectedColor || selectedBrand) && (
@@ -446,17 +443,14 @@ const ShopSidebarList: React.FC<Props> = ({ data, productPerPage, dataType, cate
                                 }
                             </div>
 
-                            <div className="list-product hide-product-sold flex flex-col gap-8 mt-7">
-                                {currentProducts.map((item) => (
-                                    item.id === 'no-data' ? (
-                                        <div key={item.id} className="no-data-product">No products match the selected criteria.</div>
-                                    ) : (
-                                        <Product key={item.id} data={item} type='list' style={''} />
-                                    )
-                                ))}
+                            <div className="list-product hide-product-sold grid lg:grid-cols-3 grid-cols-2 sm:gap-[30px] gap-[20px] mt-7">
+                                {produk ? produk?.data?.map((item: any, index: string) => (
+                                        <Product key={index} data={item} type='grid' style={''} />
+                                )) :  <div  className="no-data-product">Produk tidak ditemukan</div>}
+                                                                       
                             </div>
 
-                            {pageCount > 1 && (
+                            {produk?.last_page > 1 && (
                                 <div className="list-pagination flex items-center md:mt-10 mt-7">
                                     <HandlePagination pageCount={pageCount} onPageChange={handlePageChange} />
                                 </div>

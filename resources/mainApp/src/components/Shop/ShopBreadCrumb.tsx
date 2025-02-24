@@ -42,8 +42,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
     FetchData.GetCategories().then((res) => {
             setListCategories(res?.data)
             let filterFromSlug = res?.data?.filter((x: any) => x.slug == category)[0]
-            console.log(filterFromSlug)
-            FetchData.GetProduk(`${filterFromSlug ? `?category_id=${filterFromSlug?.id}` : ""} `).then((res) => {
+            FetchData.GetProduk(`${filterFromSlug ? `?category_id=${filterFromSlug?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc"} `).then((res) => {
                 setProduk(res)
                 setLoading(false)
             })
@@ -335,7 +334,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                                 <span className='w-[3px] h-4 bg-secondary2 rounded-sm'></span>
                                             </div>
                                         </div>
-                                        <Link href={'/shop/sidebar-list'} className="item row w-8 h-8 border border-line rounded flex items-center justify-center cursor-pointer">
+                                        <Link href={`/shop/sidebar-list?type=${dataType || ""}&category=${category || ""}`} className="item row w-8 h-8 border border-line rounded flex items-center justify-center cursor-pointer">
                                             <div className='flex flex-col items-center gap-0.5'>
                                                 <span className='w-4 h-[3px] bg-secondary2 rounded-sm'></span>
                                                 <span className='w-4 h-[3px] bg-secondary2 rounded-sm'></span>

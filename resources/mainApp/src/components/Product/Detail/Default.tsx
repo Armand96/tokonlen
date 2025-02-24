@@ -258,8 +258,8 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                     </div>
                                 </div>
                                
-                                <div className="button-block mt-5">
-                                    <div className="button-main w-full text-center">Beli sekarang</div>
+                                <div className="button-block mt-5" >
+                                    <button className={`button-main ${produk?.stock < 1 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 1} >{produk?.stock < 1 ? "Stok Habis" : "Beli sekarang"}</button>
                                 </div>
                                 <div className="flex items-center lg:gap-20 gap-8 mt-5 pb-6 border-b border-line">
                         
@@ -292,16 +292,16 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         <div className="text-secondary">orang melihat produk ini</div>
                                     </div>
                                     <div className="flex items-center gap-1 mt-3">
+                                        <div className="text-title">Stock:</div>
+                                        <div className="text-secondary">{produk?.stock}</div>
+                                    </div>
+                                    <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">SKU:</div>
                                         <div className="text-secondary">53453412</div>
                                     </div>
                                     <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">Categories:</div>
                                         <div className="text-secondary">{produk?.category}</div>
-                                    </div>
-                                    <div className="flex items-center gap-1 mt-3">
-                                        <div className="text-title">Tag:</div>
-                                        <div className="text-secondary">{produk?.type}</div>
                                     </div>
                                 </div>
                                 {/* <div className="list-payment mt-7">
