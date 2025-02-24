@@ -111,11 +111,11 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                     </>
                                 )} */}
                             </div>
-                            {data.sale && (
+                            {data?.final_price !== data?.price && (
                                 <>
                                     <div className="bg-black w-full -mt-12 rounded-b-lg absolute z-[100] flex items-center px-4 py-3">
                                         <Icon.Lightning weight='fill' className='text-red' />
-                                        <div className={`caption2 font-semibold uppercase text-white px-2.5`}>Hot Sales {percentSale}% OFF</div>
+                                        <div className={`caption2 font-semibold uppercase text-white px-2.5`}>Diskon {( data?.discount_price / data?.price) * 100 }% </div>
                                     </div>
                                 </>
                             )}
@@ -175,12 +175,12 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                 </div>
                             )} */}
                             <div className="product-price-block flex items-center gap-2 flex-wrap mt-1 duration-300 relative z-[1]">
-                                <div className="product-price text-title">{Helpers.FormatPrice(data.price)}</div>
-                                {percentSale > 0 && (
+                                <div className="product-price text-title">{Helpers.FormatPrice(data.final_price)}</div>
+                                {data?.final_price !== data?.price && (
                                     <>
-                                        <div className="product-origin-price caption1 text-secondary2"><del>${data.originPrice}.00</del></div>
+                                        <div className="product-origin-price caption1 text-secondary2"><del>{Helpers.FormatPrice(data.price)}</del></div>
                                         <div className="product-sale caption1 font-medium bg-green px-3 py-0.5 inline-block rounded-full">
-                                            -{percentSale}%
+                                            -{( data?.discount_price / data?.price) * 100 }%
                                         </div>
                                     </>
                                 )}
@@ -254,15 +254,17 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                     <div className='flex sm:items-center gap-7 max-lg:gap-4 max-lg:flex-wrap max-lg:w-full max-sm:flex-col max-sm:w-1/2'>
                                         <div className="product-infor max-sm:w-full">
                                             <div onClick={() => handleDetailProduct(data.id)} className="product-name heading6 inline-block duration-300">{data.name}</div>
-                                            <div className="product-price-block flex items-center gap-2 flex-wrap mt-2 duration-300 relative z-[1]">
-                                                <div className="product-price text-title">${data.price}.00</div>
-                                                <div className="product-origin-price caption1 text-secondary2"><del>${data.originPrice}.00</del></div>
-                                                {data.originPrice && (
-                                                    <div className="product-sale caption1 font-medium bg-green px-3 py-0.5 inline-block rounded-full">
-                                                        -{percentSale}%
-                                                    </div>
-                                                )}
-                                            </div>
+                                            <div className="product-price-block flex items-center gap-2 flex-wrap mt-1 duration-300 relative z-[1]">
+                                <div className="product-price text-title">{Helpers.FormatPrice(data.final_price)}</div>
+                                {data?.final_price !== data?.price && (
+                                    <>
+                                        <div className="product-origin-price caption1 text-secondary2"><del>{Helpers.FormatPrice(data.price)}</del></div>
+                                        <div className="product-sale caption1 font-medium bg-green px-3 py-0.5 inline-block rounded-full">
+                                            -{( data?.discount_price / data?.price) * 100 }%
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                                             {/* {data.variation.length > 0 && data.action === 'add to cart' ? (
                                                 <div className="list-color max-md:hidden py-2 mt-5 mb-1 flex items-center gap-3 flex-wrap duration-300">
                                                     {data.variation.map((item, index) => (
