@@ -198,10 +198,10 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                             <div className="flex items-center gap-3  flex-wrap mt-5 ">
                                 <div className={`product-price heading5 `}>{Helpers.FormatPrice(produk?.final_price)}</div>
                                 <div className={`w-px h-4 bg-line ${produk?.final_price == produk?.price ? "hidden" : ""}`}></div>
-                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price == produk?.price ? "hidden" : ""}`}><del>{Helpers.FormatPrice(produk?.final_price)}</del></div>
+                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price == produk?.price ? "hidden" : ""}`}><del>{Helpers.FormatPrice(produk?.price)}</del></div>
                                 {produk?.discount_price > 0 && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
-                                        -{produk?.discount}%
+                                        -{produk?.discount?.discount_percentage}%
                                     </div>
                                 )}
                             </div>
@@ -576,7 +576,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                     <div className="container">
                         <div className="heading3 text-center">Related Produk</div>
                         <div className="list-product hide-product-sold  grid lg:grid-cols-4 grid-cols-2 md:gap-[30px] gap-5 md:mt-10 mt-6">
-                            {relatedProduk.slice(0,5).map((item: any, index: number) => (
+                            {relatedProduk?.slice(0,5).map((item: any, index: number) => (
                                 <Product key={index} data={item} type='grid' style='style-1' />
                             ))}
                         </div>
