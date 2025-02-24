@@ -112,13 +112,13 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                     </div>
                                 </>
                             )}
-                            {style === 'style-2' || style === 'style-4' ? (
+                            {/* {style === 'style-2' || style === 'style-4' ? (
                                 <div className="list-size-block flex items-center justify-center gap-4 absolute bottom-0 left-0 w-full h-8">
                                     {data.sizes.map((item: any, index: number) => (
                                         <strong key={index} className="size-item text-xs font-bold uppercase">{item}</strong>
                                     ))}
                                 </div>
-                            ) : <></>}
+                            ) : <></>} */}
                      
                           
                         </div>
@@ -143,7 +143,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                 </div>
                             </div>
                             <div className="product-name text-title duration-300">{data.name}</div>
-                            {data?.variant?.length > 0 && (
+                            {/* {data?.variant?.length > 0 && (
                                 <div className="list-color-image max-md:hidden flex items-center gap-2 flex-wrap duration-500">
                                     {data?.variant?.map((item: any, index: number) => (
                                         <div
@@ -166,7 +166,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                         </div>
                                     ))}
                                 </div>
-                            )}
+                            )} */}
                             <div className="product-price-block flex items-center gap-2 flex-wrap mt-1 duration-300 relative z-[1]">
                                 <div className="product-price text-title">{Helpers.FormatPrice(data.price)}</div>
                                 {percentSale > 0 && (

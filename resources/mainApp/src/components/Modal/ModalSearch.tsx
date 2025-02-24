@@ -27,7 +27,7 @@ const ModalSearch = () => {
                     className={`modal-search-main md:p-10 p-6 rounded-[32px] ${isModalOpen ? 'open' : ''}`}
                     onClick={(e) => { e.stopPropagation() }}
                 >
-                    <div className="heading5 mb-4">Search</div>
+                    <div className="heading5 mb-4">Cari produk berdasarkan nama</div>
                     <div className="form-search relative">
                         <Icon.MagnifyingGlass
                             className='absolute heading5 right-6 top-1/2 -translate-y-1/2 cursor-pointer'

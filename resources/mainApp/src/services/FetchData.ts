@@ -14,7 +14,7 @@ const FetchData = {
         return res.data;
     },
     SearchAll: async (params: string = '' ) => {
-        const res = await apiService.getData(`api/product${params}`);
+        const res = await apiService.getData(`api/search?words=${params}`);
         return res.data;
     },
 };
