@@ -15,6 +15,8 @@ class ProductCController extends Controller
     {
         // DB::enableQueryLog();
         $query = Product::query();
+        $orderBy = $req->input('order_by') ? $req->input('order_by') : 'release_date';
+        $orderMethod = $req->input('order_method') ? $req->input('order_method') : 'desc';
         $data_per_page = $req->input('data_per_page') ? $req->input('data_per_page') : 10;
 
         // filter by name
@@ -26,7 +28,7 @@ class ProductCController extends Controller
             $query->where('category_id', '=', $req->category_id);
         }
 
-        $query->where('is_active', true)->with(['image', 'discount', 'variant.images'])->orderBy('id', 'desc');
+        $query->where('is_active', true)->with(['image', 'discount', 'variant.images'])->orderBy($orderBy, $orderMethod);
         $products = $query->paginate($data_per_page);
         // dd(DB::getQueryLog());
         return $products;
