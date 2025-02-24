@@ -237,12 +237,12 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                 <div className="choose-size mt-5">
                                     <div className="heading flex items-center justify-between">
                                         <div className="text-title">Ukuran: <span className='text-title size'>{activeSize}</span></div>
-                                        <div
+                                        {/* <div
                                             className="caption1 size-guide text-red  flex gap-x-2 items-center cursor-pointer"
                                             onClick={handleOpenSizeGuide}
                                         >
                                            Bingung ? <div className='underline caption1 font-bold'>Saran Ukuran</div>
-                                        </div>
+                                        </div> */}
                                         <ModalSizeguide data={productMain} isOpen={openSizeGuide} onClose={handleCloseSizeGuide} />
                                     </div>
                                     <div className="list-size flex items-center gap-2 flex-wrap mt-3">
