@@ -22,11 +22,11 @@ class Discount extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'id', 'product_id');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
     public function variant()
     {
-        return $this->belongsTo(Variant::class, 'id', 'variant_id');
+        return $this->belongsTo(Variant::class, 'variant_id', 'id');
     }
 }

@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Client\BannerCController;
 use App\Http\Controllers\Client\ProductCController;
 use App\Http\Controllers\Client\SearchController;
+use App\Http\Controllers\SizeController;
 use App\Http\Requests\ResponseFail;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -51,6 +52,7 @@ Route::prefix('admin')
     Route::resource('variant_images', VariantImageController::class);
     Route::resource('discount', DiscountController::class);
     Route::resource('banner', BannerController::class);
+    Route::resource('size', SizeController::class);
 });
 
 // Route::group(function() {
