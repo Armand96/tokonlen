@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
+use App\Http\Requests\Variant\VariantBulkCreateReq;
 use App\Http\Requests\Variant\VariantCreateReq;
 use App\Http\Requests\Variant\VariantUpdateReq;
 use App\Models\Variant;
@@ -107,6 +108,19 @@ class VariantController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
+            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()));
+        }
+    }
+
+    public function bulkInsert(VariantBulkCreateReq $request)
+    {
+        try {
+            $variants = $request->validated()['variants'];
+            Variant::insert($variants);
+            return response()->json(new ResponseSuccess(null,"Success","Success Create Bulk Variant"));
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::error($th->getMessage());
             return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()));
         }
     }

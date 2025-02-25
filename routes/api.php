@@ -53,6 +53,9 @@ Route::prefix('admin')
     Route::resource('discount', DiscountController::class);
     Route::resource('banner', BannerController::class);
     Route::resource('size', SizeController::class);
+
+    //additional
+    Route::post('variant_bulk_insert', [VariantController::class, 'bulkInsert']);
 });
 
 // Route::group(function() {
