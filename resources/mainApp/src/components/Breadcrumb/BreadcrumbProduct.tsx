@@ -27,11 +27,11 @@ const BreadcrumbProduct: React.FC<Props> = ({ data, productPage, productId }) =>
                         <div className="left flex items-center gap-1">
                             <Link href={'/'} className='caption1 text-secondary2 hover:underline'>Homepage</Link>
                             <Icon.CaretRight size={12} className='text-secondary2' />
-                            <div className='caption1 text-secondary2'>Product</div>
+                            <div onClick={() => router.back()} className= 'hover:underline caption1 text-secondary2 cursor-pointer' >Product</div>
                             <Icon.CaretRight size={12} className='text-secondary2' />
                             <div className='caption1 capitalize'>{`Product ${productPage}`}</div>
                         </div>
-                        <div className="right flex items-center gap-3">
+                        {/* <div className="right flex items-center gap-3">
                             {productId !== null && Number(productId) >= 2 ? (
                                 <>
                                     <div onClick={() => handleDetailProduct(Number(productId) - 1)} className='flex items-center cursor-pointer text-secondary hover:text-black border-r border-line pr-3'>
@@ -53,7 +53,7 @@ const BreadcrumbProduct: React.FC<Props> = ({ data, productPage, productId }) =>
                                     )}
                                 </>
                             )}
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
