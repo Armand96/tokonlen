@@ -1,8 +1,8 @@
 import apiService from "./api"
 
 const FetchData = {
-    GetCategories: async () => {
-        const res = await apiService.getData(`api/category`);
+    GetCategories: async (params: string = '' ) => {
+        const res = await apiService.getData(`api/category${params}`);
         return res.data;
     },
     GetBanners: async (params: string = '' ) => {

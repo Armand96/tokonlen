@@ -24,27 +24,7 @@ interface ProductProps {
 }
 
 const Product: React.FC<ProductProps> = ({ data, type, style }) => {
-    const [activeColor, setActiveColor] = useState<string>('')
-    const [activeSize, setActiveSize] = useState<string>('')
-    const [openQuickShop, setOpenQuickShop] = useState<boolean>(false)
-    const { addToCart, updateCart, cartState } = useCart();
-    const { openModalCart } = useModalCartContext()
-    const { addToWishlist, removeFromWishlist, wishlistState } = useWishlist();
-    const { openModalWishlist } = useModalWishlistContext()
-    const { openModalCompare } = useModalCompareContext()
-    const { openQuickview } = useModalQuickviewContext()
     const router = useRouter()
-
-
-    const handleActiveColor = (item: string) => {
-        setActiveColor(item)
-    }
-
-    const handleActiveSize = (item: string) => {
-        setActiveSize(item)
-    }
-
-
 
     const handleDetailProduct = (productId: string) => {
         router.push(`/product/detail?id=${productId}`);
@@ -62,7 +42,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                 (
                     <div className={`product-item grid-type ${style}`}>
                         <div onClick={() => handleDetailProduct(data.id)} className="product-main cursor-pointer block">
-                            <div className="product-thumb bg-white relative overflow-hidden rounded-2xl">
+                            <div className="product-thumb bg-white relative overflow-hidden rounded-2xl"> 
 
                                 {(dayjs(data?.release_date).diff(dayjs(), "day") > -14) && (
                                     <div className="product-tag text-button-uppercase bg-green px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
@@ -80,9 +60,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                     </div>
                                 )}
                                 <div className="product-img w-full h-full aspect-[3/4]">
-                                    {/* {activeColor ? (
-                                    <>
-                                        { */}
+                               
                                     <Image
                                         src={Helpers.GetImage(data?.image?.image)}
                                         width={500}
@@ -91,34 +69,15 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                         priority={true}
                                         className={`w-full h-full object-cover duration-700 ${data?.stock < 1 ? ' filter grayscale' : ""} `}
                                     />
-                                    {/* }
-                                    </>
-                                ) : (
-                                    <>
-                                        {
-                                            data?.variant.map((item: any, index: number) => (
-                                                <Image
-                                                    key={index}
-                                                    src={Helpers.GetImage(data?.image?.image)}
-                                                    width={500}
-                                                    height={500}
-                                                    priority={true}
-                                                    alt={data.name}
-                                                    className='w-full h-full object-cover duration-700'
-                                                />
-                                            ))
-                                        }
-                                    </>
-                                )} */}
                                 </div>
                                 {data?.final_price !== data?.price ?
                                     data?.discount?.discount_percentage == 0 ? <>
-                                        <div className="bg-black w-full -mt-12 rounded-b-lg absolute z-[100] flex items-center px-4 py-3">
+                                        <div className="bg-black w-full lg:-mt-10  2xl:-mt-12 rounded-b-lg absolute z-[100] flex items-center px-4 py-3">
                                             <Icon.Lightning weight='fill' className='text-red' />
                                             <div className={`caption2 font-semibold uppercase text-white px-2.5`}>Diskon {(data?.discount_price / data?.price) * 100}% </div>
                                         </div>
                                     </> : <>
-                                        <div className="bg-black w-full -mt-12 rounded-b-lg absolute z-[100] flex items-center px-4 py-3">
+                                        <div className="bg-black w-full lg:-mt-10  2xl:-mt-12 rounded-b-lg absolute z-[100] flex items-center px-4 py-3">
                                             <Icon.Lightning weight='fill' className='text-red' />
                                             <div className={`caption2 font-semibold uppercase text-white px-2.5`}>Diskon {Helpers.CheckDecimal(data?.discount?.discount_percentage)} % </div>
                                         </div>

@@ -9,25 +9,9 @@ import { ModalSearchProvider } from '@/context/ModalSearchContext'
 import { ModalQuickviewProvider } from '@/context/ModalQuickviewContext'
 
 const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return (
-        <CartProvider>
-            <ModalCartProvider>
-                <WishlistProvider>
-                    <ModalWishlistProvider>
-                        <CompareProvider>
-                            <ModalCompareProvider>
-                                <ModalSearchProvider>
-                                    <ModalQuickviewProvider>
-                                        {children}
-                                    </ModalQuickviewProvider>
-                                </ModalSearchProvider>
-                            </ModalCompareProvider>
-                        </CompareProvider>
-                    </ModalWishlistProvider>
-                </WishlistProvider>
-            </ModalCartProvider>
-        </CartProvider>
-    )
+    const providers = [CartProvider, ModalCartProvider, ModalCompareProvider, WishlistProvider, ModalWishlistProvider, ModalSearchProvider, ModalQuickviewProvider, CompareProvider]
+    return providers.reduceRight((acc, Provider) => <Provider>{acc}</Provider>, children)
+    
 }
 
 export default GlobalProvider

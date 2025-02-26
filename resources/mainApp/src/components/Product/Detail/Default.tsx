@@ -10,14 +10,7 @@ import { Navigation, Thumbs, Scrollbar } from 'swiper/modules';
 import 'swiper/css/bundle';
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import SwiperCore from 'swiper/core';
-import { useCart } from '@/context/CartContext'
-import { useModalCartContext } from '@/context/ModalCartContext'
-import { useWishlist } from '@/context/WishlistContext'
-import { useModalWishlistContext } from '@/context/ModalWishlistContext'
-import { useCompare } from '@/context/CompareContext'
-import { useModalCompareContext } from '@/context/ModalCompareContext'
 import ModalSizeguide from '@/components/Modal/ModalSizeguide'
-import Baju from '@/images/dumny/baju-2.jpg'
 import FetchData from '@/services/FetchData';
 import Helpers from '@/Helpers/Helpers'
 import Loading from '@/components/Other/Loading'
@@ -64,13 +57,16 @@ const Default: React.FC<Props> = ({ data, productId }) => {
 
     useEffect(() => {
         setLoading(true)
-        Promise.all([FetchData.GetProduk(`/${productId}`),FetchData.GetCategories()]).then((res) => {
-                setProduk(res[0]?.data)
-                setCategories(res[1]?.data)
-                document.title = `${res[0]?.data?.name} - Zhindaya ` ; 
-                FetchData.GetProduk(`?category_id=${res[1]?.data?.filter((x: any) => x.id == res[0]?.data?.category_id)[0]?.id}`).then((res) => {
-                    setRelatedProduk(res?.data)
+    FetchData.GetProduk(`/${productId}`).then((resp) => {
+                setProduk(resp?.data)
+                document.title = `${resp?.data?.name} - Zhindaya ` ; 
+                FetchData.GetCategories(``).then((res) => {
+                    setCategories(res?.data)
+                    FetchData.GetProduk(`?category_id=${res?.data?.filter((x: any) => x.id == resp?.data?.category_id)[0]?.id}`).then((res) => {
+                        setRelatedProduk(res?.data)
+                    })
                 })
+             
                 setLoading(false)
             })
     },[])
@@ -199,11 +195,13 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                 <div className={`product-price heading5 `}>{Helpers.FormatPrice(produk?.final_price)}</div>
                                 <div className={`w-px h-4 bg-line ${produk?.final_price == produk?.price ? "hidden" : ""}`}></div>
                                 <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price == produk?.price ? "hidden" : ""}`}><del>{Helpers.FormatPrice(produk?.price)}</del></div>
+                                
                                 {produk?.discount_price > 0 && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
-                                        -{produk?.discount?.discount_percentage}%
-                                    </div>
+                                                -{(produk?.discount_price / produk?.price) * 100}%
+                                                </div>
                                 )}
+
                             </div>
                             <div className='desc text-secondary mt-3 pb-6 border-b border-line'>{produk?.description}</div>
 

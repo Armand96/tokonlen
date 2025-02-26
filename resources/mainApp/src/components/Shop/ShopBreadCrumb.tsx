@@ -27,19 +27,23 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
     const [color, setColor] = useState<string | null>()
     const [brand, setBrand] = useState<string | null>()
     const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 100 });
-    const [currentPage, setCurrentPage] = useState(0);
     const [listCategories, setListCategories] = useState<any>([])
     const [loading, setLoading] = useState(true)
     const [produk, setProduk] = useState<any>([])
-    const productsPerPage = productPerPage;
-    const offset = currentPage * productsPerPage;
     const router = useRouter()
     
 
 
     useEffect(() => {
         setLoading(true)
-    FetchData.GetCategories().then((res) => {
+    FetchData.GetCategories(dataType ? `/${dataType}` : '').then((res) => {
+            if(dataType){
+                 FetchData.GetProduk(`${dataType ? `?category_id=${res?.data?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc"} `).then((res) => {
+                    setProduk(res)
+                    setLoading(false)
+                })
+                return
+            }
             setListCategories(res?.data)
             let filterFromSlug = res?.data?.filter((x: any) => x.slug == category)[0]
             FetchData.GetProduk(`${filterFromSlug ? `?category_id=${filterFromSlug?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc"} `).then((res) => {
@@ -47,7 +51,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                 setLoading(false)
             })
         })
-    },[category,type])
+    },[category,dataType])
 
     const handleShowOnlySale = () => {
         setShowOnlySale(toggleSelect => !toggleSelect)
@@ -55,7 +59,6 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
 
     const handleSortChange = (option: string) => {
         setSortOption(option);
-        setCurrentPage(0);
     };
 
     const handleType = (category: string, type: string | null) => {
@@ -64,13 +67,11 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
 
     const handleSize = (size: string) => {
         setSize((prevSize) => (prevSize === size ? null : size))
-        setCurrentPage(0);
     }
 
 
     const handleBrand = (brand: string) => {
         setBrand((prevBrand) => (prevBrand === brand ? null : brand));
-        setCurrentPage(0);
     }
 
 
@@ -131,29 +132,6 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
     })
 
 
-    // Create a copy array filtered to sort
-    let sortedData = [...filteredData];
-
-    if (sortOption === 'soldQuantityHighToLow') {
-        filteredData = sortedData.sort((a, b) => b.sold - a.sold)
-    }
-
-    if (sortOption === 'discountHighToLow') {
-        filteredData = sortedData
-            .sort((a, b) => (
-                (Math.floor(100 - ((b.price / b.originPrice) * 100))) - (Math.floor(100 - ((a.price / a.originPrice) * 100)))
-            ))
-    }
-
-    if (sortOption === 'priceHighToLow') {
-        filteredData = sortedData.sort((a, b) => b.price - a.price)
-    }
-
-    if (sortOption === 'priceLowToHigh') {
-        filteredData = sortedData.sort((a, b) => a.price - b.price)
-    }
-
-    const totalProducts = filteredData.length
     const selectedType = type
     const selectedSize = size
     const selectedColor = color
@@ -187,25 +165,14 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
     }
 
 
-    // Find page number base on filteredData
-    const pageCount = Math.ceil(filteredData.length / productsPerPage);
 
-    // If page number 0, set current page = 0
-    if (pageCount === 0) {
-        setCurrentPage(0);
-    }
-
-    // Get product data for current page
-    let currentProducts: ProductType[];
-
-    if (filteredData.length > 0) {
-        currentProducts = filteredData.slice(offset, offset + productsPerPage);
-    } else {
-        currentProducts = []
-    }
 
     const handlePageChange = (selected: number) => {
-        setCurrentPage(selected);
+        setLoading(true)
+        FetchData.GetProduk(`?page=${selected + 1}&order_by=release_date&order_method=desc`).then((res) => {
+            setProduk(res)
+            setLoading(false)
+        })
     };
 
     const handleClearAll = () => {
@@ -217,7 +184,6 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
         setColor(null);
         setBrand(null);
         setPriceRange({ min: 0, max: 100 });
-        setCurrentPage(0);
     };
 
     return (
@@ -254,9 +220,9 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
             <div className="shop-product breadcrumb lg:py-20 md:py-14 py-10">
                 <div className="container">
                     <div className="flex max-md:flex-wrap max-md:flex-col-reverse gap-y-8">
-                        <div className="sidebar lg:w-1/4 md:w-1/3 w-full md:pr-12">
+                        <div className="sidebar order-2 lg:order-1 lg:w-1/4 md:w-1/3 w-full md:pr-12">
                             <div className="filter-type pb-8 border-b border-line">
-                                <div className="heading6">Products Type</div>
+                                <div className="heading6">Tipe produk</div>
                                 <div className="list-type mt-4">
                                     {listCategories.filter((y: any) => y.slug == category).map((item: any, index: string) => {
                                        return item?.sub_cat?.map((x: any) => (
@@ -275,7 +241,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                 </div>
                             </div>
                             <div className="filter-size pb-8 border-b border-line mt-8">
-                                <div className="heading6">Size</div>
+                                <div className="heading6">Ukuran</div>
                                 <div className="list-size flex items-center flex-wrap gap-3 gap-y-4 mt-4">
                                     {
                                         ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'].map((item, index) => (
@@ -323,10 +289,10 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                 </div>
                             </div>
                         </div>
-                        <div className="list-product-block lg:w-3/4 md:w-2/3 w-full md:pl-3">
+                        <div className="list-product-block order-1 lg:order-2 lg:w-3/4 md:w-2/3 w-full md:pl-3">
                             <div className="filter-heading flex items-center justify-between gap-5 flex-wrap">
                                 <div className="left flex has-line items-center flex-wrap gap-5">
-                                    <div className="choose-layout flex items-center gap-2">
+                                    {/* <div className="choose-layout flex items-center gap-2">
                                         <div className="item three-col w-8 h-8 border border-line rounded flex items-center justify-center cursor-pointer active">
                                             <div className='flex items-center gap-0.5'>
                                                 <span className='w-[3px] h-4 bg-secondary2 rounded-sm'></span>
@@ -341,7 +307,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                                 <span className='w-4 h-[3px] bg-secondary2 rounded-sm'></span>
                                             </div>
                                         </Link>
-                                    </div>
+                                    </div> */}
                                     <div className="check-sale flex items-center gap-2">
                                         <input
                                             type="checkbox"
@@ -350,7 +316,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                             className='border-line'
                                             onChange={handleShowOnlySale}
                                         />
-                                        <label htmlFor="filter-sale" className='cation1 cursor-pointer'>Show only products on sale</label>
+                                        <label htmlFor="filter-sale" className='cation1 cursor-pointer'>Sedang promo saja</label>
                                     </div>
                                 </div>
                                 <div className="right flex items-center gap-3">
@@ -363,10 +329,9 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                             defaultValue={'Sorting'}
                                         >
                                             <option value="Sorting" disabled>Sorting</option>
-                                            <option value="soldQuantityHighToLow">Best Selling</option>
-                                            <option value="discountHighToLow">Best Discount</option>
-                                            <option value="priceHighToLow">Price High To Low</option>
-                                            <option value="priceLowToHigh">Price Low To High</option>
+                                            <option value="discountHighToLow">Diskon terbesar</option>
+                                            <option value="priceHighToLow">Harga tertinggi</option>
+                                            <option value="priceLowToHigh">Harga terendah</option>
                                         </select>
                                         <Icon.CaretDown size={12} className='absolute top-1/2 -translate-y-1/2 md:right-4 right-2' />
                                     </div>
@@ -376,7 +341,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                             <div className="list-filtered flex items-center gap-3 mt-4">
                                 <div className="total-product">
                                     {produk?.total}
-                                    <span className='text-secondary pl-1'>Products Found</span>
+                                    <span className='text-secondary pl-1'>Total produk</span>
                                 </div>
                                 {
                                     (selectedType || selectedSize || selectedColor || selectedBrand) && (
@@ -429,7 +394,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
 
                             {produk?.last_page > 1 && (
                                 <div className="list-pagination flex items-center md:mt-10 mt-7">
-                                    <HandlePagination pageCount={pageCount} onPageChange={handlePageChange} />
+                                    <HandlePagination pageCount={produk?.last_page} onPageChange={handlePageChange} />
                                 </div>
                             )}
                         </div>

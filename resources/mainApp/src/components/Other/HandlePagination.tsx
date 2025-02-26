@@ -16,6 +16,7 @@ const HandlePagination: React.FC<Props> = ({ pageCount, onPageChange }) => {
             pageCount={pageCount}
             pageRangeDisplayed={3}
             marginPagesDisplayed={2}
+            renderOnZeroPageCount={null}
             onPageChange={(selectedItem) => onPageChange(selectedItem.selected)}
             containerClassName={'pagination'}
             activeClassName={'active'}

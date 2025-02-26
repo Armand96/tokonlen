@@ -24,7 +24,7 @@ export default function Breadcrumb() {
             <div id="header" className='relative w-full'>
                 <MenuOne props="bg-transparent" />
             </div>
-            <Shopbreadcrumb data={productData} productPerPage={9} dataType={type} gender={gender} category={category} />
+            <Shopbreadcrumb data={productData} productPerPage={10} dataType={type} gender={gender} category={category} />
             <Footer />      
         </>
     )

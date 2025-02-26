@@ -32,14 +32,15 @@ const Footer = () => {
                                 <div className="list-nav flex justify-between basis-2/3 max-md:basis-full grid-cols-2">
                                     <div className="item flex flex-col  ">
                                         <div className="text-button-uppercase pb-3">Informasi</div>
-                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/contact'}>Contact us</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>FAQs</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/contact'}>Store</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/pages/contact'}>Contact us</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/pages/faqs'}>FaQs</Link>
                                     </div>
                     
                                     <div className="item flex flex-col  ">
                                         <div className="text-button-uppercase pb-3">other</div>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>Privacy Policy</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/order-tracking'}>Return & Refund</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/pages/faqs'}>Privacy Policy</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/order-tracking'}>Return & Refund</Link>
                                     </div>
                                 </div>
                               
