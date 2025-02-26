@@ -60,12 +60,9 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     FetchData.GetProduk(`/${productId}`).then((resp) => {
                 setProduk(resp?.data)
                 document.title = `${resp?.data?.name} - Zhindaya ` ; 
-                FetchData.GetCategories(``).then((res) => {
-                    setCategories(res?.data)
-                    FetchData.GetProduk(`?category_id=${res?.data?.filter((x: any) => x.id == resp?.data?.category_id)[0]?.id}`).then((res) => {
+                    FetchData.GetProduk(`?category_id=${resp?.data?.category?.parent_id}`).then((res) => {
                         setRelatedProduk(res?.data)
                     })
-                })
              
                 setLoading(false)
             })
@@ -289,17 +286,17 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         <div className="text-title">38</div>
                                         <div className="text-secondary">orang melihat produk ini</div>
                                     </div>
-                                    <div className="flex items-center gap-1 mt-3">
+                                    {/* <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">Stock:</div>
                                         <div className="text-secondary">{produk?.stock}</div>
-                                    </div>
+                                    </div> */}
                                     <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">SKU:</div>
                                         <div className="text-secondary">53453412</div>
                                     </div>
                                     <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">Categories:</div>
-                                        <div className="text-secondary">{produk?.category}</div>
+                                        <div className="text-secondary">{produk?.category?.name}</div>
                                     </div>
                                 </div>
                                 {/* <div className="list-payment mt-7">
