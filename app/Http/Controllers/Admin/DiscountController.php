@@ -8,6 +8,7 @@ use App\Http\Requests\Discount\DiscountUpdateReq;
 use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
 use App\Models\Discount;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -52,6 +53,15 @@ class DiscountController extends Controller
     {
         try {
             $validated = $request->validated();
+
+            if($validated['variant_id']){
+                $variant = Variant::where('id', $validated['variant_id'])->first();
+                $existingDiscount = Discount::where('product_id', $variant->product_id)->first();
+                if($existingDiscount) {
+                    $existingDiscount->delete();
+                }
+            }
+
             $discount = Discount::create($validated);
             return response()->json(new ResponseSuccess($discount,"Success","Success Create Discount"));
         } catch (\Throwable $th) {
