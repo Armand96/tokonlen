@@ -25,14 +25,14 @@ class ProductController extends Controller
         if ($req->has('name')) {
             $query->where('name', 'like', '%' . $req->name . '%');
         }
-        
+
         // filter by category
         if ($req->has('category_id')) {
             $query->where('category_id', '=', $req->category_id);
         }
 
         // paginate result
-        $products = $query->orderBy('id', 'desc')->paginate($dataPerPage);
+        $products = $query->with(['category', 'image', 'discount'])->orderBy('id', 'desc')->paginate($dataPerPage);
 
         return $products;
     }

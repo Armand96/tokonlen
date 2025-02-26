@@ -28,7 +28,7 @@ class ProductCController extends Controller
             $query->where('category_id', '=', $req->category_id);
         }
 
-        $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount'])->orderBy($orderBy, $orderMethod);
+        $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount', 'category'])->orderBy($orderBy, $orderMethod);
         $products = $query->paginate($data_per_page);
         // dd(DB::getQueryLog());
         return $products;
@@ -39,7 +39,7 @@ class ProductCController extends Controller
     {
         if ($product) return response()->json(
             new ResponseSuccess(
-                $product->with(['images', 'variant.images', 'links', 'discount'])
+                $product->with(['images', 'variant.images', 'links', 'discount', 'category'])
                     ->where('is_active', true)->where('id', $product->id)->first(),
                 "Success",
                 "Success Get Product"
