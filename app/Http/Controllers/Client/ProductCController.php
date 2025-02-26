@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
 use App\Models\Product;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -46,5 +47,12 @@ class ProductCController extends Controller
             )
         );
         else return response()->json(new ResponseFail((object) null, "Error", "Not Found"), 404);
+    }
+
+    public function getDistinctSize(Product $product)
+    {
+        $query = Variant::query();
+        $sizes = $query->where('product_id', $product->id)->where('is_active', true)->distinct()->get('size');
+        return response()->json(new ResponseSuccess($sizes, "Success", "Success Get Distinct Sizes"));
     }
 }

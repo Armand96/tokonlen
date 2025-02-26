@@ -17,7 +17,8 @@ use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Client\BannerCController;
 use App\Http\Controllers\Client\ProductCController;
 use App\Http\Controllers\Client\SearchController;
-use App\Http\Controllers\SizeController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Client\SizeCController;
 use App\Http\Requests\ResponseFail;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -68,6 +69,11 @@ Route::prefix('admin')
     // BANNER
     Route::get('banner', [BannerCController::class, 'getListActiveBanner'])->name('banner.list');
     Route::get('banner/{banner}', [BannerCController::class, 'getOneActiveBanner'])->name('banner.one');
+
+    // SIZE
+    Route::get('size', [SizeCController::class, 'getListActiveSize']);
+    Route::get('size/{size}', [SizeCController::class, 'getOneActiveSize']);
+    Route::get('size_distinct/{product}', [ProductCController::class, 'getDistinctSize']);
 
     Route::get('search', [SearchController::class, 'search']);
 // });
