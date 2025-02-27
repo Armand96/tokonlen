@@ -4,9 +4,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { ProductType } from '@/type/ProductType'
 import Product from '../Product'
-import Rate from '@/components/Other/Rate'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Thumbs, Scrollbar } from 'swiper/modules';
+import { Navigation, Thumbs, } from 'swiper/modules';
 import 'swiper/css/bundle';
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import SwiperCore from 'swiper/core';
@@ -14,6 +13,7 @@ import ModalSizeguide from '@/components/Modal/ModalSizeguide'
 import FetchData from '@/services/FetchData';
 import Helpers from '@/Helpers/Helpers'
 import Loading from '@/components/Other/Loading'
+import { useRouter } from 'next/navigation'
 
 
 SwiperCore.use([Navigation, Thumbs]);
@@ -28,14 +28,16 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const [openPopupImg, setOpenPopupImg] = useState(false)
     const [openSizeGuide, setOpenSizeGuide] = useState<boolean>(false)
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
-    const [activeColor, setActiveColor] = useState<string>('')
+    const [activeVariant, setActiveVariant] = useState<any>('')
     const [activeSize, setActiveSize] = useState<string>('')
+    const [activeImage, setActiveImage] = useState<number>(0)
     const [activeTab, setActiveTab] = useState<string | undefined>('specifications')
     const [loading, setLoading] = useState(true)
     const [produk, setProduk] = useState<any>()
     const [categories, setCategories] = useState<any>([])
     const [relatedProduk, setRelatedProduk] = useState<any>([])
-    
+    const router = useRouter()
+
     let productMain = data.find(product => product.id === productId) as ProductType
 
 
@@ -52,20 +54,20 @@ const Default: React.FC<Props> = ({ data, productId }) => {
         setThumbsSwiper(swiper);
     };
 
-  
+
 
     useEffect(() => {
         setLoading(true)
-    FetchData.GetProduk(`/${productId}`).then((resp) => {
-                setProduk(resp?.data)
-                document.title = `${resp?.data?.name} - Zhindaya ` ; 
-                    FetchData.GetProduk(`?id_parent_category=${resp?.data?.category?.parent_id}`).then((res) => {
-                        setRelatedProduk(res?.data)
-                    })
-             
-                setLoading(false)
+        FetchData.GetProduk(`/${productId}`).then((resp) => {
+            setProduk(resp?.data)
+            document.title = `${resp?.data?.name} - Zhindaya `;
+            FetchData.GetProduk(`?category_id=${resp?.data?.category?.parent_id}`).then((res) => {
+                setRelatedProduk(res?.data)
             })
-    },[])
+
+            setLoading(false)
+        })
+    }, [])
 
 
     const handleActiveSize = (item: string) => {
@@ -77,110 +79,119 @@ const Default: React.FC<Props> = ({ data, productId }) => {
         setActiveTab(tab)
     }
 
-    const handleActiveColor = (item: string) => {
+    const handleActiveColor = (item: any) => {
+        setActiveVariant(item)
+    }
 
+    const handleToShop = () => {
+        const phoneNumber = "6285310340777";
+        const message = `Halo, saya tetarik dengan produk ${produk?.name} ${activeVariant.variant ? `warna ${activeVariant?.variant}` : ""}  ${activeSize && `ukuran ${activeSize}`} `;
+        const encodedMessage = encodeURIComponent(message);
+        router.push(`https://wa.me/${phoneNumber}?text=${encodedMessage}`)
     }
 
 
     return (
         <>
-        { loading && <Loading />}
+            {loading && <Loading />}
             <div className="product-detail default">
                 <div className="featured-product underwear md:py-20 py-10">
                     <div className="container flex justify-between gap-y-6 flex-wrap">
-                        <div className="list-img md:w-1/2 md:pr-[45px] w-full">
-                           {
-                            produk?.images && (
-                                <>
-                                 <Swiper
-                                slidesPerView={1}
-                                spaceBetween={0}
-                                thumbs={{ swiper: thumbsSwiper }}
-                                modules={[Thumbs]}
-                                className="mySwiper2 rounded-2xl overflow-hidden"
-                            >
-                                {produk?.images?.map((item: any, index: number) => (
-                                    <SwiperSlide
-                                        key={index}
-                                        onClick={() => {
-                                            swiperRef.current?.slideTo(index);
-                                            setOpenPopupImg(true)
-                                        }}
-                                    >
-                                        <Image
-                                            src={Helpers.GetImage(item?.image)}
-                                            width={1000}
-                                            height={1000}
-                                            alt='prd-img'
-                                            className='w-full aspect-[3/4] object-cover'
-                                        />
-                                    </SwiperSlide>
-                                ))}
-                            </Swiper>
-                            <Swiper
-                                onSwiper={(swiper) => {
-                                    handleSwiper(swiper)
-                                }}
-                                spaceBetween={0}
-                                slidesPerView={4}
-                                freeMode={true}
-                                watchSlidesProgress={true}
-                                modules={[Navigation, Thumbs]}
-                                className="mySwiper"
-                            >
-                                {produk?.images?.map((item: any, index: number) => (
-                                    <SwiperSlide
-                                        key={index}
-                                    >
-                                        <Image
-                                            src={Helpers.GetImage(item?.image)}
-                                            width={1000}
-                                            height={1000}
-                                            alt='prd-img'
-                                            className='w-full aspect-[3/4] object-cover rounded-xl'
-                                        />
-                                    </SwiperSlide>
-                                ))}
-                            </Swiper>
-                            <div className={`popup-img ${openPopupImg ? 'open' : ''}`}>
-                                <span
-                                    className="close-popup-btn absolute top-4 right-4 z-[2] cursor-pointer"
-                                    onClick={() => {
-                                        setOpenPopupImg(false)
-                                    }}
-                                >
-                                    <Icon.X className="text-3xl text-white" />
-                                </span>
-                                <Swiper
-                                    spaceBetween={0}
-                                    slidesPerView={1}
-                                    modules={[Navigation, Thumbs]}
-                                    navigation={true}
-                                    loop={true}
-                                    className="popupSwiper"
-                                    onSwiper={(swiper) => {
-                                        swiperRef.current = swiper
-                                    }}
-                                >
-                                     {produk?.images?.map((item: any, index: number) => (
-                                    <SwiperSlide
-                                        key={index}
-                                    >
-                                        <Image
-                                            src={Helpers.GetImage(item?.image)}
-                                            width={1000}
-                                            height={1000}
-                                            alt='prd-img'
-                                            className='w-full aspect-[3/4] object-cover rounded-xl'
-                                        />
-                                    </SwiperSlide>
-                                ))}
-                                 
-                                </Swiper>
-                            </div>
-                                </>
-                            )
-                           }
+                        <div className="list-img md:w-1/2 md:pr-[45px] overflow-y-hidden w-full ">
+                            {
+                                produk?.images && (
+                                    <>
+                                        <Swiper
+                                            slidesPerView={1}
+                                            spaceBetween={0}
+                                            thumbs={{ swiper: thumbsSwiper }}
+                                            modules={[Thumbs]}
+                                            className="mySwiper2 rounded-2xl "
+                                        >
+                                            {produk?.images?.map((item: any, index: number) => (
+                                                <SwiperSlide
+                                                    key={index}
+                                                    onClick={() => {
+                                                        swiperRef.current?.slideTo(index);
+                                                        setOpenPopupImg(true)
+                                                    }}
+                                                >
+                                                    <Image
+                                                        src={Helpers.GetImage(item?.image)}
+                                                        width={1000}
+                                                        height={1000}
+                                                        alt='prd-img'
+                                                        className='w-full aspect-[3/4] object-cover'
+                                                    />
+                                                </SwiperSlide>
+                                            ))}
+                                        </Swiper>
+                                        <Swiper
+                                            onSwiper={(swiper) => {
+                                                handleSwiper(swiper)
+                                            }}
+                                            spaceBetween={0}
+                                            slidesPerView={4}
+                                            freeMode={true}
+                                            watchSlidesProgress={true}
+                                            modules={[Navigation, Thumbs]}
+                                            className="mySwiper swiper-float"
+                                        >
+                                            {produk?.images?.map((item: any, index: number) => (
+                                                <SwiperSlide
+                                                    key={index}
+                                                >
+                                                    <Image
+                                                        src={Helpers.GetImage(item?.image)}
+                                                        width={1000}
+                                                        height={1000}
+                                                        alt='prd-img'
+                                                        className='w-full aspect-[3/4] object-cover rounded-xl'
+                                                    />
+                                                </SwiperSlide>
+                                            ))}
+                                        </Swiper>
+
+
+                                        <div className={`popup-img ${openPopupImg ? 'open' : ''}`}>
+                                            <span
+                                                className="close-popup-btn absolute top-4 right-4 z-[2] cursor-pointer"
+                                                onClick={() => {
+                                                    setOpenPopupImg(false)
+                                                }}
+                                            >
+                                                <Icon.X className="text-3xl text-white" />
+                                            </span>
+                                            <Swiper
+                                                spaceBetween={0}
+                                                slidesPerView={1}
+                                                modules={[Navigation, Thumbs]}
+                                                navigation={true}
+                                                loop={true}
+                                                className="popupSwiper"
+                                                onSwiper={(swiper) => {
+                                                    swiperRef.current = swiper
+                                                }}
+                                            >
+                                                {produk?.images?.map((item: any, index: number) => (
+                                                    <SwiperSlide
+                                                        key={index}
+                                                    >
+                                                        <Image
+                                                            src={Helpers.GetImage(item?.image)}
+                                                            width={1000}
+                                                            height={1000}
+                                                            alt='prd-img'
+                                                            className='w-full aspect-[3/4] object-cover rounded-xl'
+                                                        />
+                                                    </SwiperSlide>
+                                                ))}
+
+                                            </Swiper>
+                                        </div>
+                                    </>
+                                )
+                            }
 
                         </div>
                         <div className="product-infor md:w-1/2 w-full lg:pl-[15px] md:pl-2">
@@ -189,17 +200,17 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                     <div className="caption2 text-secondary font-semibold uppercase">{categories?.filter((x: any) => x.id == produk?.category_id)[0]?.name}</div>
                                     <div className="heading4 mt-1">{produk?.name}</div>
                                 </div>
-                             
+
                             </div>
                             <div className="flex items-center gap-3  flex-wrap mt-5 ">
-                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(produk?.final_price)}</div>
-                                <div className={`w-px h-4 bg-line ${produk?.final_price == produk?.price ? "hidden" : ""}`}></div>
-                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price == produk?.price ? "hidden" : ""}`}><del>{Helpers.FormatPrice(produk?.price)}</del></div>
-                                
-                                {produk?.discount_price > 0 && (
+                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant.discount ? activeVariant?.discount_price ? produk?.price -  activeVariant?.discount_price : produk?.price - (produk?.price * activeVariant.discount?.discount_percentage / 100) : produk?.final_price)}</div>
+                                <div className={`w-px h-4 bg-line ${produk?.final_price !== produk?.price || activeVariant.discount ? "" : "hidden"}`}></div>
+                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || activeVariant.discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(produk?.price)}</del></div>
+
+                                {(produk?.discount_price > 0 || activeVariant.discount) && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
-                                                -{(produk?.discount_price / produk?.price) * 100}%
-                                                </div>
+                                        -{( parseInt(activeVariant?.discount_price) / parseInt(produk?.price)) * 100  || (produk?.discount_price / produk?.price) * 100 || activeVariant?.discount?.discount_percentage}%
+                                    </div>
                                 )}
 
                             </div>
@@ -207,17 +218,18 @@ const Default: React.FC<Props> = ({ data, productId }) => {
 
                             <div className="list-action mt-6">
                                 <div className="choose-color">
-                                    <div className="text-title">Warna: <span className='text-title color'>{activeColor}</span></div>
+                                    <div className="text-title">Warna: <span className='text-title color'>{activeVariant?.variant}</span></div>
                                     <div className="list-color flex items-center gap-2 flex-wrap mt-3">
                                         {produk?.variant.map((item: any, index: number) => (
                                             <div
-                                                className={`color-item w-12  rounded-xl duration-300 relative object-cover  ${activeColor === item.color ? 'active' : ''}`}
+                                                className={`color-item w-12 relative  rounded-xl duration-300  object-cover  ${activeVariant?.variant === item.variant ? 'active' : ''}`}
                                                 key={index}
                                                 datatype={item.image}
                                                 onClick={() => {
                                                     handleActiveColor(item)
                                                 }}
                                             >
+                                                {item.discount ? <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div> : <div className={` py-2 text-xs rounded-t-xl inset-0 text-center`}></div>}
                                                 <Image
                                                     src={Helpers.GetImage(item?.images[0]?.image)}
                                                     width={100}
@@ -225,7 +237,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                     alt='color'
                                                     className='rounded-xl'
                                                 />
-                                                <div className="tag-action bg-black text-white caption2 capitalize px-1.5 py-0.5 rounded-sm">
+                                                <div className="tag-action bg-black text-white caption2 capitalize px-1.5 py-0.5 rounded-sm ">
                                                     {item.variant}
                                                 </div>
                                             </div>
@@ -255,12 +267,12 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         ))}
                                     </div>
                                 </div>
-                               
+
                                 <div className="button-block mt-5" >
-                                    <button className={`button-main ${produk?.stock < 1 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 1} >{produk?.stock < 1 ? "Stok Habis" : "Beli sekarang"}</button>
+                                    <button onClick={handleToShop} className={`button-main ${produk?.stock < 1 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 1} >{produk?.stock < 1 ? "Stok Habis" : "Beli sekarang"}</button>
                                 </div>
                                 <div className="flex items-center lg:gap-20 gap-8 mt-5 pb-6 border-b border-line">
-                        
+
                                     <div className="share flex items-center gap-3 cursor-pointer">
                                         <div className="share-btn md:w-12 md:h-12 w-10 h-10 flex items-center justify-center border border-line cursor-pointer rounded-xl duration-300 hover:bg-black hover:text-white">
                                             <Icon.ShareNetwork weight='fill' className='heading6' />
@@ -574,7 +586,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                     <div className="container">
                         <div className="heading3 text-center">Related Produk</div>
                         <div className="list-product hide-product-sold  grid lg:grid-cols-4 grid-cols-2 md:gap-[30px] gap-5 md:mt-10 mt-6">
-                            {relatedProduk?.slice(0,5).map((item: any, index: number) => (
+                            {relatedProduk?.slice(0, 5).map((item: any, index: number) => (
                                 <Product key={index} data={item} type='grid' style='style-1' />
                             ))}
                         </div>

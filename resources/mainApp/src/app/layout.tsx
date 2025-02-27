@@ -8,6 +8,7 @@ import ModalQuickview from '@/components/Modal/ModalQuickview'
 import ModalCompare from '@/components/Modal/ModalCompare'
 import { Suspense } from 'react'
 import Loading from '@/components/Other/Loading'
+import { WhatsApp } from '@/components/Other/WhatsApp'
 
 const instrument = Instrument_Sans({ subsets: ['latin'] })
 
@@ -32,6 +33,7 @@ export default function RootLayout({
             <ModalSearch />
             <ModalQuickview />
             <ModalCompare />
+            <WhatsApp />
           </body>
         </html>
       </GlobalProvider>

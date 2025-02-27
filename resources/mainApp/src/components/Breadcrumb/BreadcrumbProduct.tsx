@@ -15,9 +15,6 @@ interface Props {
 const BreadcrumbProduct: React.FC<Props> = ({ data, productPage, productId }) => {
     const router = useRouter()
 
-    const handleDetailProduct = (productId: string | number | null) => {
-        router.push(`/product/${productPage}?id=${productId}`);
-    };
 
     return (
         <>

@@ -54,6 +54,17 @@
     }
 }
 
+
+.swiper-float .swiper-wrapper {
+    overflow-y: auto !important ;
+    cursor: pointer;
+}
+
+.swiper-float .swiper-wrapper::-webkit-scrollbar {
+   display: none;
+}
+
+
 .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active::before {
     border-color: var(--black);
 }
