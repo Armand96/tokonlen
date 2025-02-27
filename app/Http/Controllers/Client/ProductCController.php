@@ -29,7 +29,7 @@ class ProductCController extends Controller
             $query->where('category_id', '=', $req->category_id);
         }
 
-        $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount', 'category'])->orderBy($orderBy, $orderMethod);
+        $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount', 'category.parentCat'])->orderBy($orderBy, $orderMethod);
         $products = $query->paginate($data_per_page);
         // dd(DB::getQueryLog());
         return $products;
