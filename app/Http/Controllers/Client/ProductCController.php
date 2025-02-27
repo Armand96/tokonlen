@@ -28,6 +28,22 @@ class ProductCController extends Controller
         if ($req->has('category_id')) {
             $query->where('category_id', '=', $req->category_id);
         }
+        // filter by category_parent_id
+        if ($req->has('category_parent_id')) {
+            $query->whereHas('category', function($qry) use($req) {
+                $qry->where('parent_id', $req->category_parent_id);
+            });
+        }
+        // filter by size
+        if ($req->has('size')) {
+            $query->whereHas('variant', function($qry) use ($req) {
+                $qry->where('size', '=', $req->size);
+            });
+        }
+        // filter by brand
+        if ($req->has('brand')) {
+            $query->where('brand', '=', $req->brand);
+        }
 
         $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount', 'category.parentCat'])->orderBy($orderBy, $orderMethod);
         $products = $query->paginate($data_per_page);
