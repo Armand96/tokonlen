@@ -9,7 +9,7 @@ import Footer from '@/components/Footer/Footer'
 
 export default function Breadcrumb() {
     const searchParams = useSearchParams()
-    let [type,setType] = useState<string | null | undefined>()
+    let [type, setType] = useState<string | null | undefined>()
     let datatype = searchParams.get('type')
     let gender = searchParams.get('gender')
     let category = searchParams.get('category')
@@ -17,7 +17,7 @@ export default function Breadcrumb() {
     useEffect(() => {
         setType(datatype);
     }, [datatype]);
-    
+
 
     return (
         <>
@@ -25,7 +25,7 @@ export default function Breadcrumb() {
                 <MenuOne props="bg-transparent" />
             </div>
             <Shopbreadcrumb data={productData} productPerPage={10} dataType={type} gender={gender} category={category} />
-            <Footer />      
+            <Footer />
         </>
     )
 }
