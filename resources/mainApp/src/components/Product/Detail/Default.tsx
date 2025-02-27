@@ -59,7 +59,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     FetchData.GetProduk(`/${productId}`).then((resp) => {
                 setProduk(resp?.data)
                 document.title = `${resp?.data?.name} - Zhindaya ` ; 
-                    FetchData.GetProduk(`?category_id=${resp?.data?.category?.parent_id}`).then((res) => {
+                    FetchData.GetProduk(`?id_parent_category=${resp?.data?.category?.parent_id}`).then((res) => {
                         setRelatedProduk(res?.data)
                     })
              

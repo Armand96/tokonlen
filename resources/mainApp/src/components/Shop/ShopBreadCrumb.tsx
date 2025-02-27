@@ -19,7 +19,7 @@ interface Props {
     category: string | null
 }
 
-const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gender, category }) => {
+const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) => {
     const [showOnlySale, setShowOnlySale] = useState(false)
     const [sortOption, setSortOption] = useState('');
     const [type, setType] = useState<string | null | undefined>(dataType)
@@ -38,7 +38,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
         setLoading(true)
     FetchData.GetCategories(dataType ? `/${dataType}` : '').then((res) => {
             if(dataType){
-                 FetchData.GetProduk(`${dataType ? `?category_id=${res?.data?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc"} `).then((res) => {
+                 FetchData.GetProduk(`${dataType ? `?id_sub_category=${res?.data?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc"} `).then((res) => {
                     setProduk(res)
                     setLoading(false)
                 })
