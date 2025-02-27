@@ -23,9 +23,10 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
     const [showOnlySale, setShowOnlySale] = useState(false)
     const [sortOption, setSortOption] = useState('');
     const [type, setType] = useState<string | null | undefined>(dataType)
-    const [size, setSize] = useState<string | null>()
-    const [color, setColor] = useState<string | null>()
-    const [brand, setBrand] = useState<string | null>()
+    const [size, setSize] = useState<any[]>()
+    const [brand, setBrand] = useState<any[]>()
+    const [selectedBrand, setSelectedBrand] = useState<any>(null)
+    const [selectedSize, setSelectedSize] = useState<any>(null)
     const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 100 });
     const [listCategories, setListCategories] = useState<any>([])
     const [loading, setLoading] = useState(true)
@@ -36,22 +37,24 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
 
     useEffect(() => {
         setLoading(true)
-    FetchData.GetCategories(dataType ? `/${dataType}` : '').then((res) => {
+        Promise.all([FetchData.GetCategories(dataType ? `/${dataType}` : ''), FetchData.GetSize()]).then((res) => {
             if(dataType){
-                 FetchData.GetProduk(`${dataType ? `?category_id=${res?.data?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc"} `).then((res) => {
+                setSize(res[1]?.data)
+                 FetchData.GetProduk(`${dataType ? `?category_id=${res[0]?.data?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc"} `).then((res) => {
                     setProduk(res)
                     setLoading(false)
                 })
                 return
             }
-            setListCategories(res?.data)
-            let filterFromSlug = res?.data?.filter((x: any) => x.slug == category)[0]
+            setListCategories(res[0]?.data)
+            setSize(res[1]?.data)
+            let filterFromSlug = res[0]?.data?.filter((x: any) => x.slug == category)[0]
             FetchData.GetProduk(`${filterFromSlug ? `?category_id=${filterFromSlug?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc"} `).then((res) => {
                 setProduk(res)
                 setLoading(false)
             })
         })
-    },[category,dataType])
+    },[category,dataType,selectedSize])
 
     const handleShowOnlySale = () => {
         setShowOnlySale(toggleSelect => !toggleSelect)
@@ -65,103 +68,17 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
         router.push(`/shop/breadcrumb?type=${type}&category=${category}`);
     }
 
-    const handleSize = (size: string) => {
-        setSize((prevSize) => (prevSize === size ? null : size))
+    const handleSize = (size: string | null) => {
+        setSelectedSize(size)
     }
 
 
     const handleBrand = (brand: string) => {
-        setBrand((prevBrand) => (prevBrand === brand ? null : brand));
     }
 
 
     const generateText = () => {
         return dataType?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    }
-
-
-    // Filter product
-    let filteredData = data.filter(product => {
-        let isShowOnlySaleMatched = true;
-        if (showOnlySale) {
-            isShowOnlySaleMatched = product.sale
-        }
-
-        let isDatagenderMatched = true;
-        if (gender) {
-            isDatagenderMatched = product.gender === gender
-        }
-
-        let isDataCategoryMatched = true;
-        if (category) {
-            isDataCategoryMatched = product.category === category
-        }
-
-        let isDataTypeMatched = true;
-        if (dataType) {
-            isDataTypeMatched = product.type === dataType
-        }
-
-        let isTypeMatched = true;
-        if (type) {
-            dataType = type
-            isTypeMatched = product.type === type;
-        }
-
-        let isSizeMatched = true;
-        if (size) {
-            isSizeMatched = product.sizes.includes(size)
-        }
-
-        let isPriceRangeMatched = true;
-        if (priceRange.min !== 0 || priceRange.max !== 100) {
-            isPriceRangeMatched = product.price >= priceRange.min && product.price <= priceRange.max;
-        }
-
-        let isColorMatched = true;
-        if (color) {
-            isColorMatched = product.variation.some(item => item.color === color)
-        }
-
-        let isBrandMatched = true;
-        if (brand) {
-            isBrandMatched = product.brand === brand;
-        }
-
-        return isShowOnlySaleMatched && isDatagenderMatched && isDataCategoryMatched && isDataTypeMatched && isTypeMatched && isSizeMatched && isColorMatched && isBrandMatched && isPriceRangeMatched
-    })
-
-
-    const selectedType = type
-    const selectedSize = size
-    const selectedColor = color
-    const selectedBrand = brand
-
-
-    if (filteredData.length === 0) {
-        filteredData = [{
-            id: 'no-data',
-            category: 'no-data',
-            type: 'no-data',
-            name: 'no-data',
-            gender: 'no-data',
-            new: false,
-            sale: false,
-            rate: 0,
-            price: 0,
-            originPrice: 0,
-            brand: 'no-data',
-            sold: 0,
-            quantity: 0,
-            quantityPurchase: 0,
-            sizes: [],
-            variation: [],
-            thumbImage: [],
-            images: [],
-            description: 'no-data',
-            action: 'no-data',
-            slug: 'no-data'
-        }];
     }
 
 
@@ -180,9 +97,8 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
         setShowOnlySale(false);
         setSortOption('');
         setType(null);
-        setSize(null);
-        setColor(null);
-        setBrand(null);
+        setSize([]);
+        setBrand([]);
         setPriceRange({ min: 0, max: 100 });
     };
 
@@ -244,27 +160,27 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                 <div className="heading6">Ukuran</div>
                                 <div className="list-size flex items-center flex-wrap gap-3 gap-y-4 mt-4">
                                     {
-                                        ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'].map((item, index) => (
+                                        size?.map((item: any, index: number) => (
                                             <div
                                                 key={index}
-                                                className={`size-item text-button w-[44px] h-[44px] flex items-center justify-center rounded-full border border-line ${size === item ? 'active' : ''}`}
-                                                onClick={() => handleSize(item)}
+                                                className={`size-item text-button w-[44px] h-[44px] flex items-center justify-center rounded-full border border-line ${selectedSize == item?.format_size ? 'active' : ''}`}
+                                                onClick={() => handleSize(item?.format_size)}
                                             >
-                                                {item}
+                                                {item?.format_size}
                                             </div>
                                         ))
                                     }
                                     <div
-                                        className={`size-item text-button px-4 py-2 flex items-center justify-center rounded-full border border-line ${size === 'freesize' ? 'active' : ''}`}
-                                        onClick={() => handleSize('freesize')}
+                                        className={`size-item text-button px-4 py-2 flex items-center justify-center rounded-full border border-line ${!selectedSize ? 'active' : ''}`}
+                                        onClick={() => handleSize(null)}
                                     >
-                                        Freesize
+                                        semua ukuran
                                     </div>
                                 </div>
                             </div>
                           
                            
-                            <div className="filter-brand mt-8">
+                            {/* <div className="filter-brand mt-8">
                                 <div className="heading6">Brands</div>
                                 <div className="list-brand mt-4">
                                     {['adidas', 'hermes', 'zara', 'nike', 'gucci'].map((item, index) => (
@@ -287,7 +203,9 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                         </div>
                                     ))}
                                 </div>
-                            </div>
+                            </div> */}
+
+
                         </div>
                         <div className="list-product-block order-1 lg:order-2 lg:w-3/4 md:w-2/3 w-full md:pl-3">
                             <div className="filter-heading flex items-center justify-between gap-5 flex-wrap">
@@ -344,30 +262,19 @@ const Shopbreadcrumb: React.FC<Props> = ({ data, productPerPage, dataType, gende
                                     <span className='text-secondary pl-1'>Total produk</span>
                                 </div>
                                 {
-                                    (selectedType || selectedSize || selectedColor || selectedBrand) && (
+                                    ( selectedSize ||  selectedBrand) && (
                                         <>
                                             <div className="list flex items-center gap-3">
                                                 <div className='w-px h-4 bg-line'></div>
-                                                {selectedType && (
-                                                    <div className="item flex items-center px-2 py-1 gap-1 bg-linear rounded-full capitalize" onClick={() => { setType(null) }}>
-                                                        <Icon.X className='cursor-pointer' />
-                                                        <span>{selectedType}</span>
-                                                    </div>
-                                                )}
+                                               
                                                 {selectedSize && (
-                                                    <div className="item flex items-center px-2 py-1 gap-1 bg-linear rounded-full capitalize" onClick={() => { setSize(null) }}>
+                                                    <div className="item flex items-center px-2 py-1 gap-1 bg-linear rounded-full capitalize" onClick={() => { setSelectedSize(null) }}>
                                                         <Icon.X className='cursor-pointer' />
                                                         <span>{selectedSize}</span>
                                                     </div>
                                                 )}
-                                                {selectedColor && (
-                                                    <div className="item flex items-center px-2 py-1 gap-1 bg-linear rounded-full capitalize" onClick={() => { setColor(null) }}>
-                                                        <Icon.X className='cursor-pointer' />
-                                                        <span>{selectedColor}</span>
-                                                    </div>
-                                                )}
                                                 {selectedBrand && (
-                                                    <div className="item flex items-center px-2 py-1 gap-1 bg-linear rounded-full capitalize" onClick={() => { setBrand(null) }}>
+                                                    <div className="item flex items-center px-2 py-1 gap-1 bg-linear rounded-full capitalize" onClick={() => { setSelectedBrand(null) }}>
                                                         <Icon.X className='cursor-pointer' />
                                                         <span>{selectedBrand}</span>
                                                     </div>

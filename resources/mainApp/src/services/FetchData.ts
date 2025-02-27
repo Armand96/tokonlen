@@ -13,6 +13,14 @@ const FetchData = {
         const res = await apiService.getData(`api/product${params}`);
         return res.data;
     },
+    GetSize: async (params: string = '' ) => {
+        const res = await apiService.getData(`api/size${params}`);
+        return res.data;
+    },
+    GetBrand: async (params: string = '' ) => {
+        const res = await apiService.getData(`api/product${params}`);
+        return res.data;
+    },
     SearchAll: async (params: string = '' ) => {
         const res = await apiService.getData(`api/search?words=${params}`);
         return res.data;

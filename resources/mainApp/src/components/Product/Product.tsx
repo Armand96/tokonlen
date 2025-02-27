@@ -30,10 +30,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
         router.push(`/product/detail?id=${productId}`);
     };
 
-    let percentSale = Math.floor(100 - ((data.price / data.originPrice) * 100))
     let percentSold = Math.floor((data.sold / data.quantity) * 100)
-
-
 
     return (
         <>
@@ -42,25 +39,25 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                 (
                     <div className={`product-item grid-type ${style}`}>
                         <div onClick={() => handleDetailProduct(data.id)} className="product-main cursor-pointer block">
-                            <div className="product-thumb bg-white relative overflow-hidden rounded-2xl"> 
+                            <div className="product-thumb bg-white relative overflow-hidden rounded-2xl">
 
                                 {(dayjs(data?.release_date).diff(dayjs(), "day") > -14) && (
                                     <div className="product-tag text-button-uppercase bg-green px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
                                         New
                                     </div>
                                 )}
-                                {(data?.stock < 1) && (
+                                {(data?.stock < 1 || data.variant.filter((x: any) => x.variant?.stock < 1).length > 0) && (
                                     <div className="product-tag text-button-uppercase bg-black text-white px-3 py-0.5 inline-block rounded-full absolute top-3 right-3 z-[1]">
                                         Stock Habis
                                     </div>
                                 )}
-                                {(data?.final_price !== data?.price) && (
+                                {(data?.final_price !== data?.price || data.variant.filter((x: any) => x.variant !== null)[0]) && (
                                     <div className="product-tag text-button-uppercase text-white bg-red px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
                                         Promo
                                     </div>
                                 )}
                                 <div className="product-img w-full h-full aspect-[3/4]">
-                               
+
                                     <Image
                                         src={Helpers.GetImage(data?.image?.image)}
                                         width={500}
@@ -82,7 +79,8 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                             <div className={`caption2 font-semibold uppercase text-white px-2.5`}>Diskon {Helpers.CheckDecimal(data?.discount?.discount_percentage)} % </div>
                                         </div>
                                     </>
-                                    : ''}
+                                    :<></>
+                                  }
                                 {/* {style === 'style-2' || style === 'style-4' ? (
                                 <div className="list-size-block flex items-center justify-center gap-4 absolute bottom-0 left-0 w-full h-8">
                                     {data.sizes.map((item: any, index: number) => (
@@ -219,7 +217,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                             <div className="product-infor max-sm:w-full">
                                                 <div onClick={() => handleDetailProduct(data.id)} className="product-name heading6 inline-block duration-300">{data.name}</div>
                                                 <div className="product-price-block flex items-center gap-2 flex-wrap mt-1 duration-300 relative z-[1]">
-                                                    <div className="product-price text-title">{Helpers.FormatPrice(data.final_price)}</div>                                            
+                                                    <div className="product-price text-title">{Helpers.FormatPrice(data.final_price)}</div>
                                                     {data?.final_price !== data?.price ?
                                                         data?.discount?.discount_percentage == 0 ?
                                                             <>

@@ -23,8 +23,6 @@ const WhatNewOne: React.FC<Props> = ({ start, limit }) => {
         setActiveTab(type);
     };
 
-
-
     useEffect(() => {
         setLoading(true)
         Promise.all([FetchData.GetCategories(), FetchData.GetProduk()]).then((res) => {
