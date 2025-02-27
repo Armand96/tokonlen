@@ -49,7 +49,6 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     };
 
     const handleSwiper = (swiper: SwiperCore) => {
-        // Do something with the thumbsSwiper instance
         setThumbsSwiper(swiper);
     };
 
@@ -60,12 +59,9 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     FetchData.GetProduk(`/${productId}`).then((resp) => {
                 setProduk(resp?.data)
                 document.title = `${resp?.data?.name} - Zhindaya ` ; 
-                FetchData.GetCategories(``).then((res) => {
-                    setCategories(res?.data)
-                    FetchData.GetProduk(`?category_id=${res?.data?.filter((x: any) => x.id == resp?.data?.category_id)[0]?.id}`).then((res) => {
+                    FetchData.GetProduk(`?category_id=${resp?.data?.category?.parent_id}`).then((res) => {
                         setRelatedProduk(res?.data)
                     })
-                })
              
                 setLoading(false)
             })
@@ -79,6 +75,10 @@ const Default: React.FC<Props> = ({ data, productId }) => {
 
     const handleActiveTab = (tab: string) => {
         setActiveTab(tab)
+    }
+
+    const handleActiveColor = (item: string) => {
+
     }
 
 
@@ -206,32 +206,32 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                             <div className='desc text-secondary mt-3 pb-6 border-b border-line'>{produk?.description}</div>
 
                             <div className="list-action mt-6">
-                                {/* <div className="choose-color">
-                                    <div className="text-title">Colors: <span className='text-title color'>{activeColor}</span></div>
+                                <div className="choose-color">
+                                    <div className="text-title">Warna: <span className='text-title color'>{activeColor}</span></div>
                                     <div className="list-color flex items-center gap-2 flex-wrap mt-3">
-                                        {productMain.variation.map((item, index) => (
+                                        {produk?.variant.map((item: any, index: number) => (
                                             <div
-                                                className={`color-item w-12 h-12 rounded-xl duration-300 relative ${activeColor === item.color ? 'active' : ''}`}
+                                                className={`color-item w-12  rounded-xl duration-300 relative object-cover  ${activeColor === item.color ? 'active' : ''}`}
                                                 key={index}
                                                 datatype={item.image}
                                                 onClick={() => {
-                                                    handleActiveColor(item.color)
+                                                    handleActiveColor(item)
                                                 }}
                                             >
                                                 <Image
-                                                    src={item.colorImage}
+                                                    src={Helpers.GetImage(item?.images[0]?.image)}
                                                     width={100}
                                                     height={100}
                                                     alt='color'
                                                     className='rounded-xl'
                                                 />
                                                 <div className="tag-action bg-black text-white caption2 capitalize px-1.5 py-0.5 rounded-sm">
-                                                    {item.color}
+                                                    {item.variant}
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-                                </div> */}
+                                </div>
                                 <div className="choose-size mt-5">
                                     <div className="heading flex items-center justify-between">
                                         <div className="text-title">Ukuran: <span className='text-title size'>{activeSize}</span></div>
@@ -244,13 +244,13 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         <ModalSizeguide data={productMain} isOpen={openSizeGuide} onClose={handleCloseSizeGuide} />
                                     </div>
                                     <div className="list-size flex items-center gap-2 flex-wrap mt-3">
-                                        {productMain.sizes.map((item, index) => (
+                                        {produk?.variant.map((item: any, index: number) => (
                                             <div
-                                                className={`size-item ${item === 'freesize' ? 'px-3 py-2' : 'w-12 h-12'} flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item ? 'active' : ''}`}
+                                                className={`size-item w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
                                                 key={index}
-                                                onClick={() => handleActiveSize(item)}
+                                                onClick={() => handleActiveSize(item?.size)}
                                             >
-                                                {item}
+                                                {item?.size}
                                             </div>
                                         ))}
                                     </div>
@@ -289,17 +289,17 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         <div className="text-title">38</div>
                                         <div className="text-secondary">orang melihat produk ini</div>
                                     </div>
-                                    <div className="flex items-center gap-1 mt-3">
+                                    {/* <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">Stock:</div>
                                         <div className="text-secondary">{produk?.stock}</div>
-                                    </div>
+                                    </div> */}
                                     <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">SKU:</div>
                                         <div className="text-secondary">53453412</div>
                                     </div>
                                     <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">Categories:</div>
-                                        <div className="text-secondary">{produk?.category}</div>
+                                        <div className="text-secondary">{produk?.category?.name}</div>
                                     </div>
                                 </div>
                                 {/* <div className="list-payment mt-7">
