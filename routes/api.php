@@ -18,6 +18,7 @@ use App\Http\Controllers\Client\BannerCController;
 use App\Http\Controllers\Client\ProductCController;
 use App\Http\Controllers\Client\SearchController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Client\SizeCController;
 use App\Http\Requests\ResponseFail;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -42,6 +43,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::prefix('admin')
     // ->middleware('auth:sanctum')
     ->group(function () {
+    /* CRUD ADMIN */
     Route::resource('user', UserController::class);
     Route::resource('category', CategoryController::class);
     Route::resource('product', ProductController::class);
@@ -54,6 +56,8 @@ Route::prefix('admin')
     Route::resource('discount', DiscountController::class);
     Route::resource('banner', BannerController::class);
     Route::resource('size', SizeController::class);
+    Route::resource('web_setting', WebSettingController::class);
+    /* CRUD ADMIN */
 
     //additional
     Route::post('variant_bulk_insert', [VariantController::class, 'bulkInsert']);
