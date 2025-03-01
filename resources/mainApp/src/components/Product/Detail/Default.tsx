@@ -30,7 +30,6 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
     const [activeVariant, setActiveVariant] = useState<any>('')
     const [activeSize, setActiveSize] = useState<string>('')
-    const [activeImage, setActiveImage] = useState<number>(0)
     const [activeTab, setActiveTab] = useState<string | undefined>('specifications')
     const [loading, setLoading] = useState(true)
     const [produk, setProduk] = useState<any>()
