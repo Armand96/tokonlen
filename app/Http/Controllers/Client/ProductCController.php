@@ -44,6 +44,11 @@ class ProductCController extends Controller
         if ($req->has('brand')) {
             $query->where('brand', '=', $req->brand);
         }
+        // filter by brand
+        if ($req->has('brand_in')) {
+            $data = explode(",", $req->brand_in);
+            $query->whereIn('brand',$data);
+        }
 
         $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount', 'category.parentCat'])->orderBy($orderBy, $orderMethod);
         $products = $query->paginate($data_per_page);
