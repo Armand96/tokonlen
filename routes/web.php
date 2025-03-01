@@ -20,6 +20,12 @@ use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\File;
 
+Route::prefix('admin')->group(function() {
+    Route::get('', function() {
+        return view('backoffice.dashboard');
+    });
+});
+
 Route::get('/{any?}', function ($any = null) {
     $filePath = public_path($any ? "/mainApp/{$any}.html" : "/mainApp/index.html");
 
@@ -29,3 +35,4 @@ Route::get('/{any?}', function ($any = null) {
 
     abort(404);
 })->where('any', '.*');
+
