@@ -22,7 +22,7 @@ interface Props {
 const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) => {
     const [showOnlySale, setShowOnlySale] = useState(false)
     const [sortOption, setSortOption] = useState('');
-    const [type, setType] = useState<string | null | undefined>(dataType)
+    const [isAvailable, setIsAvailable] = useState<boolean>(false)
     const [size, setSize] = useState<any[]>()
     const [brand, setBrand] = useState<any[]>()
     const [selectedBrand, setSelectedBrand] = useState<any>(null)
@@ -32,29 +32,51 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
     const [loading, setLoading] = useState(true)
     const [produk, setProduk] = useState<any>([])
     const router = useRouter()
+
     
 
 
     useEffect(() => {
-        setLoading(true)
-        Promise.all([FetchData.GetCategories(dataType ? `/${dataType}` : ''), FetchData.GetSize()]).then((res) => {
-            if(dataType){
-                setSize(res[1]?.data)
-                 FetchData.GetProduk(`${dataType ? `?category_id=${res[0]?.data?.id}&order_by=release_date&order_method=desc${selectedSize ? `&size=${selectedSize}` : ""}` : `?order_by=release_date&order_method=desc${selectedSize ? `&size=${selectedSize}` : ""}`} `).then((res) => {
-                    setProduk(res)
-                    setLoading(false)
-                })
-                return
+        setLoading(true);
+    
+        Promise.all([
+            FetchData.GetCategories(dataType ? `/${dataType}` : ''),
+            FetchData.GetSize(),
+            FetchData.GetBrand()
+        ]).then(([categoriesRes, sizeRes, brandRes]) => {
+            const categories = categoriesRes?.data;
+            const size = sizeRes?.data;
+            const brand = brandRes?.data;
+            const brandsSelect = selectedBrand ? `&brand=${selectedBrand}` : "";
+            const available = isAvailable ? `&has_stock=${isAvailable}` : "";
+            const sortBy = isAvailable ? `&has_stock=${isAvailable}` : "";
+
+            setSize(size);
+            if (dataType) {
+                FetchData.GetProduk(
+                    `?category_id=${categories?.id}&order_by=release_date&order_method=desc${selectedSize ? `&size=${selectedSize}${brandsSelect}${available}` : ""}`
+                ).then((produkRes) => {
+                    setProduk(produkRes);
+                    setLoading(false);
+                });
+                return;
             }
-            setListCategories(res[0]?.data)
-            setSize(res[1]?.data)
-            let filterFromSlug = res[0]?.data?.filter((x: any) => x.slug == category)[0]
-            FetchData.GetProduk(`${filterFromSlug ? `?category_id=${filterFromSlug?.id}&order_by=release_date&order_method=desc${selectedSize ? `&size=${selectedSize}` : ""}` : `?order_by=release_date&order_method=desc${selectedSize ? `&size=${selectedSize}` : ""}`}`).then((res) => {
-                setProduk(res)
-                setLoading(false)
-            })
-        })
-    },[category,dataType,selectedSize])
+            
+            setBrand(brand);
+            setListCategories(categories);
+    
+            const filterFromSlug = categories?.find((x: any) => x.slug === category);
+            const categoryIdParam = filterFromSlug ? `?category_id=${filterFromSlug.id}` : "?";
+            const sizeParam = selectedSize ? `&size=${selectedSize}` : "";
+
+    
+            FetchData.GetProduk(`${categoryIdParam}&order_by=release_date&order_method=desc${sizeParam}${brandsSelect}${available}`)
+                .then((produkRes) => {
+                    setProduk(produkRes);
+                    setLoading(false);
+                });
+        });
+    }, [category, dataType, selectedSize, selectedBrand, isAvailable]);
 
     const handleShowOnlySale = () => {
         setShowOnlySale(toggleSelect => !toggleSelect)
@@ -74,6 +96,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
 
 
     const handleBrand = (brand: string) => {
+        setSelectedBrand(brand)
     }
 
 
@@ -90,16 +113,6 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
             setProduk(res)
             setLoading(false)
         })
-    };
-
-    const handleClearAll = () => {
-        dataType = null
-        setShowOnlySale(false);
-        setSortOption('');
-        setType(null);
-        setSize([]);
-        setBrand([]);
-        setPriceRange({ min: 0, max: 100 });
     };
 
     return (
@@ -137,8 +150,8 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                 <div className="container">
                     <div className="flex max-md:flex-wrap max-md:flex-col-reverse gap-y-8">
                         <div className="sidebar order-2 lg:order-1 lg:w-1/4 md:w-1/3 w-full md:pr-12">
-                            <div className="filter-type pb-8 border-b border-line">
-                                <div className="heading6">Tipe produk</div>
+                            <div className={`filter-type pb-8 border-b border-line ${listCategories.filter((y: any) => y.slug == category)[0]?.sub_cat == null && "hidden"}`}>
+                                <div className="heading6">Sub Kategori</div>
                                 <div className="list-type mt-4">
                                     {listCategories.filter((y: any) => y.slug == category).map((item: any, index: string) => {
                                        return item?.sub_cat?.map((x: any) => (
@@ -179,7 +192,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                                 </div>
                             </div>
                           
-{/*                            
+                           
                             <div className="filter-brand mt-8">
                                 <div className="heading6">Brands</div>
                                 <div className="list-brand mt-4">
@@ -191,19 +204,16 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                                                         type="checkbox"
                                                         name={item}
                                                         id={item}
-                                                        checked={brand === selectedBrand}
+                                                        checked={item === selectedBrand}
                                                         onChange={() => handleBrand(item)} />
                                                     <Icon.CheckSquare size={20} weight='fill' className='icon-checkbox' />
                                                 </div>
-                                                <label htmlFor={item} className="brand-name capitalize pl-2 cursor-pointer">{item?.}</label>
-                                            </div>
-                                            <div className='text-secondary2'>
-                                                ({data.filter(dataItem => dataItem.brand === item && dataItem.category === 'fashion').length})
+                                                <label htmlFor={item} className="brand-name capitalize pl-2 cursor-pointer">{item}</label>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
-                            </div> */}
+                            </div>
 
 
                         </div>
@@ -234,7 +244,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                                             className='border-line'
                                             onChange={handleShowOnlySale}
                                         />
-                                        <label htmlFor="filter-sale" className='cation1 cursor-pointer'>Tersedia</label>
+                                        <label htmlFor="filter-sale" className='cation1 cursor-pointer' onClick={() => setIsAvailable(!isAvailable)}>Tersedia</label>
                                     </div>
                                 </div>
                                 <div className="right flex items-center gap-3">
@@ -247,11 +257,11 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                                             defaultValue={'Sorting'}
                                         >
                                             <option value="Sorting" disabled>Sorting</option>
-                                            <option value="discountHighToLow">Diskon</option>
-                                            <option value="priceHighToLow">Harga tertinggi</option>
-                                            <option value="priceLowToHigh">Harga terendah</option>
-                                            <option value="priceHighToLow">Terbaru</option>
-                                            <option value="priceLowToHigh">Terlama</option>
+                                            <option value="diskon">Diskon</option>
+                                            <option value="hargatinggi">Harga tertinggi</option>
+                                            <option value="hargarendah">Harga terendah</option>
+                                            <option value="terbaru">Terbaru</option>
+                                            <option value="terlama">Terlama</option>
                                         </select>
                                         <Icon.CaretDown size={12} className='absolute top-1/2 -translate-y-1/2 md:right-4 right-2' />
                                     </div>
@@ -281,13 +291,6 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                                                         <span>{selectedBrand}</span>
                                                     </div>
                                                 )}
-                                            </div>
-                                            <div
-                                                className="clear-btn flex items-center px-2 py-1 gap-1 rounded-full border border-red cursor-pointer"
-                                                onClick={handleClearAll}
-                                            >
-                                                <Icon.X color='rgb(219, 68, 68)' className='cursor-pointer' />
-                                                <span className='text-button-uppercase text-red'>Clear All</span>
                                             </div>
                                         </>
                                     )
