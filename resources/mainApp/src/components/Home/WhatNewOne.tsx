@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import productData from '@/data/Product.json'
 import FetchData from '@/services/FetchData'
 import Loading from '../Other/Loading';
+import { useRouter } from 'next/navigation'
 
 interface Props {
     start: number;
@@ -18,6 +19,7 @@ const WhatNewOne: React.FC<Props> = ({ start, limit }) => {
     const [categories, setCategories] = useState<any>([])
     const [produk, setProduk] = useState<any>([])
     const [loading, setLoading] = useState(true)
+    const router = useRouter()
 
     const handleTabClick = (type: any) => {
         setActiveTab(type);
@@ -66,13 +68,14 @@ const WhatNewOne: React.FC<Props> = ({ start, limit }) => {
                         </div>
                     </div>
 
-                    <div className="list-product hide-product-sold grid lg:grid-cols-4 grid-cols-2 sm:gap-[30px] gap-[20px] md:mt-10 mt-6">
+                    <div className="list-product hide-product-sold grid lg:grid-cols-4 grid-cols-2 sm:gap-[70px] gap-[20px] md:mt-10 mt-6">
                         {produk.slice(0,8).map((prd: any, index: string) => (
                             <Product data={prd} type='grid' key={index} style='style-1' />
                         ))}
                     </div>
                 </div>
             </div>
+            <button onClick={() => router.push('/shop/breadcrumb')} className={`button-main block mt-[20px] md:mt-[100px] mb-[50px] mx-auto text-center`} >Lihat Semua Produk</button>
         </>
     )
 }

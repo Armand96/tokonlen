@@ -48,7 +48,6 @@ const SliderOne = () => {
                                         <div className="text-content basis-1/2">
                                             <div className="text-sub-display">{item?.caption}</div>
                                             <div className="text-display md:mt-5 mt-2">{item?.name}</div>
-                                            {/* <Link href='/shop/breadcrumb' className="button-main md:mt-8 mt-3">Beli sekarang</Link> */}
                                         </div>
                                         <div className="sub-img md:absolute  md:w-1/2 h-[calc(90% - 120px)] lg:h-[90%] w-[200px] 2xl:-right-[60px] -right-[10px] md:-right-[0] bottom-0">
                                             <Image

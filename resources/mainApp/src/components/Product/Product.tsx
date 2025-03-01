@@ -2,15 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { ProductType } from '@/type/ProductType'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import { useCart } from '@/context/CartContext'
-import { useModalCartContext } from '@/context/ModalCartContext'
-import { useWishlist } from '@/context/WishlistContext'
-import { useModalWishlistContext } from '@/context/ModalWishlistContext'
-import { useCompare } from '@/context/CompareContext'
-import { useModalCompareContext } from '@/context/ModalCompareContext'
-import { useModalQuickviewContext } from '@/context/ModalQuickviewContext'
 import { useRouter } from 'next/navigation'
 import Baju from '@/images/dumny/baju-2.jpg'
 import Helpers from '@/Helpers/Helpers';
@@ -47,7 +39,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                     </div>
                                 )}
                                 {(data?.stock < 1 || data.variant.filter((x: any) => x.variant?.stock < 1).length > 0) && (
-                                    <div className="product-tag text-button-uppercase bg-black text-white px-3 py-0.5 inline-block rounded-full absolute top-3 right-3 z-[1]">
+                                    <div className="product-tag text-button-uppercase bg-black text-white px-3 py-0.5 inline-block rounded-full absolute bottom-4 md:bottom-auto md:top-3 md:right-3 z-[1]">
                                         Stock Habis
                                     </div>
                                 )}

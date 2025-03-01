@@ -14,8 +14,7 @@ interface Props {
 
 const BreadcrumbProduct: React.FC<Props> = ({ data, productPage, productId }) => {
     const router = useRouter()
-
-
+    
     return (
         <>
             <div className="breadcrumb-product">
