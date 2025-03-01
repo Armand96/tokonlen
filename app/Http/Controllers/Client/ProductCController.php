@@ -71,4 +71,14 @@ class ProductCController extends Controller
         $sizes = $query->where('product_id', $product->id)->where('is_active', true)->distinct()->get('size');
         return response()->json(new ResponseSuccess($sizes, "Success", "Success Get Distinct Sizes"));
     }
+
+    public function getDistinctBrand()
+    {
+        $brands = [];
+        $datas = Product::distinct('brand')->get('brand');
+        foreach ($datas as $key => $value) {
+            array_push($brands, $value->brand);
+        }
+        return response()->json(new ResponseSuccess($brands, "Success", "Success Get Distinct Brands"));
+    }
 }
