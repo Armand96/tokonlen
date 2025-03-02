@@ -12,4 +12,5 @@ import './bootstrap';
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import './react/Example';
+import './backoffice/src/index';
+import './backoffice/src/index.scss';

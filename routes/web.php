@@ -20,11 +20,12 @@ use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\File;
 
-Route::prefix('admin')->group(function() {
-    Route::get('', function() {
+Route::prefix('/admin')->group(function () {
+    Route::get('/{any?}', function () {
         return view('backoffice.dashboard');
-    });
+    })->where('any', '.*'); // Menangkap semua path setelah /admin
 });
+
 
 Route::get('/{any?}', function ($any = null) {
     $filePath = public_path($any ? "/mainApp/{$any}.html" : "/mainApp/index.html");

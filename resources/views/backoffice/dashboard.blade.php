@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laravel 11 with React</title>
     @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/react/Example.jsx'])
+    @vite([ 'resources/js/backoffice/src/index.tsx'])
 </head>
 
 <body>
-    <div id="example"></div>
+    <div id="root"></div>
 </body>
 
 </html>
