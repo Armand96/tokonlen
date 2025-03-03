@@ -15,6 +15,60 @@ export interface MenuItemTypes {
 
 const MENU_ITEMS: MenuItemTypes[] = [
 	{
+		key: 'backoffice',
+		label: 'Backoffice',
+		isTitle: true,
+	},
+	{
+		key: 'dashboard',
+		label: 'Dashboard',
+		isTitle: false,
+		icon: 'ri-home-4-line',
+		url: '/backoffice/dashboard',
+	},
+	{
+		key: 'Products',
+		label: 'Products',
+		isTitle: false,
+		icon: 'ri-shopping-cart-line',
+		url: '/backoffice/products',
+	},
+	{
+		key: 'Variants',
+		label: 'Variants',
+		isTitle: false,
+		icon: 'ri-magic-line',
+		url: '/backoffice/variants',
+	},
+	{
+		key: 'Discounts',
+		label: 'discounts',
+		isTitle: false,
+		icon: 'ri-percent-line',
+		url: '/backoffice/discounts',
+	},
+	{
+		key: 'Link Type',
+		label: 'Link Type',
+		isTitle: false,
+		icon: 'ri-links-line',
+		url: '/backoffice/link-types',
+	},
+	{
+		key: 'Size',
+		label: 'Size',
+		isTitle: false,
+		icon: 'ri-ruler-line',
+		url: '/backoffice/sizes',
+	},
+	{
+		key: 'Brand',
+		label: 'Brand',
+		isTitle: false,
+		icon: 'ri-trademark-line',
+		url: '/backoffice/brands',
+	},
+	{
 		key: 'navigation',
 		label: 'Navigation',
 		isTitle: true,

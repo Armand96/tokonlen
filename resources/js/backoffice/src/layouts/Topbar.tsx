@@ -16,10 +16,6 @@ import profilePic from '@/assets/images/users/avatar-1.jpg'
 import avatar2 from '@/assets/images/users/avatar-2.jpg'
 import avatar4 from '@/assets/images/users/avatar-4.jpg'
 
-import TopBarSearch from '../components/TopBarSearch'
-import LanguageDropdown from '../components/LanguageDropdown'
-import NotificationDropdown from '../components/NotificationDropDown'
-import AppsDropDown from '../components/AppsDropDown'
 import MaximizeScreen from '../components/MaximizeScreen'
 import ProfileDropDown from '../components/ProfileDropDown'
 import LogoBox from '../components/LogoBox'
@@ -34,74 +30,12 @@ export interface NotificationItem {
 	createdAt: Date
 }
 
-/**
- * notification items
- */
-const notifications: NotificationItem[] = [
-	{
-		id: 1,
-		text: 'Datacorp',
-		subText: 'Caleb Flakelar commented on Admin',
-		icon: 'ri-message-3-line text-lg',
-		bgColor: 'primary',
-		createdAt: subtractHours(new Date(), 1),
-	},
-	{
-		id: 2,
-		text: 'Admin',
-		subText: 'New user registered',
-		icon: 'ri-user-add-line text-lg',
-		bgColor: 'info',
-		createdAt: subtractHours(new Date(), 60),
-	},
-	{
-		id: 3,
-		text: 'Cristina Pride',
-		subText: 'Hi, How are you? What about our next meeting',
-		avatar: avatar2,
-		createdAt: subtractHours(new Date(), 1440),
-	},
-	{
-		id: 4,
-		text: 'Datacorp',
-		subText: 'Caleb Flakelar commented on Admin',
-		icon: 'ri-discuss-line text-lg',
-		bgColor: 'primary',
-		createdAt: subtractHours(new Date(), 2880),
-	},
-	{
-		id: 5,
-		text: 'Karen Robinson',
-		subText: 'Wow ! this admin looks good and awesome design',
-		avatar: avatar4,
-		createdAt: subtractHours(new Date(), 2880),
-	},
-]
+
 
 /**
  * profile menu items
  */
 const profileMenus = [
-	{
-		label: 'My Account',
-		icon: 'ri-account-circle-line',
-		redirectTo: '/pages/profile',
-	},
-	{
-		label: 'Settings',
-		icon: 'ri-settings-4-line',
-		redirectTo: '/pages/profile',
-	},
-	{
-		label: 'Support',
-		icon: 'ri-customer-service-2-line',
-		redirectTo: '/pages/faq',
-	},
-	{
-		label: 'Lock Screen',
-		icon: 'ri-lock-password-line',
-		redirectTo: '/auth/lock-screen',
-	},
 	{
 		label: 'Logout',
 		icon: 'ri-logout-box-line',
@@ -109,13 +43,6 @@ const profileMenus = [
 	},
 ]
 
-/**
- * for subtraction minutes
- */
-function subtractHours(date: Date, minutes: number) {
-	date.setMinutes(date.getMinutes() - minutes)
-	return date
-}
 
 const Topbar = () => {
 	const dispatch = useDispatch<AppDispatch>()
@@ -208,7 +135,7 @@ const Topbar = () => {
 
 	return (
 		<React.Fragment>
-			<header className="app-header flex items-center px-4 gap-3.5">
+			<header className="app-header flex justify-between items-center px-4 gap-3.5">
 				<LogoBox />
 
 				<button id="button-toggle-menu" className="nav-link p-2" onClick={handleLeftMenuCallBack}>
@@ -217,48 +144,26 @@ const Topbar = () => {
 						<i className="ri-menu-2-fill text-2xl"></i>
 					</span>
 				</button>
+				
 
-				<div className="relative hidden lg:block">
-					<TopBarSearch />
-				</div>
+				<div className="flex w-fit gap-x-6">
+					<div className="lg:flex hidden">
+						<button id="light-dark-mode" type="button" className="nav-link p-2" onClick={toggleDarkMode}>
+							<span className="sr-only">Light/Dark Mode</span>
+							<span className="flex items-center justify-center">
+								<i className="ri-moon-line text-2xl block dark:hidden"></i>
+								<i className="ri-sun-line text-2xl hidden dark:block"></i>
+							</span>
+						</button>
+					</div>
 
-				<div className="relative ms-auto">
-					<LanguageDropdown />
-				</div>
+					<div className="md:flex hidden">
+						<MaximizeScreen />
+					</div>
 
-				<div className="relative lg:flex hidden">
-					<NotificationDropdown notifications={notifications} />
-				</div>
-
-				<div className="relative lg:flex hidden">
-					<AppsDropDown />
-				</div>
-
-				{/* <div className="flex">
-					<button type="button" className="nav-link p-2" onClick={handleRightSideBar}>
-						<span className="sr-only">Customization</span>
-						<span className="flex items-center justify-center">
-							<i className="ri-settings-3-line text-2xl"></i>
-						</span>
-					</button>
-				</div> */}
-
-				<div className="lg:flex hidden">
-					<button id="light-dark-mode" type="button" className="nav-link p-2" onClick={toggleDarkMode}>
-						<span className="sr-only">Light/Dark Mode</span>
-						<span className="flex items-center justify-center">
-							<i className="ri-moon-line text-2xl block dark:hidden"></i>
-							<i className="ri-sun-line text-2xl hidden dark:block"></i>
-						</span>
-					</button>
-				</div>
-
-				<div className="md:flex hidden">
-					<MaximizeScreen />
-				</div>
-
-				<div className="relative">
-					<ProfileDropDown profiliePic={profilePic} menuItems={profileMenus} username="Tosha Minner" userTitle="Founder" />
+					<div className="relative">
+						<ProfileDropDown profiliePic={profilePic} menuItems={profileMenus} username="Admin" userTitle="Admin" />
+					</div>
 				</div>
 			</header>
 		</React.Fragment>

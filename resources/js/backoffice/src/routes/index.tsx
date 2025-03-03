@@ -128,7 +128,14 @@ const Error404Alt = React.lazy(() => import('../pages/error/Error404Alt'))
 const Error500 = React.lazy(() => import('../pages/error/Error500'))
 
 // 
-const DefaultDashboard = React.lazy(() => import('../pages/dashboard/default'))
+const Dashboard = React.lazy(() => import('../pages/backoffice/dashboard'))
+const Produk = React.lazy(() => import('../pages/backoffice/Products'))
+const Variants = React.lazy(() => import('../pages/backoffice/variants'))
+const Discounts = React.lazy(() => import('../pages/backoffice/Discount'))
+const Size = React.lazy(() => import('../pages/backoffice/sizes'))
+const Brands = React.lazy(() => import('../pages/backoffice/brands'))
+const LinkType = React.lazy(() => import('../pages/backoffice/linkTypes'))
+
 
 
 export interface RoutesProps {
@@ -143,29 +150,59 @@ export interface RoutesProps {
 	children?: RoutesProps[]
 }
 
-// // dashboards
+// dashboards
 const BackOffice: RoutesProps = {
 	path: '/dashboard',
-	name: 'Dashboards',
+	name: 'Dashboard',
 	icon: 'home',
 	header: 'Navigation',
 	children: [
 		{
 			path: '/',
 			name: 'Root',
-			element: <Navigate to="/dashboard" />,
+			element: <Navigate to="/backoffice/dashboard" />,
 			route: PrivateRoute,
 		},
 		{
-			path: '/default',
-			name: 'dashboard',
-			element: <DefaultDashboard />,
+			path: '/backoffice/dashboard',
+			name: 'Dashboard',
+			element: <Dashboard />,
 			route: PrivateRoute,
 		},
 		{
-			path: '/analytics',
-			name: 'Analytics',
-			element: <Analytics />,
+			path: '/backoffice/products',
+			name: 'Dashboard',
+			element: <Produk />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/backoffice/variants',
+			name: 'Variants',
+			element: <Variants />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/backoffice/sizes',
+			name: 'Size',
+			element: <Size />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/backoffice/brands',
+			name: 'Brands',
+			element: <Brands />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/backoffice/link-types',
+			name: 'link-type',
+			element: <LinkType />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/backoffice/discounts',
+			name: 'discounts',
+			element: <Discounts />,
 			route: PrivateRoute,
 		},
 	],

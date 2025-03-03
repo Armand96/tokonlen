@@ -1,11 +1,12 @@
 // components
 
+import React from 'react'
 import { PageBreadcrumb } from '../../components'
 
 const StarterPages = () => {
 	return (
 		<>
-			<PageBreadcrumb title="Starter Page" subName="Pages" />
+			<PageBreadcrumb title="Produk" subName="Backoffice" />
 		</>
 	)
 }

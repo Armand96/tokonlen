@@ -7,12 +7,12 @@ import 'gridjs/dist/theme/mermaid.min.css'
 import './index.scss'
 
 // configure fake backend
-configureFakeBackend()
+// configureFakeBackend()
 
 const App = () => {
 	return (
 		<React.Fragment>
-						<AllRoutes />
+			<AllRoutes />
 
 		</React.Fragment>
 	)

@@ -40,7 +40,6 @@ const Layout = (state: LayoutStateTypes = INIT_STATE(), action: LayoutActionType
 			}
 
 		case LayoutActionTypes.CHANGE_LAYOUT_WIDTH: {
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const layoutConfig = getLayoutConfigs(action.payload! && action.payload)
 			return {
 				...state,
