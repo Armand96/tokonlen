@@ -10,7 +10,9 @@ interface TablePaginateProps {
   data: any[];
   columns: Column[];
   totalPage: number;
-  onPageChange: (params: { selected: number }) => void;
+  onPageChange: (params: {
+	  current_page(current_page: any): void; selected: number 
+}) => void;
 }
 
 const TablePaginate: React.FC<TablePaginateProps> = ({ data, columns, totalPage, onPageChange }) => {
