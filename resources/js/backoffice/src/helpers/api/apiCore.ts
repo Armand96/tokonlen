@@ -59,7 +59,7 @@ class APICore {
 	/**
 	 * Fetches data from given url
 	 */
-	get = (url: string, params: any) => {
+	get = (url: string, params?: any) => {
 		let response
 		if (params) {
 			const queryString = params

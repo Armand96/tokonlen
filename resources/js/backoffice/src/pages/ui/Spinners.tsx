@@ -1,4 +1,5 @@
 // components
+import React from 'react'
 import { PageBreadcrumb } from '../../components'
 
 const colors: string[] = ['bg-primary/75', 'bg-secondary/75', 'bg-success/75', 'bg-danger/75', 'bg-warning/75', 'bg-info/75', 'bg-light/75', 'bg-dark/75']

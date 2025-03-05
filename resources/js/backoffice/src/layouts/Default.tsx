@@ -8,8 +8,6 @@ import { RootState } from '../redux/store'
 import { changeHTMLAttribute } from '../utils'
 import React from 'react'
 
-const loading = () => <div />
-
 interface DefaultLayoutProps {
 	layout: {
 		layoutType: string
@@ -21,7 +19,6 @@ interface DefaultLayoutProps {
 }
 
 const DefaultLayout = (props: DefaultLayoutProps) => {
-
 	const { layoutTheme } = useSelector((state: RootState) => ({
 		layoutTheme: state.Layout.layoutTheme,
 	}))
@@ -34,8 +31,8 @@ const DefaultLayout = (props: DefaultLayoutProps) => {
 	const children = props['children'] || null
 
 	return (
-		<>
-			<Suspense fallback={loading()}>{children}</Suspense>
+		<>			
+			{/* <Suspense fallback={<LoadingScreen />}>{children}</Suspense> */}
 		</>
 	)
 }

@@ -13,8 +13,6 @@ import { SideBarType, LayoutTheme } from '../constants'
 
 // assets
 import profilePic from '@/assets/images/users/avatar-1.jpg'
-import avatar2 from '@/assets/images/users/avatar-2.jpg'
-import avatar4 from '@/assets/images/users/avatar-4.jpg'
 
 import MaximizeScreen from '../components/MaximizeScreen'
 import ProfileDropDown from '../components/ProfileDropDown'
@@ -126,17 +124,9 @@ const Topbar = () => {
 		}
 	}
 
-	/**
-	 * Toggles the right sidebar
-	 */
-	const handleRightSideBar = () => {
-		dispatch(showRightSidebar())
-	}
-
 	return (
 		<React.Fragment>
 			<header className="app-header flex justify-between items-center px-4 gap-3.5">
-				<LogoBox />
 
 				<button id="button-toggle-menu" className="nav-link p-2" onClick={handleLeftMenuCallBack}>
 					<span className="sr-only">Menu Toggle Button</span>

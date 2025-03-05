@@ -133,7 +133,6 @@ const Produk = React.lazy(() => import('../pages/backoffice/Products'))
 const Variants = React.lazy(() => import('../pages/backoffice/variants'))
 const Discounts = React.lazy(() => import('../pages/backoffice/Discount'))
 const Size = React.lazy(() => import('../pages/backoffice/sizes'))
-const Brands = React.lazy(() => import('../pages/backoffice/brands'))
 const LinkType = React.lazy(() => import('../pages/backoffice/linkTypes'))
 
 
@@ -185,12 +184,6 @@ const BackOffice: RoutesProps = {
 			path: '/backoffice/sizes',
 			name: 'Size',
 			element: <Size />,
-			route: PrivateRoute,
-		},
-		{
-			path: '/backoffice/brands',
-			name: 'Brands',
-			element: <Brands />,
 			route: PrivateRoute,
 		},
 		{

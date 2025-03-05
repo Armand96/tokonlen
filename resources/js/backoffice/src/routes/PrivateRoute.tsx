@@ -3,6 +3,7 @@ import { Route, Navigate, RouteProps } from 'react-router-dom'
 // helpers
 import { APICore } from '../helpers/api/apiCore'
 import React from 'react'
+import LoadingScreen from '../components/Loading/loading'
 
 /**
  * Private Route forces the authorization before the route can be accessed
@@ -36,8 +37,9 @@ const PrivateRoute = ({ component: Component, roles, ...rest }: any) => {
 					// return <Navigate to={{ pathname: '/dashboard' }} />
 				// }
 				// authorised so return component
-				
-				return <Component {...props} />
+				return <>
+				<Component {...props} />
+				</>
 			}}
 		/>
 	)

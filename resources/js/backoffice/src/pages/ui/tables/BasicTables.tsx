@@ -6,6 +6,7 @@ import { PageBreadcrumb } from '../../../components'
 
 // dummy data
 import { records, expandablerecords, nestedrecords } from './data'
+import React from 'react'
 
 const BasicTable = () => {
 	return (

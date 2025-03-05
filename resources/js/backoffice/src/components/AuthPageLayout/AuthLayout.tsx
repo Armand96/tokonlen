@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 // images
 import logo from '@/assets/images/logo.png'
 import logoDark from '@/assets/images/logo-dark.png'
+import React from 'react'
 
 interface AccountLayoutProps {
 	pageImage?: string
@@ -34,7 +35,6 @@ const AuthLayout = ({ pageImage, authTitle, helpText, bottomLinks, children }: A
 									<h4 className={`${pageImage ? 'mt-9' : ''} text-dark/70 text-center text-lg font-bold dark:text-light/80 mb-2`}>{authTitle}</h4>
 									<p className="text-gray-400 mb-9">{helpText}</p>
 								</div>
-
 								{children}
 							</div>
 						</div>
