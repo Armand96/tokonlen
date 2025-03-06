@@ -106,11 +106,13 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
 
               className="form-input"
               placeholder="tanggal mulai hingga tanggal akhir"
+              
               value={[new Date(), new Date()]}
               options={{
                 mode: 'range',
                 time_24hr: true,
-                dateFormat: 'y-m-d'
+                dateFormat: 'y-m-d',
+                onChange: (v) => console.log(v)
               }}
             />
           </div>
