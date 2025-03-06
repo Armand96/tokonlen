@@ -34,7 +34,7 @@ const Index = () => {
         await postLinkType(data, formData?.id);
         await fetchData();
         setModal(false);
-        Swal.fire('Success', formData.id ? 'Update Link Type Berhasil' : 'Input Size Berhasil', 'success');
+        Swal.fire('Success', formData.id ? 'Update Link Type Berhasil' : 'Input Link Type Berhasil', 'success');
     };
 
     const columns = [
@@ -63,7 +63,7 @@ const Index = () => {
                             </button>
                         </div>
                         <div className='p-4 max-h-80 overflow-y-auto w-[70vw]'>
-                            <FormInput name='name' label='Size' value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className='form-input mb-3' />
+                            <FormInput name='name' label='Nama Link' value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className='form-input mb-3' />
                             <FormInput name='image' label='Format' value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} className='form-input mb-3' />
                             {!isCreate && (
                                 <div className='mt-5'>
@@ -83,8 +83,8 @@ const Index = () => {
             <PageBreadcrumb title="LinkTypes" subName="Backoffice" />
             <div className='bg-white p-4'>
                 <div className='flex justify-between'>
-                    <h3 className='text-2xl'>Size</h3>
-                    <button className='btn bg-primary text-white' onClick={() => { setModal(true); setIsCreate(true); setFormData({ name: '', format_size: '', is_active: 1 }); }}>Tambah Data</button>
+                    <h3 className='text-2xl'>Link Type</h3>
+                    <button className='btn bg-primary text-white' onClick={() => { setModal(true); setIsCreate(true); setFormData({ name: '', image: '', is_active: 1 }); }}>Tambah Data</button>
                 </div>
                 <TablePaginate totalPage={dataPaginate?.last_page || 0} data={dataPaginate?.data} columns={columns} onPageChange={(val) => fetchData(val?.current_page as any)} />
             </div>
