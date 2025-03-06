@@ -10,7 +10,9 @@ export interface FileType extends File {
 
 interface FileUploaderProps extends ChildrenProps {
 	onFileUpload?: (files: FileType[]) => void
-	showPreview?: boolean
+	showPreview?: boolean,
+	multipleUploads?: boolean,
+	singleFile?: boolean
 }
 
 type ChildrenProps = {
@@ -21,14 +23,14 @@ type ChildrenProps = {
 	classname?: string
 }
 
-const FileUploader = ({ showPreview = true, onFileUpload, icon, text }: FileUploaderProps) => {
+const FileUploader = ({ showPreview = true, onFileUpload, icon, text, singleFile = false, multipleUploads = true }: FileUploaderProps) => {
 	const { selectedFiles, handleAcceptedFiles, removeFile } = useFileUploader(showPreview)
 
 	return (
 		<>
-			<Dropzone onDrop={(acceptedFiles) => handleAcceptedFiles(acceptedFiles, onFileUpload)}>
+			<Dropzone disabled={ singleFile ?  selectedFiles.length > 0 ? true : false : false } multiple={multipleUploads} onDrop={(acceptedFiles) => handleAcceptedFiles(acceptedFiles, onFileUpload)}>
 				{({ getRootProps, getInputProps }) => (
-					<div className="dropzone flex justify-center items-center">
+					<div className="dropzone flex justify-center items-center"  {...getRootProps()}>
 						<div className="fallback">
 							<input {...getInputProps()} name="file" type="file" multiple />
 						</div>

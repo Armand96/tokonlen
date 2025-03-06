@@ -62,6 +62,20 @@ const MENU_ITEMS: MenuItemTypes[] = [
 		url: '/backoffice/sizes',
 	},
 	{
+		key: 'Banner',
+		label: 'banner',
+		isTitle: false,
+		icon: 'ri-honour-line',
+		url: '/backoffice/banners',
+	},
+	{
+		key: 'Web Settings',
+		label: 'web settings',
+		isTitle: false,
+		icon: 'ri-settings-3-line',
+		url: '/backoffice/web-settings',
+	},
+	{
 		key: 'navigation',
 		label: 'Navigation',
 		isTitle: true,

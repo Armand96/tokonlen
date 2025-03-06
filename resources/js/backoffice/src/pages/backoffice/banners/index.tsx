@@ -3,23 +3,24 @@
 import React, { useEffect, useState } from 'react'
 import { FileUploader, FormInput, PageBreadcrumb } from '../../../components'
 import { LinkType } from '../../../dto/link_type';
-import { getLinkType, postLinkType } from '../../../helpers/api/linkType';
 import Swal from 'sweetalert2';
 import LoadingScreen from '../../../components/Loading/loading';
 import { ModalLayout } from '../../../components/HeadlessUI';
 import TablePaginate from '../../../components/Table/tablePaginate';
+import { Banners } from '../../../dto/banners';
+import { getBanner, postBanner } from '../../../helpers';
 
 const Index = () => {
 
     const [modal, setModal] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState<any>({ name: '', image_file: '', is_active: 1 });
+    const [formData, setFormData] = useState<any>({ name: '', image_file: '', is_active: 1, caption: ""});
     const [isCreate, setIsCreate] = useState<boolean>(false);
     const [dataPaginate, setDataPaginate] = useState<any>(null);
 
     const fetchData = async (page = 1) => {
         setLoading(true);
-        const res: LinkType[] = await getLinkType(`?page=${page}`);
+        const res: LinkType[] = await getBanner(`?page=${page}`);
         setDataPaginate(res);
         setLoading(false);
     }
@@ -31,18 +32,18 @@ const Index = () => {
     const postData = async () => {
         setLoading(true);
         const data = { ...formData, _method: formData.id ? 'PUT' : '' };
-        await postLinkType(data, formData?.id);
+        await postBanner(data, formData?.id);
         await fetchData();
         setModal(false);
         Swal.fire('Success', formData.id ? 'Update Link Type Berhasil' : 'Input Link Type Berhasil', 'success');
     };
 
     const columns = [
-        { name: 'Nama Link', row: (cell: LinkType) => <div>{cell.name}</div> },
-        { name: 'Image', row: (cell: LinkType) => <div>{cell.image}</div> },
-        { name: 'Status', row: (cell: LinkType) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
+        { name: 'Nama Link', row: (cell: Banners) => <div>{cell.name}</div> },
+        { name: 'Image', row: (cell: Banners) => <div>{cell.image}</div> },
+        { name: 'Status', row: (cell: Banners) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
         {
-            name: 'Action', row: (cell: LinkType) => (
+            name: 'Action', row: (cell: Banners) => (
                 <button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
                     Edit
                 </button>
@@ -51,7 +52,7 @@ const Index = () => {
     ];
 
     const onFileUpload = (val: any) => {
-        setFormData({...formData, image_file: val})
+            setFormData({...formData, image_file: val})
     }
 
     return (
@@ -67,7 +68,7 @@ const Index = () => {
                             </button>
                         </div>
                         <div className='p-4 max-h-screen overflow-y-auto w-[70vw]'>
-                            <FormInput name='name' label='Nama Link' value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className='form-input mb-3' />
+                            <FormInput name='name' label='Caption' value={formData.caption} onChange={(e) => setFormData({ ...formData, caption: e.target.value })} className='form-input mb-3' />
                             <div className="flex justify-between items-center">
 						<h4 className="card-title mb-1">Image</h4>
 					</div>
@@ -90,10 +91,10 @@ const Index = () => {
                     </div>
                 </ModalLayout>
             )}
-            <PageBreadcrumb title="LinkTypes" subName="Backoffice" />
+            <PageBreadcrumb title="Banners" subName="Backoffice" />
             <div className='bg-white p-4'>
             <div className='flex justify-between'>
-          <h3 className='text-2xl font-bold'>Link Types</h3>
+          <h3 className='text-2xl font-bold'>Banners</h3>
           <button className='btn bg-primary mb-4 text-white' onClick={() => { setModal(true); setIsCreate(true); setFormData({ name: '', image_file: '', is_active: 1 }); }}>Tambah Data</button>
         </div>
         <p className='mb-2'>Total Data : {dataPaginate?.total}</p>

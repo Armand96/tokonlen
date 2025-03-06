@@ -134,6 +134,8 @@ const Variants = React.lazy(() => import('../pages/backoffice/variants'))
 const Discounts = React.lazy(() => import('../pages/backoffice/Discount'))
 const Size = React.lazy(() => import('../pages/backoffice/sizes'))
 const LinkType = React.lazy(() => import('../pages/backoffice/linkTypes'))
+const Banners = React.lazy(() => import('../pages/backoffice/banners'))
+const WebSettings = React.lazy(() => import('../pages/backoffice/webSettings'))
 
 
 
@@ -196,6 +198,18 @@ const BackOffice: RoutesProps = {
 			path: '/backoffice/discounts',
 			name: 'discounts',
 			element: <Discounts />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/backoffice/banners',
+			name: 'banners',
+			element: <Banners />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/backoffice/web-settings',
+			name: 'websettings',
+			element: <WebSettings />,
 			route: PrivateRoute,
 		},
 	],
