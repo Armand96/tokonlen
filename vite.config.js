@@ -10,7 +10,7 @@ export default defineConfig({
             input: [
                 'resources/sass/app.scss',
                 'resources/js/app.js',
-                'resources/js/react/Example.jsx'
+                'resources/js/backoffice/src/index.tsx'
             ],
             refresh: true,
         }),
