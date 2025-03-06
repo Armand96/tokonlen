@@ -1,14 +1,70 @@
-// components
-
-import React from 'react'
-import { PageBreadcrumb } from '../../../components'
+import React, { useEffect, useState } from 'react';
+import { FormInput, PageBreadcrumb } from '../../../components';
+import { ModalLayout } from '../../../components/HeadlessUI';
+import TablePaginate from '../../../components/Table/tablePaginate';
+import LoadingScreen from '../../../components/Loading/loading';
+import { GetSize, PostSize } from '../../../helpers';
+import Swal from 'sweetalert2';
+import { Size } from '../../../dto/size';
+import { ModalAdd } from './ModalAdd';
 
 const Index = () => {
+	const [modal, setModal] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [formData, setFormData] = useState<any>({ name: '', format_size: '', is_active: 1 });
+	const [isCreate, setIsCreate] = useState<boolean>(false);
+	const [dataPaginate, setDataPaginate] = useState<any>(null);
+
+	const fetchData = async (page = 1) => {
+		setLoading(true);
+		const res: Size[] = await GetSize(`?page=${page}`);
+		setDataPaginate(res);
+		setLoading(false);
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, []);
+
+	const postData = async () => {
+		setLoading(true);
+		const data = { ...formData, _method: formData.id ? 'PUT' : 'POST' };
+		await PostSize(data, formData?.id);
+		await fetchData();
+		setModal(false);
+		Swal.fire('Success', formData.id ? 'Edit Diskon berhasil' : 'Input Diskon berhasil', 'success');
+	};
+
+	const columns = [
+		{ name: 'Ukuran', row: (cell: Size) => <div>{cell.name}</div> },
+		{ name: 'Format', row: (cell: Size) => <div>{cell.format_size}</div> },
+		{ name: 'Status', row: (cell: Size) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
+		{
+			name: 'Action', row: (cell: Size) => (
+				<button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
+					Edit
+				</button>
+			)
+		}
+	];
+
 	return (
 		<>
-			<PageBreadcrumb title="Discounts" subName="Backoffice" />
+			{loading && <LoadingScreen />}
+			{modal && (
+				<ModalAdd isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} handlePost={postData} detailData={formData} />
+			)}
+			<PageBreadcrumb title='discount' subName='Backoffice' />
+			<div className='bg-white p-4 '>
+				<div className='flex justify-between'>
+					<h3 className='text-2xl font-bold'>Discounts</h3>
+					<button className='btn bg-primary mb-4 text-white' onClick={() => { setModal(true); setIsCreate(true); setFormData({ name: '', format_size: '', is_active: 1 }); }}>Tambah Data</button>
+				</div>
+				<p className='mb-2'>Total Data : {dataPaginate?.total}</p>
+				<TablePaginate totalPage={dataPaginate?.last_page || 0} data={dataPaginate?.data} columns={columns} onPageChange={(val) => fetchData(val?.current_page as any)} />
+			</div>
 		</>
-	)
-}
+	);
+};
 
-export default Index
+export default Index;
