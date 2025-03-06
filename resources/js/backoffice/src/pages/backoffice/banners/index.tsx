@@ -9,6 +9,7 @@ import { ModalLayout } from '../../../components/HeadlessUI';
 import TablePaginate from '../../../components/Table/tablePaginate';
 import { Banners } from '../../../dto/banners';
 import { getBanner, postBanner } from '../../../helpers';
+import ModalPreview from '../../../components/ModalPreviewImage/ModalPreview';
 
 const Index = () => {
 
@@ -17,6 +18,8 @@ const Index = () => {
     const [formData, setFormData] = useState<any>({ name: '', image_file: '', is_active: 1, caption: ""});
     const [isCreate, setIsCreate] = useState<boolean>(false);
     const [dataPaginate, setDataPaginate] = useState<any>(null);
+    const [previewImage, setPreviewImage] = useState(false)
+
 
     const fetchData = async (page = 1) => {
         setLoading(true);
@@ -31,7 +34,7 @@ const Index = () => {
 
     const postData = async () => {
         setLoading(true);
-        const data = { ...formData, _method: formData.id ? 'PUT' : '' };
+        const data = { ...formData, _method: formData.id ? 'PUT' : 'POST' };
         await postBanner(data, formData?.id);
         await fetchData();
         setModal(false);
@@ -40,8 +43,11 @@ const Index = () => {
 
     const columns = [
         { name: 'Nama Link', row: (cell: Banners) => <div>{cell.name}</div> },
-        { name: 'Image', row: (cell: Banners) => <div>{cell.image}</div> },
-        { name: 'Status', row: (cell: Banners) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
+ {
+            name: 'Image', row: (cell: LinkType) => <button className='btn bg-success text-white' onClick={() => { setPreviewImage(true); setFormData(cell) }}>
+                Preview image
+            </button>
+        },        { name: 'Status', row: (cell: Banners) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
         {
             name: 'Action', row: (cell: Banners) => (
                 <button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
@@ -52,12 +58,13 @@ const Index = () => {
     ];
 
     const onFileUpload = (val: any) => {
-            setFormData({...formData, image_file: val})
+            setFormData({...formData, image_file: val[0]})
     }
 
     return (
         <>
             {loading && <LoadingScreen />}
+            <ModalPreview toggleModal={() => setPreviewImage(false)} isOpen={previewImage} img={formData?.image} />
             {modal && (
                 <ModalLayout showModal={modal} toggleModal={() => setModal(false)} placement='justify-center items-start'>
                     <div className='m-3 sm:mx-auto flex flex-col bg-white shadow-sm rounded'>
@@ -68,7 +75,7 @@ const Index = () => {
                             </button>
                         </div>
                         <div className='p-4 max-h-screen overflow-y-auto w-[70vw]'>
-                            <FormInput name='name' label='Caption' value={formData.caption} onChange={(e) => setFormData({ ...formData, caption: e.target.value })} className='form-input mb-3' />
+                            <FormInput name='name' label='Caption' value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className='form-input mb-3' />
                             <div className="flex justify-between items-center">
 						<h4 className="card-title mb-1">Image</h4>
 					</div>

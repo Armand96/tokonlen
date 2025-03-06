@@ -21,14 +21,15 @@ type ChildrenProps = {
 	textClass?: string
 	extraText?: string
 	classname?: string
+	prevData?: any
 }
 
-const FileUploader = ({ showPreview = true, onFileUpload, icon, text, singleFile = false, multipleUploads = true }: FileUploaderProps) => {
+const FileUploader = ({ showPreview = true, onFileUpload, icon, text, singleFile = false, multipleUploads = true, prevData }: FileUploaderProps) => {
 	const { selectedFiles, handleAcceptedFiles, removeFile } = useFileUploader(showPreview)
 
 	return (
 		<>
-			<Dropzone disabled={ singleFile ?  selectedFiles.length > 0 ? true : false : false } multiple={multipleUploads} onDrop={(acceptedFiles) => handleAcceptedFiles(acceptedFiles, onFileUpload)}>
+			<Dropzone disabled={singleFile ? selectedFiles.length > 0 ? true : false : false} multiple={multipleUploads} onDrop={(acceptedFiles) => handleAcceptedFiles(acceptedFiles, onFileUpload)}>
 				{({ getRootProps, getInputProps }) => (
 					<div className="dropzone flex justify-center items-center"  {...getRootProps()}>
 						<div className="fallback">
@@ -44,7 +45,7 @@ const FileUploader = ({ showPreview = true, onFileUpload, icon, text, singleFile
 				)}
 			</Dropzone>
 
-			{showPreview && selectedFiles.length > 0 && (
+			{((showPreview && selectedFiles.length > 0) || prevData) && (
 				<div>
 					{(selectedFiles || []).map((file, idx) => {
 						return (
@@ -55,6 +56,30 @@ const FileUploader = ({ showPreview = true, onFileUpload, icon, text, singleFile
 											<i className="ri-close-line text-lg" onClick={() => removeFile(file)}></i>
 										</Link>
 									</div>
+
+									<div className="flex items-center gap-3">
+										{file.preview && <img data-dz-thumbnail="" className="h-12 w-12 rounded bg-light" style={{ objectFit: 'cover' }} alt={file.name} src={file.preview} />}
+										{!file.preview && <span className="flex items-center justify-center bg-primary/10 text-primary font-semibold rounded-md w-12 h-12">{file.type.split('/')[0]}</span>}
+										<div>
+											<Link to="" className="font-semibold">
+												{file.name}
+											</Link>
+											<p>{file.formattedSize}</p>
+										</div>
+									</div>
+								</div>
+							</React.Fragment>
+						)
+					})}
+					{(prevData || []).map((file, idx) => {
+						return (
+							<React.Fragment key={idx}>
+								<div className="border rounded-md border-gray-200 p-3 mb-2 dark:border-gray-600 mt-2">
+									{/* <div className="float-right">
+										<Link to="" className="btn btn-link">
+											<i className="ri-close-line text-lg" onClick={() => removeFile(file)}></i>
+										</Link>
+									</div> */}
 
 									<div className="flex items-center gap-3">
 										{file.preview && <img data-dz-thumbnail="" className="h-12 w-12 rounded bg-light" style={{ objectFit: 'cover' }} alt={file.name} src={file.preview} />}

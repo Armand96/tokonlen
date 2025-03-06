@@ -6,6 +6,7 @@ import { PageBreadcrumb } from '../../../components'
 // styles
 import 'react-quill/dist/quill.snow.css'
 import 'react-quill/dist/quill.bubble.css'
+import React from 'react'
 
 const Editors = () => {
 	let valueBubble = ''

@@ -11,7 +11,7 @@ import { WebSettings } from '../../../dto/web_settings';
 const Index = () => {
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<any>({ name: '', value: '', is_active: 1 });
+  const [formData, setFormData] = useState<any>({ name: '', value: '', is_active: true });
   const [isCreate, setIsCreate] = useState<boolean>(false);
   const [dataPaginate, setDataPaginate] = useState<any>(null);
 
@@ -28,7 +28,7 @@ const Index = () => {
 
   const postData = async () => {
     setLoading(true);
-    const data = { ...formData, _method: formData.id ? 'PUT' : '' };
+    const data = { ...formData, _method: formData.id ? 'PUT' : 'POST' };
     await postWebSettings(data, formData?.id);
     await fetchData();
     setModal(false);
@@ -80,7 +80,7 @@ const Index = () => {
       <div className='bg-white p-4 '>
         <div className='flex justify-between'>
           <h3 className='text-2xl font-bold'>web settings</h3>
-          <button className='btn bg-primary mb-4 text-white' onClick={() => { setModal(true); setIsCreate(true); setFormData({ name: '', format_size: '', is_active: 1 }); }}>Tambah Data</button>
+          <button className='btn bg-primary mb-4 text-white' onClick={() => { setModal(true); setIsCreate(true); setFormData({ name: '', is_active: true }); }}>Tambah Data</button>
         </div>
         <p className='mb-2'>Total Data : {dataPaginate?.total}</p>
         <TablePaginate totalPage={dataPaginate?.last_page || 0} data={dataPaginate?.data} columns={columns} onPageChange={(val) => fetchData(val?.current_page as any)} />

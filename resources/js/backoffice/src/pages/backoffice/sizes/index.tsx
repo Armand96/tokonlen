@@ -27,7 +27,7 @@ const Index = () => {
 
   const postData = async () => {
     setLoading(true);
-    const data = { ...formData, _method: formData.id ? 'PUT' : '' };
+    const data = { ...formData, _method: formData.id ? 'PUT' : 'POST' };
     await PostSize(data, formData?.id);
     await fetchData();
     setModal(false);

@@ -12,6 +12,7 @@ import { PageBreadcrumb } from '../../../components'
 
 // styles
 import 'rsuite/dist/rsuite-no-reset.min.css'
+import React from 'react'
 
 const FormSelect = () => {
 	return (
