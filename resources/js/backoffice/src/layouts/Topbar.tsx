@@ -16,7 +16,6 @@ import profilePic from '@/assets/images/users/avatar-1.jpg'
 
 import MaximizeScreen from '../components/MaximizeScreen'
 import ProfileDropDown from '../components/ProfileDropDown'
-import LogoBox from '../components/LogoBox'
 
 export interface NotificationItem {
 	id: number

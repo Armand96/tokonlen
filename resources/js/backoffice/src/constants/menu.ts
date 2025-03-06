@@ -62,13 +62,6 @@ const MENU_ITEMS: MenuItemTypes[] = [
 		url: '/backoffice/sizes',
 	},
 	{
-		key: 'Brand',
-		label: 'Brand',
-		isTitle: false,
-		icon: 'ri-trademark-line',
-		url: '/backoffice/brands',
-	},
-	{
 		key: 'navigation',
 		label: 'Navigation',
 		isTitle: true,

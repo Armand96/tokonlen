@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import App from './App.js'
 import { store } from './redux/store.js'
+import 'remixicon/fonts/remixicon.css'
 
 const container = document.getElementById('root')
 if (container) {
