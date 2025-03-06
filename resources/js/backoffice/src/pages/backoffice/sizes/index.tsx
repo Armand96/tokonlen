@@ -5,6 +5,7 @@ import TablePaginate from '../../../components/Table/tablePaginate';
 import LoadingScreen from '../../../components/Loading/loading';
 import { GetSize, PostSize } from '../../../helpers';
 import Swal from 'sweetalert2';
+import { Size } from '../../../dto/size';
 
 const Index = () => {
   const [modal, setModal] = useState(false);
@@ -15,7 +16,7 @@ const Index = () => {
 
   const fetchData = async (page = 1) => {
     setLoading(true);
-    const res = await GetSize(`?page=${page}`);
+    const res:Size[] = await GetSize(`?page=${page}`);
     setDataPaginate(res);
     setLoading(false);
   };
@@ -34,10 +35,10 @@ const Index = () => {
   };
 
   const columns = [
-    { name: 'Ukuran', row: (cell) => <div>{cell.name}</div> },
-    { name: 'Format', row: (cell) => <div>{cell.format_size}</div> },
-    { name: 'Status', row: (cell) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
-    { name: 'Action', row: (cell) => (
+    { name: 'Ukuran', row: (cell:Size) => <div>{cell.name}</div> },
+    { name: 'Format', row: (cell:Size) => <div>{cell.format_size}</div> },
+    { name: 'Status', row: (cell:Size) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
+    { name: 'Action', row: (cell:Size) => (
         <button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
           Edit
         </button>
@@ -75,10 +76,10 @@ const Index = () => {
           </div>
         </ModalLayout>
       )}
-      <PageBreadcrumb title='Brands' subName='Backoffice' />
+      <PageBreadcrumb title='Sizes' subName='Backoffice' />
       <div className='bg-white p-4'>
         <div className='flex justify-between'>
-          <h3 className='text-2xl'>Brands</h3>
+          <h3 className='text-2xl'>Size</h3>
           <button className='btn bg-primary text-white' onClick={() => { setModal(true); setIsCreate(true); setFormData({ name: '', format_size: '', is_active: 1 }); }}>Tambah Data</button>
         </div>
         <TablePaginate totalPage={dataPaginate?.last_page || 0} data={dataPaginate?.data} columns={columns} onPageChange={(val) => fetchData(val?.current_page as any)} />
