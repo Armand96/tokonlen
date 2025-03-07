@@ -57,6 +57,7 @@ class BannerController extends Controller
             } else {
                 $validatedData['image'] = '';
             }
+            $validatedData['caption'] = "default";
             $banner = Banner::create($validatedData);
             return response()->json(new ResponseSuccess($banner,"Success","Success Create Banner"));
         } catch (\Throwable $th) {
@@ -102,6 +103,7 @@ class BannerController extends Controller
                 $path = $updateBanner->file('image_file')->storeAs('banner', $imageName, 'public');
                 $validatedData['image'] = $path;
             }
+            $validatedData['caption'] = "default";
             $banner->update($validatedData);
             return response()->json(new ResponseSuccess($banner,"Success", "Success Update Banner"));
         } catch (\Throwable $th) {
