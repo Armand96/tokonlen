@@ -34,9 +34,14 @@ class VariantController extends Controller
         if ($req->has('product_id')) {
             $query->where('product_id', '=', $req->product_id);
         }
+        // filter by is_active
+        if ($req->has('is_active')) {
+            $query->where('is_active', '=', $req->is_active);
+        }
+
 
         // paginate result
-        $variants = $query->paginate($dataPerPage);
+        $variants = $query->with(['product'])->paginate($dataPerPage);
 
         return $variants;
     }
