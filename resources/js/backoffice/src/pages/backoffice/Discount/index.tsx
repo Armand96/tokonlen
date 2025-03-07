@@ -7,17 +7,21 @@ import { GetSize, PostSize } from '../../../helpers';
 import Swal from 'sweetalert2';
 import { Size } from '../../../dto/size';
 import { ModalAdd } from './ModalAdd';
+import { GetDiscount, PostDiscount } from '../../../helpers/api/discounts';
+import { Discount } from '../../../dto/discounts';
+import { HelperFunction } from '../../../helpers/HelpersFunction';
+import dayjs from 'dayjs';
 
 const Index = () => {
 	const [modal, setModal] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [formData, setFormData] = useState<any>({ name: '', format_size: '', is_active: 1 });
+	const [formData, setFormData] = useState<any>();
 	const [isCreate, setIsCreate] = useState<boolean>(false);
 	const [dataPaginate, setDataPaginate] = useState<any>(null);
 
 	const fetchData = async (page = 1) => {
 		setLoading(true);
-		const res: Size[] = await GetSize(`?page=${page}`);
+		const res: Size[] = await GetDiscount(`?page=${page}`);
 		setDataPaginate(res);
 		setLoading(false);
 	};
@@ -29,18 +33,21 @@ const Index = () => {
 	const postData = async () => {
 		setLoading(true);
 		const data = { ...formData, _method: formData.id ? 'PUT' : 'POST' };
-		await PostSize(data, formData?.id);
+		await PostDiscount(data, formData?.id);
 		await fetchData();
 		setModal(false);
 		Swal.fire('Success', formData.id ? 'Edit Diskon berhasil' : 'Input Diskon berhasil', 'success');
 	};
 
 	const columns = [
-		{ name: 'Ukuran', row: (cell: Size) => <div>{cell.name}</div> },
-		{ name: 'Format', row: (cell: Size) => <div>{cell.format_size}</div> },
-		{ name: 'Status', row: (cell: Size) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
+		{ name: 'Nama Produk', row: (cell: Discount) => <div>{cell.product.name}</div> },
+		{ name: 'Persen', row: (cell: Discount) => <div>{cell.discount_percentage}</div> },
+		{ name: 'Harga', row: (cell: Discount) => <div>{HelperFunction.FormatToRupiah(cell.discount_amount)}</div> },
+		{ name: 'Tanggal', row: (cell: Discount) => <div>{dayjs(cell.start_date).format("DD MMM YYYY")}</div> },
+		{ name: 'Tanggal', row: (cell: Discount) => <div>{dayjs(cell.end_date).format("DD MMM YYYY")}</div> },
+		{ name: 'Status', row: (cell: Discount) => <div>{dayjs().isAfter(cell.end_date,'milliseconds') ? 'Expired' : 'Active'}</div> },
 		{
-			name: 'Action', row: (cell: Size) => (
+			name: 'Action', row: (cell: Discount) => (
 				<button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
 					Edit
 				</button>

@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { FormInput, PageBreadcrumb } from '../../../components';
+import { PageBreadcrumb } from '../../../components';
 import TablePaginate from '../../../components/Table/tablePaginate';
 import LoadingScreen from '../../../components/Loading/loading';
-import {  getWebSettings, postWebSettings } from '../../../helpers';
 import Swal from 'sweetalert2';
 import { Size } from '../../../dto/size';
-import { WebSettings } from '../../../dto/web_settings';
 import { ModalAdd } from './ModalAdd';
 import { Products } from '../../../dto/products';
 import { GetProducts, PostProductImages, PostProductLink, PostProducts } from '../../../helpers/api/Products';
 import { HelperFunction } from '../../../helpers/HelpersFunction';
+import ModalPreview from '../../../components/ModalPreviewImage/ModalPreview';
 
 const Index = () => {
   const [modal, setModal] = useState(false);
@@ -17,6 +16,7 @@ const Index = () => {
   const [formData, setFormData] = useState<any>({ name: '', value: '', is_active: 1 });
   const [isCreate, setIsCreate] = useState<boolean>(false);
   const [dataPaginate, setDataPaginate] = useState<any>(null);
+    const [previewImage, setPreviewImage] = useState(false)
 
   const fetchData = async (page = 1) => {
     setLoading(true);
@@ -45,14 +45,19 @@ const Index = () => {
     { name: 'Nama', row: (cell:Products) => <div>{cell.name}</div> },
     { name: 'Harga', row: (cell:Products) => <div>{HelperFunction.FormatToRupiah(cell.final_price)}</div> },
     { name: 'Diskon', row: (cell:Products) => <div>{cell.discount_price}</div> },
-    { name: 'Tersedia', row: (cell:Products) => <div>{cell.stock > 1 ? "Available" : "Not Available"}</div> },
+    {
+      name: 'Image', row: (cell: Products) => <button className='btn bg-success text-white' onClick={() => { setPreviewImage(true); setFormData(cell.image) }}>
+          Preview image
+      </button>
+  },      
+  { name: 'Tersedia', row: (cell:Products) => <div>{cell.stock > 1 ? "Available" : "Not Available"}</div> },
     { name: 'Status', row: (cell:Products) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
     { name: 'Action', row: (cell:Products) => (
        <div className="flex gap-x-3">
          <button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
           Edit
         </button>
-          <button className='btn bg-success text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
+          <button className='btn bg-secondary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
           Settings Variant
         </button>
        </div>
@@ -63,6 +68,7 @@ const Index = () => {
   return (
     <>
       {loading && <LoadingScreen />}
+      <ModalPreview toggleModal={() => setPreviewImage(false)} isOpen={previewImage} img={formData?.image} />
       {modal && (
 		<ModalAdd isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} handlePost={postData} detailData={formData} />
       )}

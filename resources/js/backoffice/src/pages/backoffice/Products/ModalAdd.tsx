@@ -6,6 +6,7 @@ import { Products } from '../../../dto/products';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import cloneDeep from 'clone-deep'
+import { HelperFunction } from '../../../helpers/HelpersFunction';
 
 
 interface ModalAddTypes {
@@ -21,6 +22,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
     name: '',
     brand: '',
     description: '',
+    price: 0,
     link: []
   })
   const [categoriesOptions, setCategoriesOptions] = useState<any[]>()
@@ -45,19 +47,19 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
 
   const handleAddLink = () => {
     let prevData = formData?.link
-    prevData.push({ link: tempLink, detail: selectedLink})
+    prevData.push({ link: tempLink, detail: selectedLink })
 
     setSelectedLink(null)
     setTempLink('')
-   
 
-    setFormData({...formData, link: prevData})
+
+    setFormData({ ...formData, link: prevData })
   }
 
   const deleteLink = (index: any) => {
     let prevData = cloneDeep(formData.link)
     prevData.splice(index, 1)
-    setFormData({...formData, link: prevData})
+    setFormData({ ...formData, link: prevData })
   }
 
 
@@ -84,9 +86,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
         <div className='p-4 overflow-y-auto w-[70vw]'>
           <FormInput name='name' label='Name' value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className='form-input mb-3' />
 
-          <FormInput name='name' label='Harga (saat ada variant ini tidak terpakai)' value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className='form-input mb-3' />
-
-
+          <FormInput name='price' labelClassName='mb-2' label='Harga' value={HelperFunction.FormatToRupiah2(formData?.price || 0)} onChange={(e) => setFormData({ ...formData, price: parseInt(HelperFunction.onlyNumber(e.target.value)) })} className='form-input mb-3' />
           <div className="mb-20">
             <div className="flex justify-between items-center">
               <h4 className="card-title">Deskripsi</h4>
@@ -115,42 +115,63 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
             <h4 className="card-title">Link</h4>
             <div className="flex gap-x-4 items-center ">
               <div className="w-3/6">
-                <FormInput name='name' label='Nama link' value={tempLink} onChange={(e) => setTempLink( e.target.value )} className='form-input' labelClassName='mb-2' />
+                <FormInput name='name' label='Nama link' value={tempLink} onChange={(e) => setTempLink(e.target.value)} className='form-input' labelClassName='mb-2' />
               </div>
               <div className="w-3/6 mt-6">
-                <Select className="select2 h-full" options={linkOptions} value={selectedLink} onChange={(v) => setSelectedLink(v)}/>
+                <Select className="select2 h-full" options={linkOptions} value={selectedLink} onChange={(v) => setSelectedLink(v)} />
               </div>
             </div>
-            <button className="mt-2 btn bg-primary text-white" onClick={handleAddLink} disabled={!selectedLink || !tempLink ? true : false }>
+            <button className="mt-2 btn bg-primary text-white" onClick={handleAddLink} disabled={!selectedLink || !tempLink ? true : false}>
               Add Link
             </button>
 
+
+
+
             <div className="mt-3">
-                {(formData.link || []).map((item, idx) => {
-                          return (
-                            <React.Fragment key={idx}>
-                              <div className="border rounded-md border-gray-200 p-3 mb-2 dark:border-gray-600 mt-2">
-                                <div className="float-right">
-                                  <p className="btn btn-link">
-                                    <i className="ri-close-line text-lg" onClick={() => deleteLink(idx)}></i>
-                                  </p>
-                                </div>
-              
-                                <div className="flex items-center gap-3">
-                                  <img data-dz-thumbnail="" className="h-12 w-12 rounded bg-light" style={{ objectFit: 'cover' }} alt={item?.name} src={item?.link} />
-                                  <div>
-                                    <p  className="font-semibold">
-                                    {item?.link}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </React.Fragment>
-                          )
-                        })}
+              {(formData.link || []).map((item, idx) => {
+                return (
+                  <React.Fragment key={idx}>
+                    <div className="border rounded-md border-gray-200 p-3 mb-2 dark:border-gray-600 mt-2">
+                      <div className="float-right">
+                        <p className="btn btn-link">
+                          <i className="ri-close-line text-lg" onClick={() => deleteLink(idx)}></i>
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <img data-dz-thumbnail="" className="h-12 w-12 rounded bg-light" style={{ objectFit: 'cover' }} alt={item?.name} src={item?.link} />
+                        <div>
+                          <p className="font-semibold">
+                            {item?.link}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </React.Fragment>
+                )
+              })}
             </div>
 
           </div>
+
+          <div className="mb-3">
+              <h6 className="text-sm mb-2">Product Tersedia ?</h6>
+              <div className="flex gap-5">
+                <div className="flex items-center">
+                  <input type="radio" className="form-radio text-primary" name="InlineRadio" id="InlineRadio01" defaultChecked />
+                  <label className="ms-1.5" htmlFor="InlineRadio01">
+                    Ya
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input type="radio" className="form-radio text-primary" name="InlineRadio" id="InlineRadio02" />
+                  <label className="ms-1.5" htmlFor="InlineRadio02">
+                    tidak
+                  </label>
+                </div>
+              </div>
+            </div>
 
 
           <FormInput labelClassName='mb-2' name='content' label='Brand' value={formData.value} onChange={(e) => setFormData({ ...formData, brand: e.target.value })} className='form-input mb-3' />

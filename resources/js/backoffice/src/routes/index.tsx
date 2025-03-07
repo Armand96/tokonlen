@@ -38,14 +38,6 @@ const TasksDetails = React.lazy(() => import('../pages/apps/Tasks/TasksDetails/'
 const KanbanApp = React.lazy(() => import('../pages/apps/Kanban/'))
 const FileManagerApp = React.lazy(() => import('../pages/apps/FileManager/'))
 
-// pages
-const ProfilePages = React.lazy(() => import('../pages/other/Profile/'))
-const InvoicePages = React.lazy(() => import('../pages/other/Invoice'))
-const FAQPages = React.lazy(() => import('../pages/other/FAQ'))
-const PricingPages = React.lazy(() => import('../pages/other/Pricing'))
-const MaintenancePages = React.lazy(() => import('../pages/other/Maintenance'))
-const StarterPages = React.lazy(() => import('../pages/other/Starter'))
-const TimelinePages = React.lazy(() => import('../pages/other/Timeline'))
 
 // base ui
 const Accordions = React.lazy(() => import('../pages/ui/Accordions'))
@@ -117,10 +109,6 @@ const Editors = React.lazy(() => import('../pages/ui/forms/Editors'))
 // tables
 const BasicTables = React.lazy(() => import('../pages/ui/tables/BasicTables'))
 const DataTables = React.lazy(() => import('../pages/ui/tables/DataTables'))
-
-// maps
-const GoogleMaps = React.lazy(() => import('../pages/ui/maps/GoogleMaps'))
-const VectorMaps = React.lazy(() => import('../pages/ui/maps/VectorMaps'))
 
 // error
 const Error404 = React.lazy(() => import('../pages/error/Error404'))
@@ -331,57 +319,6 @@ const fileAppRoutes: RoutesProps = {
 
 const appRoutes = [calendarAppRoutes, chatAppRoutes, emailAppRoutes, tasksAppRoutes, kanbanAppRoutes, fileAppRoutes]
 
-// pages
-const customPagesRoutes = {
-	path: '/pages',
-	name: 'Pages',
-	icon: 'pages',
-	header: 'Custom',
-	children: [
-		{
-			path: '/pages/starter',
-			name: 'Starter Page',
-			element: <StarterPages />,
-			route: PrivateRoute,
-		},
-		{
-			path: '/pages/profile',
-			name: 'Profile',
-			element: <ProfilePages />,
-			route: PrivateRoute,
-		},
-		{
-			path: '/pages/timeline',
-			name: 'Timeline',
-			element: <TimelinePages />,
-			route: PrivateRoute,
-		},
-		{
-			path: '/pages/invoice',
-			name: 'Invoice',
-			element: <InvoicePages />,
-			route: PrivateRoute,
-		},
-		{
-			path: '/pages/faq',
-			name: 'FAQ',
-			element: <FAQPages />,
-			route: PrivateRoute,
-		},
-		{
-			path: '/pages/pricing',
-			name: 'Pricing',
-			element: <PricingPages />,
-			route: PrivateRoute,
-		},
-		{
-			path: '/error-404-alt',
-			name: 'Error - 404-alt',
-			element: <Error404Alt />,
-			route: PrivateRoute,
-		},
-	],
-}
 
 // ui
 const uiRoutes: RoutesProps = {
@@ -774,24 +711,6 @@ const uiRoutes: RoutesProps = {
 				},
 			],
 		},
-		{
-			path: '/ui/maps',
-			name: 'Maps',
-			children: [
-				{
-					path: '/ui/maps/google-maps',
-					name: 'Google Maps',
-					element: <GoogleMaps />,
-					route: PrivateRoute,
-				},
-				{
-					path: '/ui/maps/vector-maps',
-					name: 'Vector Maps',
-					element: <VectorMaps />,
-					route: PrivateRoute,
-				},
-			],
-		},
 	],
 }
 
@@ -891,12 +810,6 @@ const otherPublicRoutes = [
 		element: <Error500 />,
 		route: Route,
 	},
-	{
-		path: '/pages/maintenance',
-		name: 'Maintenance',
-		element: <MaintenancePages />,
-		route: Route,
-	},
 ]
 
 // flatten the list of all nested routes
@@ -914,7 +827,7 @@ const flattenRoutes = (routes: RoutesProps[]) => {
 }
 
 // All routes
-const authProtectedRoutes = [BackOffice, ...appRoutes, customPagesRoutes, uiRoutes, ]
+const authProtectedRoutes = [BackOffice, ...appRoutes, uiRoutes, ]
 const publicRoutes = [...authRoutes, ...otherPublicRoutes]
 
 const authProtectedFlattenRoutes = flattenRoutes([...authProtectedRoutes])
