@@ -112,12 +112,12 @@ const DataTables = React.lazy(() => import('../pages/ui/tables/DataTables'))
 
 // error
 const Error404 = React.lazy(() => import('../pages/error/Error404'))
-const Error404Alt = React.lazy(() => import('../pages/error/Error404Alt'))
 const Error500 = React.lazy(() => import('../pages/error/Error500'))
 
 // 
 const Dashboard = React.lazy(() => import('../pages/backoffice/dashboard'))
 const Produk = React.lazy(() => import('../pages/backoffice/Products'))
+const Categories = React.lazy(() => import('../pages/backoffice/categories'))
 const Variants = React.lazy(() => import('../pages/backoffice/variants'))
 const Discounts = React.lazy(() => import('../pages/backoffice/Discount'))
 const Size = React.lazy(() => import('../pages/backoffice/sizes'))
@@ -160,8 +160,14 @@ const BackOffice: RoutesProps = {
 		},
 		{
 			path: '/backoffice/products',
-			name: 'Dashboard',
+			name: 'products',
 			element: <Produk />,
+			route: PrivateRoute,
+		},
+		{
+			path: '/backoffice/categories',
+			name: 'categories',
+			element: <Categories />,
 			route: PrivateRoute,
 		},
 		{

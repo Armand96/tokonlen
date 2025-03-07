@@ -3,9 +3,7 @@ import { ModalLayout } from '../../../components/HeadlessUI';
 import { FileUploader, FormInput } from '../../../components';
 import Select from 'react-select'
 import { Products } from '../../../dto/products';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
-import cloneDeep from 'clone-deep'
 import { HelperFunction } from '../../../helpers/HelpersFunction';
 import { GetSize } from '../../../helpers';
 

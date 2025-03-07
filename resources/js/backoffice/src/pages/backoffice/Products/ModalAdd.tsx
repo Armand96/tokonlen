@@ -26,7 +26,9 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
     link: []
   })
   const [categoriesOptions, setCategoriesOptions] = useState<any[]>()
+  const [selectedCategories, setSelectedCategories] = useState<any>(null)
   const [subCategoriesOptions, setSubCategoriesOptions] = useState<any[]>()
+  const [selectedSubCategories, setSelectedSubCategories] = useState<any>(null)
   const [linkOptions, setLinkOptions] = useState<any[]>(
     [
       { value: 'https://www.google.com', label: 'Tokped' },
@@ -37,7 +39,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
   const [tempLink, setTempLink] = useState<any>()
 
   useEffect(() => {
-
+    
   }, [])
 
 
@@ -72,7 +74,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
   }
 
 
-  console.log(formData)
+
 
   return (
     <ModalLayout showModal={isOpen} toggleModal={() => toggleModal()} placement='justify-center items-start'>

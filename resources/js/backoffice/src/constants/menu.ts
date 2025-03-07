@@ -34,6 +34,13 @@ const MENU_ITEMS: MenuItemTypes[] = [
 		url: '/backoffice/products',
 	},
 	{
+		key: 'Categories',
+		label: 'Categories',
+		isTitle: false,
+		icon: 'ri-dashboard-line',
+		url: '/backoffice/categories',
+	},
+	{
 		key: 'Variants',
 		label: 'Variants',
 		isTitle: false,

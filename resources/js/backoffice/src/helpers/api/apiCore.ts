@@ -32,7 +32,7 @@ axios.interceptors.response.use(
 					message = 'Sorry! the data you are looking for could not be found'
 					break
 				default: {
-					message = error.response && error.response.data ? error.response.data['message'] : error.message || error
+					message = error.response && error.response.data ?  error.response.data.errors : error
 				}
 			}
 			return Promise.reject(message)
