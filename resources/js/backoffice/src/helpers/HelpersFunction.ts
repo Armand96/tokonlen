@@ -1,5 +1,5 @@
 export const HelperFunction = {
-    FormatToRupiah: function (angka: number) {
+    FormatToRupiah: function (angka: number | string) {
         let rupiah = '';
         const angkaRev = Number.parseFloat(angka.toString()).toFixed(0).toString().split('').reverse().join('');
         for (let i = 0; i < angkaRev.length; i++) {
@@ -9,7 +9,7 @@ export const HelperFunction = {
         }
         return 'Rp ' + rupiah.split('', rupiah.length - 1).reverse().join('');
     },
-    FormatToRupiah2: function (angka: number) {
+    FormatToRupiah2: function (angka: number ) {
         let rupiah = '';
         const angkaRev = angka.toString().split('').reverse().join('');
         for (let i = 0; i < angkaRev.length; i++) {

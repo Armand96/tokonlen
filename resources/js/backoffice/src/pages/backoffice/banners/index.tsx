@@ -47,7 +47,8 @@ const Index = () => {
             name: 'Image', row: (cell: LinkType) => <button className='btn bg-success text-white' onClick={() => { setPreviewImage(true); setFormData(cell) }}>
                 Preview image
             </button>
-        },        { name: 'Status', row: (cell: Banners) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
+        },  
+              { name: 'Status', row: (cell: Banners) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
         {
             name: 'Action', row: (cell: Banners) => (
                 <button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
