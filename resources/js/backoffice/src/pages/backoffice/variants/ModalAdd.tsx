@@ -24,13 +24,10 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
   const [sizeList, setSizeList] = useState<any>()
 
   useEffect(() => {
-    GetSize(`?data_per_page=99999`).then((res) => {
+    GetSize(`?data_per_page=99999&is_active=1`).then((res) => {
       setSizeList(res?.data)
     })
   }, [])
-
-  console.log(sizeList)
-
 
   const postData = () => {
 
@@ -86,7 +83,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
               <h6 className='text-sm mb-2'>Variant Ukuran</h6>
               {
                 sizeList?.map((item: any, key: any) => (
-                  <div className="">
+                  <div className="" key={key}>
                       <input type='checkbox' />
                       <label className='ml-2'>{item?.format_size}</label>
                   </div>
@@ -108,7 +105,6 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
               Upload Image
             </label>
             <FileUploader onFileUpload={onFileUpload} icon="ri-upload-cloud-line text-4xl text-gray-300 dark:text-gray-200" text=" klik untuk upload." />
-
           </div>
 
 

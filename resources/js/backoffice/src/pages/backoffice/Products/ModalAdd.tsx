@@ -97,21 +97,12 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
 
 
 
-    setLoading(true)
+    // setLoading(true)
     PostProducts(postData).then(async (res) => {
 
       console.log("fallback",res)
 
-      let imagePayload = new FormData()
-
-      imagePayload.append('product_id', res?.data?.data?.id)
-
-      Array.from(formData.image_files).forEach((file: any) => {
-        console.log(file)
-        imagePayload.append('image_files[]', file);
-      })
-       
-    // imagePayload.append('image_files[]', formData?.image_files);
+    
 
 
 
@@ -120,6 +111,22 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
           item.product_id = res?.data?.data?.id
           await PostProductLink(item)
         })
+
+        let imagePayload = new FormData()
+
+        imagePayload.append('product_id', res?.data?.data?.id)
+  
+        // Array.from(formData.image_files).forEach((file: any) => {
+        //   console.log(file)
+        //   imagePayload.append('image_files[]', file);
+        // })
+         
+        formData.image_files.forEach((file: File) => {
+          imagePayload.append('image_files[]', file);
+        });
+
+        console.log(imagePayload); // Debugging untuk melihat isi FormData
+
 
         await PostProductImages(imagePayload)
         // toggleModal()
