@@ -26,6 +26,10 @@ class LinkTypeController extends Controller
         if ($req->has('name')) {
             $query->where('name', 'like', '%' . $req->name . '%');
         }
+        // filter by is_active
+        if ($req->has('is_active')) {
+            $query->where('is_active', '=', $req->is_active);
+        }
 
         // paginate result
         $linkTypes = $query->paginate($dataPerPage);
@@ -53,7 +57,7 @@ class LinkTypeController extends Controller
             if ($request->hasFile('image_file')) {
                 $imageName = time() . '.' . $request->file('image_file')->extension();
                 $path = $request->file('image_file')->storeAs('link_type', $imageName, 'public');
-                $validatedData['image'] = $imageName;
+                $validatedData['image'] = $path;
             } else {
                 $validatedData['image'] = '';
             }
@@ -62,8 +66,8 @@ class LinkTypeController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            $isExist = Storage::disk('public')->exists($imageName) ?? false;
-            if ($isExist) Storage::delete($imageName);
+            $isExist = Storage::disk('public')->exists($path) ?? false;
+            if ($isExist) Storage::delete($path);
             return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
         }
     }
@@ -99,8 +103,8 @@ class LinkTypeController extends Controller
                 if ($isExist) Storage::disk('public')->delete($linkType->image);
 
                 $imageName = time() . '.' . $request->file('image_file')->extension();
-                $request->file('image_file')->storeAs('link_type', $imageName, 'public');
-                $validatedData['image'] = $imageName;
+                $path = $request->file('image_file')->storeAs('link_type', $imageName, 'public');
+                $validatedData['image'] = $path;
             } else {
                 $validatedData['image'] = '';
             }

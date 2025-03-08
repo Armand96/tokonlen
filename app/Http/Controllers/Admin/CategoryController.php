@@ -26,6 +26,10 @@ class CategoryController extends Controller
         if ($req->has('name')) {
             $query->where('name', 'like', '%' . $req->name . '%');
         }
+        // filter by is_active
+        if ($req->has('is_active')) {
+            $query->where('is_active', '=', $req->is_active);
+        }
 
         $query->where('parent_id', null)->with('subCat');
 
