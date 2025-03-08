@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ClientSide\LinkVisitCreate;
 use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
 use App\Models\Product;
+use App\Models\ProductLinkVisit;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductCController extends Controller
 {
@@ -89,5 +92,23 @@ class ProductCController extends Controller
             array_push($brands, $value->brand);
         }
         return response()->json(new ResponseSuccess($brands, "Success", "Success Get Distinct Brands"));
+    }
+
+    public function counterLinkVisit(LinkVisitCreate $linkVisitCreate)
+    {
+        try {
+            DB::beginTransaction();
+            $validatedReq = $linkVisitCreate->validated();
+            $linkVisit = ProductLinkVisit::create($validatedReq);
+            $product = Product::find($linkVisitCreate['product_id']);
+            $product->increment('visited');
+
+            DB::commit();
+            return response()->json(new ResponseSuccess($linkVisit,"Success","Success insert increment visit"));
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th->getMessage());
+            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
+        }
     }
 }

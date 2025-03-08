@@ -71,6 +71,7 @@ Route::prefix('admin')
     Route::get('product', [ProductCController::class, 'getListActiveProduct'])->name('product.list');
     Route::get('product/{product}', [ProductCController::class, 'getOneActiveProductWithProducts'])->name('product.one');
     Route::get('brand', [ProductCController::class, 'getDistinctBrand']);
+    Route::post('link_visit', [ProductCController::class, 'counterLinkVisit']);
     // BANNER
     Route::get('banner', [BannerCController::class, 'getListActiveBanner'])->name('banner.list');
     Route::get('banner/{banner}', [BannerCController::class, 'getOneActiveBanner'])->name('banner.one');
