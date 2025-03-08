@@ -112,16 +112,6 @@ const Topbar = () => {
 		}
 	}
 
-	/**
-	 * Toggle Dark Mode
-	 */
-	const toggleDarkMode = () => {
-		if (layoutTheme === 'dark') {
-			dispatch(changeLayoutTheme(LayoutTheme.THEME_LIGHT))
-		} else {
-			dispatch(changeLayoutTheme(LayoutTheme.THEME_DARK))
-		}
-	}
 
 	return (
 		<React.Fragment>
@@ -136,15 +126,7 @@ const Topbar = () => {
 				
 
 				<div className="flex w-fit gap-x-6">
-					<div className="lg:flex hidden">
-						<button id="light-dark-mode" type="button" className="nav-link p-2" onClick={toggleDarkMode}>
-							<span className="sr-only">Light/Dark Mode</span>
-							<span className="flex items-center justify-center">
-								<i className="ri-moon-line text-2xl block dark:hidden"></i>
-								<i className="ri-sun-line text-2xl hidden dark:block"></i>
-							</span>
-						</button>
-					</div>
+					
 
 					<div className="md:flex hidden">
 						<MaximizeScreen />

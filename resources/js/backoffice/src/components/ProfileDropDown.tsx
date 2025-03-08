@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import PopoverLayout from './HeadlessUI/PopoverLayout'
 import React from 'react'
+import { UserCircle } from '@phosphor-icons/react'
 
 interface ProfileMenuItem {
 	label: string
@@ -21,10 +22,11 @@ const ProfileDropDown = (props: ProfileDropDownProps) => {
 	const PopoverToggler = () => {
 		return (
 			<>
-				<img src={profilePic} alt="user-image" className="rounded-full h-8" />
+				{/* <img src={profilePic} alt="user-image" className="rounded-full h-8" /> */}
+				<UserCircle weight='fill' className="rounded-full h-6 w-6"  />
 				<span className="md:flex flex-col gap-0.5 text-start hidden">
 					<h5 className="text-sm">Admin</h5>
-					<span className="text-xs">Admin</span>
+					{/* <span className="text-xs">Admin</span> */}
 				</span>
 			</>
 		)
