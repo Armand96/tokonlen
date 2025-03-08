@@ -231,6 +231,7 @@ export const ModalAdd = ({
                     <FormInput
                         name="name"
                         label="Name"
+                        autoComplete="false"
                         value={formData.name}
                         onChange={(e) =>
                             setFormData({ ...formData, name: e.target.value })
@@ -241,6 +242,7 @@ export const ModalAdd = ({
                     <FormInput
                         name="price"
                         labelClassName="mb-2"
+                        autoComplete="false"
                         label="Harga"
                         value={HelperFunction.FormatToRupiah2(
                             formData?.price || 0,
@@ -284,6 +286,7 @@ export const ModalAdd = ({
                         <CustomFlatpickr
                             className="form-input"
                             placeholder="masukan tanggal"
+                            
                             value={formData?.release_date}
                             options={{
                                 time_24hr: true,
