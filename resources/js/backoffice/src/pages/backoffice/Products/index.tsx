@@ -40,7 +40,6 @@ const Index = () => {
    
     await fetchData();
     setModal(false);
-    Swal.fire('Success', formData.id ? 'Edit Product berhasil' : 'Input Product berhasil', 'success');
   };
 
   const columns = [
@@ -52,7 +51,7 @@ const Index = () => {
           Preview image
       </button>
   },      
-  { name: 'Tersedia', row: (cell:Products) => <div>{cell.stock > 1 ? "Available" : "Not Available"}</div> },
+  { name: 'Tersedia', row: (cell:Products) => <div>{cell.stock >= 1 ? "Available" : "Not Available"}</div> },
     { name: 'Status', row: (cell:Products) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
     { name: 'Action', row: (cell:Products) => (
        <div className="flex gap-x-3">
@@ -72,7 +71,7 @@ const Index = () => {
       {loading && <LoadingScreen />}
       <ModalPreview toggleModal={() => setPreviewImage(false)} isOpen={previewImage} img={formData?.image} />
       {modal && (
-		<ModalAdd isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} setLoading={setLoading} detailData={formData} />
+		<ModalAdd reloadData={fetchData} isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} setLoading={setLoading} detailData={formData} />
       )}
       <PageBreadcrumb title='Products' subName='Backoffice' />
       <div className='bg-white p-4 '>

@@ -46,10 +46,27 @@ interface Discount {
   }
   
 
-interface WebSettingsCreateUpdate {
-    name: string;
-    value: string;
-    is_active: boolean;
+
+interface PostProductsTypes {
+  name: string
+  description: string
+  brand: string
+  release_date: string
+  price: number
+  stock: number
+  category_id: number
+  is_active: number
 }
 
-export { Products, WebSettingsCreateUpdate }
+interface PostProductLinks {
+  product_id: number
+  link: string
+  link_type_id: number
+}
+
+interface PostImageProducts {
+  product_id: string | number,
+  image_files: any[] 
+}
+
+export { Products, PostProductsTypes, PostProductLinks, PostImageProducts }

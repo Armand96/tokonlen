@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ModalLayout } from '../../../components/HeadlessUI';
 import { FileUploader, FormInput } from '../../../components';
 import Select from 'react-select'
-import { Products } from '../../../dto/products';
+import { PostImageProducts, PostProductLinks, PostProductsTypes, Products } from '../../../dto/products';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import cloneDeep from 'clone-deep'
@@ -11,7 +11,9 @@ import { GetCategories } from '../../../helpers/api/categories';
 import { Dropdown } from '../../../dto/dropdown';
 import { getLinkType } from '../../../helpers';
 import Swal from 'sweetalert2';
-import { GetBrands } from '../../../helpers/api/Products';
+import { GetBrands, PostProductImages, PostProductLink, PostProducts } from '../../../helpers/api/Products';
+import CustomFlatpickr from '../../../components/CustomFlatpickr';
+import dayjs from 'dayjs';
 
 
 interface ModalAddTypes {
@@ -19,14 +21,16 @@ interface ModalAddTypes {
   toggleModal: () => void,
   isCreate: boolean,
   setLoading: (loading: any) => void,
-  detailData: Products
+  detailData: Products,
+  reloadData: () => void
 }
 
-export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData }: ModalAddTypes) => {
+export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData, reloadData }: ModalAddTypes) => {
   const [formData, setFormData] = useState<any>({
     name: '',
     brand: '',
     description: '',
+    release_date: '',
     price: 0,
     link: []
   })
@@ -43,11 +47,11 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
 
   useEffect(() => {
     setLoading(true)
-    Promise.all([GetCategories(`?data_per_page=100000`), getLinkType(`?data_per_page=10000`), GetBrands()]).then((res) => {
+    Promise.all([GetCategories(`?data_per_page=100000&is_active=1`), getLinkType(`?data_per_page=10000&is_active=1`), GetBrands()]).then((res) => {
       setCategoriesOptions(HelperFunction.FormatOptions(res[0].data, 'name', 'id'))
       setLinkOptions(HelperFunction.FormatOptions(res[1].data, 'name', 'id'))
       setSuggestBrand(res[2]?.data)
-      setFormData({...formData, ...detailData})
+      setFormData({ ...formData, ...detailData })
 
       setLoading(false)
     }).catch((err) => {
@@ -59,12 +63,84 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
 
 
   const postData = () => {
-    console.log("post",formData)
+    let postData: PostProductsTypes = {
+      name: formData.name,
+      description: formData.description,
+      brand: formData.brand,
+      release_date: formData.release_date,
+      price: formData.price,
+      stock: formData.stock,
+      is_active: 1,
+      category_id: 0,
+    }
+
+
+    if (!selectedCategories.value) {
+      postData.category_id = parseInt(selectedSubCategories.value)
+    } else {
+      postData.category_id = parseInt(selectedCategories.value)
+    }
+
+    let imageLink: PostProductLinks[] = []
+
+    formData?.link?.map((item) => {
+      imageLink.push({
+        link: item?.link,
+        link_type_id: item?.detail?.id,
+        product_id: 0
+      })
+    })
+
+
+    console.log(imageLink)
+
+
+
+
+    setLoading(true)
+    PostProducts(postData).then(async (res) => {
+
+      console.log("fallback",res)
+
+      let imagePayload = new FormData()
+
+      imagePayload.append('product_id', res?.data?.data?.id)
+
+      Array.from(formData.image_files).forEach((file: any) => {
+        console.log(file)
+        imagePayload.append('image_files[]', file);
+      })
+       
+    // imagePayload.append('image_files[]', formData?.image_files);
+
+
+
+      try {
+        imageLink.map(async (item) => {
+          item.product_id = res?.data?.data?.id
+          await PostProductLink(item)
+        })
+
+        await PostProductImages(imagePayload)
+        // toggleModal()
+        // reloadData()
+        Swal.fire('Success', formData.id ? 'Edit Product berhasil' : 'Input Product berhasil', 'success');
+        setLoading(false)
+      } catch (error) {
+        // toggleModal()
+        // reloadData()
+        // Swal.fire('Error', error.name[0], 'error');
+        // setLoading(false)
+      }
+
+
+
+    })
   }
 
   const handleAddLink = () => {
     let prevData = formData?.link
-    prevData.push({ link: tempLink, detail: selectedLink })
+    prevData.push({ link: tempLink, detail: selectedLink.detail })
 
     setSelectedLink(null)
     setTempLink('')
@@ -79,8 +155,12 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
     setFormData({ ...formData, link: prevData })
   }
 
-  const onFileUpload = (val: any) => {
-    setFormData({ ...formData, image_file: val })
+  const onFileUpload = (images: any) => {
+    let temp: any = []
+    images.forEach((image) => {
+      temp.push(image)
+    })
+    setFormData({ ...formData, image_files: temp })
   }
 
   const handleOnSelect = (val: any, name: string) => {
@@ -123,7 +203,20 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
             </div>
           </div>
 
-          <div className='mb-2'>
+          <div className='mb-4' >
+            <label className="mb-2" htmlFor="choices-text-remove-button">
+             Tanggal rilis
+            </label>
+            <CustomFlatpickr className="form-input" placeholder="masukan tanggal" value={formData?.release_date} options={{
+              time_24hr: true,
+              dateFormat: 'y-m-d',
+              onChange: (v) => setFormData({ ...formData, release_date: dayjs(v).format("YY-MM-DD") })
+            }}
+            />
+          </div>
+
+
+          <div className='mb-4'>
             <label className="mb-2" htmlFor="choices-text-remove-button">
               Kategori
             </label>
@@ -141,7 +234,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
             <h4 className="card-title">Link</h4>
             <div className="flex gap-x-4 items-center ">
               <div className="w-3/6">
-                <FormInput name='name' label='Nama link' value={tempLink} onChange={(e) => setTempLink(e.target.value)} className='form-input' labelClassName='mb-2' />
+                <FormInput name='name' label='url link' value={tempLink} onChange={(e) => setTempLink(e.target.value)} className='form-input' labelClassName='mb-2' />
               </div>
               <div className="w-3/6 mt-6">
                 <Select className="select2 h-full" options={linkOptions} value={selectedLink} onChange={(v) => setSelectedLink(v)} />
@@ -166,10 +259,10 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
                       </div>
 
                       <div className="flex items-center gap-3">
-                        <img data-dz-thumbnail="" className="h-12 w-12 rounded bg-light" style={{ objectFit: 'cover' }} alt={item?.name} src={HelperFunction.GetImage(item?.link)} />
+                        <img data-dz-thumbnail="" className="h-12 w-12 rounded bg-light" style={{ objectFit: 'cover' }} alt={item?.name} src={HelperFunction.GetImage(item?.detail?.image)} />
                         <div>
                           <p className="font-semibold">
-                            {item?.link}
+                          {item?.link} ({item?.detail?.name})
                           </p>
                         </div>
                       </div>

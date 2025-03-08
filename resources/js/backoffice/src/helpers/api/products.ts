@@ -11,7 +11,7 @@ function PostProductLink(body: any, update: any = "") {
 }
 
 function PostProductImages(body: any, update: any = "") {
-    return api.create(`api/admin/product_link/${update}`, body)
+    return api.create(`api/admin/product_images/${update}`, body)
 }
 
 function GetProducts(params:any = "") {
