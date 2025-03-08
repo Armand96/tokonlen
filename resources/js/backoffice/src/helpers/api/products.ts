@@ -19,4 +19,9 @@ function GetProducts(params:any = "") {
     return api.get(baseUrl).then((res) => res.data)
 }
 
-export { PostProducts, GetProducts, PostProductLink, PostProductImages }
+function GetBrands(params:any = "") {
+    const baseUrl = `api/brand${params}`
+    return api.get(baseUrl).then((res) => res.data)
+}
+
+export { PostProducts, GetProducts, PostProductLink, PostProductImages, GetBrands }

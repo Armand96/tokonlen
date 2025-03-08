@@ -9,6 +9,7 @@ import { Products } from '../../../dto/products';
 import { GetProducts, PostProductImages, PostProductLink, PostProducts } from '../../../helpers/api/Products';
 import { HelperFunction } from '../../../helpers/HelpersFunction';
 import ModalPreview from '../../../components/ModalPreviewImage/ModalPreview';
+import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
   const [modal, setModal] = useState(false);
@@ -17,6 +18,7 @@ const Index = () => {
   const [isCreate, setIsCreate] = useState<boolean>(false);
   const [dataPaginate, setDataPaginate] = useState<any>(null);
     const [previewImage, setPreviewImage] = useState(false)
+    const navigate = useNavigate()
 
   const fetchData = async (page = 1) => {
     setLoading(true);
@@ -57,7 +59,7 @@ const Index = () => {
          <button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
           Edit
         </button>
-          <button className='btn bg-secondary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
+          <button className='btn bg-secondary text-white' onClick={() => { navigate('/backoffice/variants')}}>
           Settings Variant
         </button>
        </div>
@@ -70,7 +72,7 @@ const Index = () => {
       {loading && <LoadingScreen />}
       <ModalPreview toggleModal={() => setPreviewImage(false)} isOpen={previewImage} img={formData?.image} />
       {modal && (
-		<ModalAdd isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} handlePost={postData} detailData={formData} />
+		<ModalAdd isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} setLoading={setLoading} detailData={formData} />
       )}
       <PageBreadcrumb title='Products' subName='Backoffice' />
       <div className='bg-white p-4 '>

@@ -40,7 +40,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
     useEffect(() => {
         const handleScroll = () => {
             const scrollPosition = window.scrollY;
-            setFixedHeader(scrollPosition > 0 && scrollPosition < lastScrollPosition);
+            setFixedHeader(scrollPosition > 0);
             setLastScrollPosition(scrollPosition);
         };
 
@@ -49,7 +49,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [lastScrollPosition]);
+    });
 
 
     // const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown';
@@ -63,8 +63,8 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
 
     return (
         <>
-            <div className={`header-menu style-one ${fixedHeader ? 'fixed' : 'absolute'} top-0 left-0 right-0 w-full md:h-[74px] h-[56px] ${props}`}>
-                <div className="container mx-auto h-full">
+            <div className={`header-menu style-two ${fixedHeader ? 'fixed  ' : 'absolute'}  top-0 left-0 right-0 w-full md:h-[74px] h-[56px] ${props}`}>
+            <div className="container mx-auto h-full">
                     <div className="header-main flex justify-between h-full">
                         <div className="menu-mobile-icon lg:hidden flex items-center" onClick={handleMenuMobile}>
                             <i className="icon-category text-2xl"></i>
@@ -79,12 +79,12 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                         categories?.slice(0, 5).map((category, index) => (
                                             <li className='h-full' key={index}>
                                                 <Link
-                                                    href="#!"
+                                                    href={`/shop/breadcrumb?category=${category?.slug}`}
                                                     className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === category?.name ? 'active' : ''}`}
                                                 >
                                                     {category?.name}
                                                 </Link>
-                                                <div className="sub-menu absolute top-[74px]  bg-white">
+                                                <div className={`sub-menu absolute top-[74px] ${category?.sub_cat?.length === 0 && "hidden"}  bg-white`}>
                                                     <div className="container">
                                                         <div className="flex justify-between py-8">
                                                             <div className="nav-link grid gap-y-8">
@@ -107,9 +107,10 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                             </li>
                                         ))
                                     }
+
                                     <li className='h-full relative '>
                                         <Link
-                                            href="#!"
+                                            href={`/shop/breadcrumb`}
                                             className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === '/prempuan' ? 'active' : ''}`}
                                         >
                                             Kategori
@@ -119,7 +120,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                                 {
                                                     categories?.map((category, index) => (
                                                         <li key={index}>
-                                                            <Link href="/" className={`link text-secondary duration-300`}>
+                                                            <Link href={`/shop/breadcrumb?type=&category=${category?.slug}`} className={`link text-secondary duration-300`}>
                                                                 {category?.name}
                                                             </Link>
                                                         </li>
@@ -127,6 +128,11 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                                 }
                                             </ul>
                                         </div>
+                                    </li>
+                                    <li className='h-full'>
+                                        <Link href="/shop/breadcrumb" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
+                                            all
+                                        </Link>
                                     </li>
                                     <li className='h-full'>
                                         <Link href="#!" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
@@ -143,8 +149,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                         </div>
                         <div className="right flex gap-12">
                             <div className="max-md:hidden search-icon flex items-center cursor-pointer relative">
-                                <Icon.MagnifyingGlass size={24} color='black' onClick={openModalSearch} />
-                                <div className="line absolute bg-line w-px h-6 -right-6"></div>
+                                <Icon.MagnifyingGlass size={24} color={"black"} onClick={openModalSearch} />
                             </div>
                         </div>
                     </div>
@@ -165,51 +170,9 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                 <Link href={'/'} className='logo text-3xl font-semibold text-center'>Zhindaya</Link>
                             </div>
                             <div className="form-search relative mt-2">
-                                <Icon.MagnifyingGlass size={20} className='absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer' />
+                                <Icon.MagnifyingGlass size={20} className='absolute   left-3 top-1/2 -translate-y-1/2 cursor-pointer' />
                                 <input type="text" placeholder='What are you looking for?' className=' h-12 rounded-lg border border-line text-sm w-full pl-10 pr-4' />
                             </div>
-                            {
-                                categories?.slice(0, 5).map((category, index) => (
-                                    <div className="list-nav mt-6" key={index}>
-                                        <ul>
-                                            <li
-                                                className={`${openSubNavMobile === index ? 'open  bg-white ' : ''}`}
-                                                onClick={() => handleOpenSubNavMobile(index)}
-                                            >
-                                                <a href={`#`} className={`text-xl font-semibold flex items-center justify-between`}> {category?.name}
-                                                    <span className='text-right'>
-                                                        <Icon.CaretRight size={20} />
-                                                    </span>
-                                                </a>
-                                                <div className="sub-nav-mobile">
-                                                    <div
-                                                        className="back-btn flex items-center gap-3"
-                                                        onClick={() => handleOpenSubNavMobile(index)}
-                                                    >
-                                                        <Icon.CaretLeft />
-                                                        Back
-                                                    </div>
-                                                    <div className="list-nav-item w-full  grid grid-cols-2 pt-2 pb-6">
-                                                        <ul>
-                                                            {
-                                                                category?.sub_cat?.map((item: any, index: string) => (
-                                                                    <li key={index}>
-                                                                        <Link href={`/shop/breadcrumb?type=${item?.slug}&category=${category?.slug}`} className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
-                                                                            {item?.name}
-                                                                        </Link>
-                                                                    </li>
-                                                                ))
-                                                            }
-
-                                                        </ul>
-
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                ))
-                            }
                             {
                                 <div className="list-nav mt-6" >
                                     <ul className='flex flex-col gap-y-6'>

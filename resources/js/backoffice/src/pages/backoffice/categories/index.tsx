@@ -78,7 +78,6 @@ const Index = () => {
     setModal(true); 
     setFormData(detail); 
     setIsCreate(false); 
-    console.log(categoriesOptions?.filter((item) => item.value == detail.parent_id)[0])
     setSelectedCategories(categoriesOptions?.filter((item) => item.value == detail.parent_id)[0])
   }
 

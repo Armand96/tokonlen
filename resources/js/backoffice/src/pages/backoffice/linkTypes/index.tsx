@@ -31,12 +31,21 @@ const Index = () => {
     }, []);
 
     const postData = async () => {
+        if (!isCreate) {
+            delete formData.image
+            delete formData.image_thumb
+        }
         setLoading(true);
         const data = { ...formData, _method: formData.id ? 'PUT' : 'POST' };
-        await postLinkType(data, formData?.id);
+        await postLinkType(data, formData?.id).then(() => {
+            setModal(false);
+            Swal.fire('Success', formData.id ? 'Update Link Type Berhasil' : 'Input Link Type Berhasil', 'success')
+        }).catch((err) => {
+            setModal(false);
+            console.log(err)
+            Swal.fire('Error', err.name[0], 'error');
+        })
         await fetchData();
-        setModal(false);
-        Swal.fire('Success', formData.id ? 'Update Link Type Berhasil' : 'Input Link Type Berhasil', 'success');
     };
 
     const columns = [

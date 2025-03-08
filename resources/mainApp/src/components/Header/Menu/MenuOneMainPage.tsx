@@ -40,13 +40,11 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
     }, [])
 
     const [fixedHeader, setFixedHeader] = useState(false)
-    const [lastScrollPosition, setLastScrollPosition] = useState(0);
 
     useEffect(() => {
         const handleScroll = () => {
             const scrollPosition = window.scrollY;
-            setFixedHeader(scrollPosition > 0 && scrollPosition < lastScrollPosition);
-            setLastScrollPosition(scrollPosition);
+            setFixedHeader(scrollPosition > 0);
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -54,11 +52,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [lastScrollPosition]);
-
-
-    // const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown';
-    // console.log("test",userAgent)
+    });
 
 
     const handleTypeClick = (type: string, category: string) => {
@@ -79,7 +73,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                             <Link href={'/'} className='flex items-center max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2'>
                                 <div className="heading4">Zhindaya</div>
                             </Link>
-                            <div className="menu-main h-full max-lg:hidden">
+                            <div className="menu-main-page h-full max-lg:hidden">
                                 <ul className='flex items-center gap-8 h-full'>
                                     {
                                         categories?.slice(0, 5).map((category, index) => (

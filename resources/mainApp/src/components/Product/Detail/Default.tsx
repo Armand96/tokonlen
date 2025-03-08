@@ -14,6 +14,7 @@ import FetchData from '@/services/FetchData';
 import Helpers from '@/Helpers/Helpers'
 import Loading from '@/components/Other/Loading'
 import { useRouter } from 'next/navigation'
+import { WhatsappLogo } from '@phosphor-icons/react/dist/ssr'
 
 
 SwiperCore.use([Navigation, Thumbs]);
@@ -265,7 +266,23 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                              
 
                                 <div className="button-block mt-5" >
-                                    <button onClick={handleToShop} className={`button-main ${produk?.stock < 1 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 1} >{produk?.stock < 1 ? "Stok Habis" : "Beli sekarang"}</button>
+                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${produk?.stock < 1 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 1} > <WhatsappLogo className={produk?.stock < 1 ? 'hidden' : 'block'} weight='fill' size={27}  />  {produk?.stock < 1 ? "Stok Habis" : "Beli sekarang"}</button>
+                                </div>
+                                <div className="list-payment mt-7">
+                                    <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative max-md:w-2/3 max-sm:w-full">
+                                        <div className="heading6 px-5 bg-white absolute -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">Atau lanjutkan via</div>
+                                        <div className="list grid grid-cols-6">
+                                            <div className="item flex items-center justify-center lg:px-3 px-1">
+                                                <Image
+                                                    src={'/images/payment/Frame-0.png'}
+                                                    width={500}
+                                                    height={450}
+                                                    alt='payment'
+                                                    className='w-full'
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="flex items-center lg:gap-20 gap-8 mt-5 pb-6 border-b border-line">
 
@@ -310,67 +327,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         <div className="text-secondary">{produk?.category?.name}</div>
                                     </div>
                                 </div>
-                                {/* <div className="list-payment mt-7">
-                                    <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative max-md:w-2/3 max-sm:w-full">
-                                        <div className="heading6 px-5 bg-white absolute -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">Guranteed safe checkout</div>
-                                        <div className="list grid grid-cols-6">
-                                            <div className="item flex items-center justify-center lg:px-3 px-1">
-                                                <Image
-                                                    src={'/images/payment/Frame-0.png'}
-                                                    width={500}
-                                                    height={450}
-                                                    alt='payment'
-                                                    className='w-full'
-                                                />
-                                            </div>
-                                            <div className="item flex items-center justify-center lg:px-3 px-1">
-                                                <Image
-                                                    src={'/images/payment/Frame-1.png'}
-                                                    width={500}
-                                                    height={450}
-                                                    alt='payment'
-                                                    className='w-full'
-                                                />
-                                            </div>
-                                            <div className="item flex items-center justify-center lg:px-3 px-1">
-                                                <Image
-                                                    src={'/images/payment/Frame-2.png'}
-                                                    width={500}
-                                                    height={450}
-                                                    alt='payment'
-                                                    className='w-full'
-                                                />
-                                            </div>
-                                            <div className="item flex items-center justify-center lg:px-3 px-1">
-                                                <Image
-                                                    src={'/images/payment/Frame-3.png'}
-                                                    width={500}
-                                                    height={450}
-                                                    alt='payment'
-                                                    className='w-full'
-                                                />
-                                            </div>
-                                            <div className="item flex items-center justify-center lg:px-3 px-1">
-                                                <Image
-                                                    src={'/images/payment/Frame-4.png'}
-                                                    width={500}
-                                                    height={450}
-                                                    alt='payment'
-                                                    className='w-full'
-                                                />
-                                            </div>
-                                            <div className="item flex items-center justify-center lg:px-3 px-1">
-                                                <Image
-                                                    src={'/images/payment/Frame-5.png'}
-                                                    width={500}
-                                                    height={450}
-                                                    alt='payment'
-                                                    className='w-full'
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> */}
+                              
                             </div>
                             <div className='desc text-secondary mt-3 pt-6 border-t  border-line'>{produk?.description}</div>
                         </div>

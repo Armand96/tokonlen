@@ -8,7 +8,9 @@ export default function useFileUploader(showPreview: boolean = true) {
 	 * Handled the accepted files and shows the preview
 	 */
 	const handleAcceptedFiles = (files: FileType[], callback?: (files: FileType[]) => void) => {
+	
 		var allFiles = files
+
 
 		if (showPreview) {
 			files.map((file) =>

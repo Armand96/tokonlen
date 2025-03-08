@@ -1,4 +1,7 @@
+import React from 'react'
 import { useState, InputHTMLAttributes, ReactNode } from 'react'
+import TextInput from 'react-autocomplete-input';
+import 'react-autocomplete-input/dist/bundle.css';
 
 import { FieldErrors, Control } from 'react-hook-form'
 
@@ -57,10 +60,13 @@ interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	containerClass?: string
 	refCallback?: any
 	children?: ReactNode
-	rows?: number
+	rows?: number,
+	dataSuggest?: any,
+	triggerSuggest?: any,
+
 }
 
-const FormInput = ({ label, type, name, placeholder, register, errors, className, labelClassName, labelContainerClassName, containerClass, refCallback, children, rows, ...otherProps }: FormInputProps) => {
+const FormInput = ({ label, type, name, placeholder, register, errors, className, labelClassName, labelContainerClassName, containerClass, refCallback, children, rows, dataSuggest, ...otherProps }: FormInputProps) => {
 	const Tag = type === 'textarea' ? 'textarea' : type === 'select' ? 'select' : 'input'
 	return (
 		<>
@@ -165,7 +171,44 @@ const FormInput = ({ label, type, name, placeholder, register, errors, className
 												</>
 											) : (
 												<>
-													<div className={containerClass ?? ''}>
+													{type === 'suggest' ? (
+														<>
+														<div className={containerClass ?? ''}>
+														{label && (
+															<label className={labelClassName ?? ''} htmlFor={name}>
+																{label}
+															</label>
+														)}
+														<div className="relative">
+															<TextInput 
+																trigger={''}
+																options={dataSuggest}
+																type={type}
+																placeholder={placeholder}
+																name={name}
+																id={name}
+																ref={(r: HTMLInputElement) => {
+																	if (refCallback) refCallback(r)
+																}}
+																
+																className={`${className} ${errors && errors[name] ? 'border-red-500 focus:border-red-500 text-red-700  pe-10' : ''} relative z-10`}
+																{...(register ? register(name) : {})}
+																{...otherProps}
+																autoComplete={name}
+															/>
+															{errors && errors[name] && (
+																<div className="absolute inset-y-0 end-0 flex items-center pointer-events-none pe-3">
+																	<i className="ri-error-warning-fill text-xl text-red-500" />
+																</div>
+															)}
+														</div>
+														{errors && errors[name] && <p className="text-xs text-red-600 mt-2">{errors[name]['message']}</p>}
+														{children ? children : null}
+													</div>
+													</>
+													) : (
+													<>
+														<div className={containerClass ?? ''}>
 														{label && (
 															<label className={labelClassName ?? ''} htmlFor={name}>
 																{label}
@@ -194,6 +237,10 @@ const FormInput = ({ label, type, name, placeholder, register, errors, className
 														{errors && errors[name] && <p className="text-xs text-red-600 mt-2">{errors[name]['message']}</p>}
 														{children ? children : null}
 													</div>
+													</>
+													) 
+													}
+													
 												</>
 											)}
 										</>

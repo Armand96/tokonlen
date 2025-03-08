@@ -7,17 +7,22 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import cloneDeep from 'clone-deep'
 import { HelperFunction } from '../../../helpers/HelpersFunction';
+import { GetCategories } from '../../../helpers/api/categories';
+import { Dropdown } from '../../../dto/dropdown';
+import { getLinkType } from '../../../helpers';
+import Swal from 'sweetalert2';
+import { GetBrands } from '../../../helpers/api/Products';
 
 
 interface ModalAddTypes {
   isOpen: boolean,
   toggleModal: () => void,
   isCreate: boolean,
-  handlePost: (parms: any) => void,
+  setLoading: (loading: any) => void,
   detailData: Products
 }
 
-export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData }: ModalAddTypes) => {
+export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData }: ModalAddTypes) => {
   const [formData, setFormData] = useState<any>({
     name: '',
     brand: '',
@@ -25,26 +30,36 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
     price: 0,
     link: []
   })
-  const [categoriesOptions, setCategoriesOptions] = useState<any[]>()
-  const [selectedCategories, setSelectedCategories] = useState<any>(null)
-  const [subCategoriesOptions, setSubCategoriesOptions] = useState<any[]>()
-  const [selectedSubCategories, setSelectedSubCategories] = useState<any>(null)
+  const [suggestBrand, setSuggestBrand] = useState<any>()
+  const [categoriesOptions, setCategoriesOptions] = useState<Dropdown[]>()
+  const [selectedCategories, setSelectedCategories] = useState<Dropdown>({ value: '', label: '' })
+  const [subCategoriesOptions, setSubCategoriesOptions] = useState<Dropdown[]>()
+  const [selectedSubCategories, setSelectedSubCategories] = useState<Dropdown>({ value: '', label: '' })
   const [linkOptions, setLinkOptions] = useState<any[]>(
-    [
-      { value: 'https://www.google.com', label: 'Tokped' },
-    ]
+
   )
   const [selectedLink, setSelectedLink] = useState<any>()
-  const [link, setLink] = useState<any>()
   const [tempLink, setTempLink] = useState<any>()
 
   useEffect(() => {
-    
+    setLoading(true)
+    Promise.all([GetCategories(`?data_per_page=100000`), getLinkType(`?data_per_page=10000`), GetBrands()]).then((res) => {
+      setCategoriesOptions(HelperFunction.FormatOptions(res[0].data, 'name', 'id'))
+      setLinkOptions(HelperFunction.FormatOptions(res[1].data, 'name', 'id'))
+      setSuggestBrand(res[2]?.data)
+      setFormData({...formData, ...detailData})
+
+      setLoading(false)
+    }).catch((err) => {
+      setLoading(false);
+      console.log(err)
+      Swal.fire('Error', err.name[0], 'error');
+    })
   }, [])
 
 
   const postData = () => {
-
+    console.log("post",formData)
   }
 
   const handleAddLink = () => {
@@ -64,16 +79,24 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
     setFormData({ ...formData, link: prevData })
   }
 
-
   const onFileUpload = (val: any) => {
     setFormData({ ...formData, image_file: val })
+  }
+
+  const handleOnSelect = (val: any, name: string) => {
+    if (name === 'categories') {
+      setSelectedCategories(val)
+      setSelectedSubCategories({ value: '', label: '' })
+      setSubCategoriesOptions(HelperFunction.FormatOptions(val?.detail?.sub_cat, 'name', 'id'))
+    }
+    if (name === 'sub_categories') {
+      setSelectedSubCategories(val)
+    }
   }
 
   const modules = {
     toolbar: [[{ font: [] }, { size: [] }], ['bold', 'italic', 'underline', 'strike'], [{ color: [] }, { background: [] }], [{ script: 'super' }, { script: 'sub' }], [{ header: [false, 1, 2, 3, 4, 5, 6] }, 'blockquote', 'code-block'], [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }], ['direction', { align: [] }], ['link', 'clean']],
   }
-
-
 
 
   return (
@@ -86,6 +109,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
           </button>
         </div>
         <div className='p-4 overflow-y-auto w-[70vw]'>
+
           <FormInput name='name' label='Name' value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className='form-input mb-3' />
 
           <FormInput name='price' labelClassName='mb-2' label='Harga' value={HelperFunction.FormatToRupiah2(formData?.price || 0)} onChange={(e) => setFormData({ ...formData, price: parseInt(HelperFunction.onlyNumber(e.target.value)) })} className='form-input mb-3' />
@@ -95,7 +119,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
             </div>
 
             <div className="pt-3">
-              <ReactQuill defaultValue={`input deskripsi disini`} theme="snow" modules={modules} style={{ height: 300 }} />
+              <ReactQuill defaultValue={`input deskripsi disini`} theme="snow" modules={modules} style={{ height: 300 }} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e })} />
             </div>
           </div>
 
@@ -103,14 +127,14 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
             <label className="mb-2" htmlFor="choices-text-remove-button">
               Kategori
             </label>
-            <Select className="select2 z-5" options={categoriesOptions} />
+            <Select className="select2 z-5" options={categoriesOptions} value={selectedCategories} onChange={(v) => handleOnSelect(v, 'categories')} />
           </div>
 
           <div className='mb-4' >
             <label className="mb-2" htmlFor="choices-text-remove-button">
               Sub Kategori
             </label>
-            <Select isDisabled={!subCategoriesOptions} className="select2 z-5" options={subCategoriesOptions} />
+            <Select isDisabled={subCategoriesOptions?.length === 0} className="select2 z-5" options={subCategoriesOptions} value={selectedSubCategories} onChange={(v) => handleOnSelect(v, 'sub_categories')} />
           </div>
 
           <div className='mb-2 border px-3 py-4'>
@@ -142,7 +166,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
                       </div>
 
                       <div className="flex items-center gap-3">
-                        <img data-dz-thumbnail="" className="h-12 w-12 rounded bg-light" style={{ objectFit: 'cover' }} alt={item?.name} src={item?.link} />
+                        <img data-dz-thumbnail="" className="h-12 w-12 rounded bg-light" style={{ objectFit: 'cover' }} alt={item?.name} src={HelperFunction.GetImage(item?.link)} />
                         <div>
                           <p className="font-semibold">
                             {item?.link}
@@ -158,25 +182,25 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
           </div>
 
           <div className="mb-3">
-              <h6 className="text-sm mb-2">Product Tersedia ?</h6>
-              <div className="flex gap-5">
-                <div className="flex items-center">
-                  <input type="radio" className="form-radio text-primary" name="InlineRadio" id="InlineRadio01" defaultChecked />
-                  <label className="ms-1.5" htmlFor="InlineRadio01">
-                    Ya
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input type="radio" className="form-radio text-primary" name="InlineRadio" id="InlineRadio02" />
-                  <label className="ms-1.5" htmlFor="InlineRadio02">
-                    tidak
-                  </label>
-                </div>
+            <h6 className="text-sm mb-2">Product Tersedia ?</h6>
+            <div className="flex gap-5">
+              <div className="flex items-center" >
+                <input type="radio" className="form-radio text-primary" name="product-available" onChange={() => setFormData({ ...formData, stock: 1 })} checked={formData?.stock === 1} />
+                <label className="ms-1.5" htmlFor="InlineRadio01">
+                  Ya
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input type="radio" className="form-radio text-primary" onChange={() => setFormData({ ...formData, stock: 0 })} name="product-available" checked={formData?.stock === 0} />
+                <label className="ms-1.5" htmlFor="InlineRadio02">
+                  tidak
+                </label>
               </div>
             </div>
+          </div>
 
 
-          <FormInput labelClassName='mb-2' name='content' label='Brand' value={formData.value} onChange={(e) => setFormData({ ...formData, brand: e.target.value })} className='form-input mb-3' />
+          <FormInput type='suggest' dataSuggest={suggestBrand} labelClassName='mb-2' name='brand' label='Brand' value={formData.brand} onChange={(e) => setFormData({ ...formData, brand: e })} className='form-input mb-3' />
 
           {!isCreate && (
             <div className='mb-2'>
@@ -188,9 +212,9 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, handlePost, detailData
 
           <div className='mb-2' >
             <label className="mb-2" htmlFor="choices-text-remove-button">
-              Upload Image
+              Upload Image (max ukuran image 2 mb)
             </label>
-            <FileUploader onFileUpload={onFileUpload} icon="ri-upload-cloud-line text-4xl text-gray-300 dark:text-gray-200" text=" klik untuk upload." />
+            <FileUploader maxSizeParms={2} onFileUpload={onFileUpload} icon="ri-upload-cloud-line text-4xl text-gray-300 dark:text-gray-200" text=" klik untuk upload. " />
 
           </div>
 
