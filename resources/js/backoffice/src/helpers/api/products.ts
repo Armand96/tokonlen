@@ -10,9 +10,21 @@ function PostProductLink(body: any, update: any = "") {
     return api.create(`api/admin/product_link/${update}`, body)
 }
 
+function PostDeleteOLdLink(body: any, update: any = "" ) {
+    return api.create(`api/admin/product_link/${update}`, body)
+}
+
+
 function PostProductImages(body: any, update: any = "") {
+    console.log(body)
     return api.createWithFile(`api/admin/product_image_single/${update}`, body)
 }
+
+
+function PostDeleteProductImage(body: any, update: any = "" ) {
+    return api.create(`api/admin/product_images/${update}`, body)
+}
+
 
 function GetProducts(params:any = "") {
     const baseUrl = `api/admin/product${params}`
@@ -24,4 +36,4 @@ function GetBrands(params:any = "") {
     return api.get(baseUrl).then((res) => res.data)
 }
 
-export { PostProducts, GetProducts, PostProductLink, PostProductImages, GetBrands }
+export { PostProducts, GetProducts, PostProductLink, PostProductImages, GetBrands, PostDeleteOLdLink, PostDeleteProductImage }

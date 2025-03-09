@@ -13,7 +13,7 @@
     final_price: number
     discount_price: number
     category: Category
-    image: Image
+    images: Image
     discount: Discount
   }
   
@@ -55,7 +55,8 @@ interface PostProductsTypes {
   price: number
   stock: number
   category_id: number
-  is_active: number
+  is_active: number,
+  _method?: string
 }
 
 interface PostProductLinks {

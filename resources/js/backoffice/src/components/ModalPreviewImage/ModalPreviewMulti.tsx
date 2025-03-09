@@ -13,14 +13,6 @@ import 'swiper/css/effect-fade'
 import 'swiper/css/effect-creative'
 import 'swiper/css/effect-flip'
 
-// images
-import picture1 from '@/assets/images/small/small-1.jpg'
-import picture2 from '@/assets/images/small/small-2.jpg'
-import picture3 from '@/assets/images/small/small-3.jpg'
-import picture4 from '@/assets/images/small/small-4.jpg'
-import picture5 from '@/assets/images/small/small-5.jpg'
-import picture6 from '@/assets/images/small/small-6.jpg'
-import picture7 from '@/assets/images/small/small-7.jpg'
 interface ModalPreviewTypes {
 	toggleModal: () => void,
 	isOpen: boolean,

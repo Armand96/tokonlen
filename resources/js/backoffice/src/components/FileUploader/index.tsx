@@ -3,6 +3,7 @@ import Dropzone from "react-dropzone";
 import useFileUploader from "./useFileUploader";
 import React from "react";
 import Swal from "sweetalert2";
+import { HelperFunction } from "../../helpers/HelpersFunction";
 
 export interface FileType extends File {
     preview?: string;
@@ -11,6 +12,7 @@ export interface FileType extends File {
 
 interface FileUploaderProps extends ChildrenProps {
     onFileUpload?: (files: FileType[]) => void;
+    onFileDelete: (index: any) => void;
     showPreview?: boolean;
     multipleUploads?: boolean;
     singleFile?: boolean;
@@ -24,17 +26,22 @@ type ChildrenProps = {
     classname?: string;
     prevData?: any;
     maxSizeParms?: any;
+    handleDeletePrevImage: (parms: any, idx: any) => void;
+    detailData: any
 };
 
 const FileUploader = ({
     showPreview = true,
     onFileUpload,
+    onFileDelete,
     maxSizeParms = 2,
     icon,
     text,
     singleFile = false,
     multipleUploads = true,
     prevData,
+    handleDeletePrevImage,
+    detailData = '',
 }: FileUploaderProps) => {
     const { selectedFiles, handleAcceptedFiles, removeFile } =
         useFileUploader(showPreview);
@@ -54,9 +61,12 @@ const FileUploader = ({
             );
         }
 
+
         handleAcceptedFiles(validFiles, onFileUpload);
     };
 
+
+  
     return (
         <>
             <Dropzone
@@ -107,7 +117,7 @@ const FileUploader = ({
                                     <Link to="" className="btn btn-link">
                                         <i
                                             className="ri-close-line text-lg"
-                                            onClick={() => removeFile(file)}
+                                            onClick={() => {removeFile(file), onFileDelete(idx)}}
                                         ></i>
                                     </Link>
                                 </div>
@@ -138,31 +148,36 @@ const FileUploader = ({
                         </React.Fragment>
                     ))}
 
-                    {(prevData || []).map((file, idx) => (
-                        <React.Fragment key={idx}>
+                    {prevData?.map((file: any, idx: any) => (
+                        <React.Fragment key={file?.id}>
                             <div className="border rounded-md border-gray-200 p-3 mb-2 dark:border-gray-600 mt-2">
+                            <div className="float-right">
+                                    <Link to="" className="btn btn-link">
+                                        <i
+                                            className="ri-close-line text-lg"
+                                            onClick={() => {handleDeletePrevImage(file?.id, idx)}}
+                                        ></i>
+                                    </Link>
+                                </div>
+                        
                                 <div className="flex items-center gap-3">
-                                    {file.preview && (
+                                    {file.image && (
                                         <img
                                             data-dz-thumbnail=""
                                             className="h-12 w-12 rounded bg-light"
                                             style={{ objectFit: "cover" }}
                                             alt={file.name}
-                                            src={file.preview}
+                                            src={HelperFunction.GetImage(file.image)}
                                         />
                                     )}
-                                    {!file.preview && (
-                                        <span className="flex items-center justify-center bg-primary/10 text-primary font-semibold rounded-md w-12 h-12">
-                                            {file.type.split("/")[0]}
-                                        </span>
-                                    )}
-                                    <div>
+                                    
+                                <div>
                                         <Link to="" className="font-semibold">
-                                            {file.name}
+                                            Foto {detailData?.name}  { idx + 1 } 
                                         </Link>
-                                        <p>{file.formattedSize}</p>
                                     </div>
                                 </div>
+
                             </div>
                         </React.Fragment>
                     ))}
