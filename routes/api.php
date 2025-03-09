@@ -48,6 +48,7 @@ Route::prefix('admin')
     Route::resource('category', CategoryController::class);
     Route::resource('product', ProductController::class);
     Route::resource('product_images', ProductImageController::class);
+    Route::post('product_image_single', [ProductImageController::class, 'uploadOneImage']);
     Route::resource('link_type', LinkTypeController::class);
     Route::resource('product_link', ProductLinkController::class);
     Route::resource('product_link_visit', ProductLinkVisitController::class);

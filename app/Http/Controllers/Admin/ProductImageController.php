@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductImageCreateReq;
+use App\Http\Requests\Product\ProductImageCreateSingleReq;
 use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
 use App\Models\ProductImage;
@@ -120,6 +121,44 @@ class ProductImageController extends Controller
             Log::error($th->getMessage());
             //throw $th;
             return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()), 500);
+        }
+    }
+
+    /* STORE IMAGE SINGLE */
+    public function uploadOneImage(ProductImageCreateSingleReq $request)
+    {
+        $productImages = [];
+        $imagePaths = [];
+        try {
+            DB::beginTransaction();
+            $productImage = array();
+            $validated = $request->validated();
+            // dd($validated);
+            if ($request->hasFile('image_file')) {
+                $file = $request->file('image_file');
+
+                $imageName = time() . '.' . $file->extension();
+                $path = $file->storeAs('products', $imageName, 'public');
+                array_push($imagePaths, $path);
+                $validated['image'] = $path;
+                $validated['image_thumb'] = $path;
+                $productImage = ProductImage::create($validated);
+                array_push($productImages, $productImage);
+
+                DB::commit();
+                return response()->json(new ResponseSuccess($productImages,"Success", "Success Upload Product Image"));
+            } else {
+                return response()->json(new ResponseFail((object) null,"Bad Request", "Image File required"), 404);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            DB::rollBack();
+            //throw $th;
+            foreach ($imagePaths as $key => $value) {
+                $isExist = Storage::disk('public')->exists($value) ?? false;
+                if ($isExist) Storage::disk('public')->delete($value);
+            }
+            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
         }
     }
 }
