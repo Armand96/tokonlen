@@ -75,7 +75,7 @@ class VariantController extends Controller
      */
     public function show(Variant $variant)
     {
-        return response()->json(new ResponseSuccess($variant, "Success", "Success Get Variant"));
+        return response()->json(new ResponseSuccess($variant->with(['product.category', 'images', 'discount'])->where('id', $variant->id)->first(), "Success", "Success Get Variant"));
     }
 
     /**
