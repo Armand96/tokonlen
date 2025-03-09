@@ -109,7 +109,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
 
         }
         imagePayload.product_id = res?.data?.data?.id
-        imagePayload.image_files =  file;
+        imagePayload.image_file =  file;
         await PostProductImages(imagePayload)
       })
 
