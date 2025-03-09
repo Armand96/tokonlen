@@ -40,7 +40,7 @@ const Index = () => {
 	};
 
 	const columns = [
-		{ name: 'Nama Produk', row: (cell: Discount) => <div>{cell.product.name}</div> },
+		{ name: 'Nama Produk', row: (cell: Discount) => <div>{cell.product?.name}</div> },
 		{ name: 'Persen', row: (cell: Discount) => <div>{cell.discount_percentage}</div> },
 		{ name: 'Harga', row: (cell: Discount) => <div>{HelperFunction.FormatToRupiah(cell.discount_amount)}</div> },
 		{ name: 'Tanggal', row: (cell: Discount) => <div>{dayjs(cell.start_date).format("DD MMM YYYY")}</div> },

@@ -92,9 +92,6 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
     })
 
 
-    console.log(imageLink)
-
-
 
 
     setLoading(true)
@@ -108,16 +105,18 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
 
         
       Array.from(formData.image_files).forEach(async (file: any) => {
-        let imagePayload = new FormData()
-        imagePayload.append('product_id', res?.data?.data?.id)
-        imagePayload.append('image_files[]', file);
+        let imagePayload: any = {
+
+        }
+        imagePayload.product_id = res?.data?.data?.id
+        imagePayload.image_files =  file;
         await PostProductImages(imagePayload)
       })
 
         toggleModal()
-        reloadData()
         Swal.fire('Success', formData.id ? 'Edit Product berhasil' : 'Input Product berhasil', 'success');
         setLoading(false)
+        reloadData()
       } catch (error) {
         toggleModal()
         reloadData()
