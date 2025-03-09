@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Variant;
+namespace App\Http\Requests\Product;
 
 use App\Http\Requests\ApiRequest;
 
-class VariantImageCreateReq extends ApiRequest
+class VariantImageCreateSingleReq extends ApiRequest
 {
     public int $variant_id;
     public mixed $image_file;
