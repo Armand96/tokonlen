@@ -32,7 +32,7 @@ class ProductController extends Controller
         }
 
         // paginate result
-        $products = $query->with(['category', 'image', 'discount'])->orderBy('id', 'desc')->paginate($dataPerPage);
+        $products = $query->with(['category', 'images', 'discount'])->orderBy('id', 'desc')->paginate($dataPerPage);
 
         return $products;
     }
