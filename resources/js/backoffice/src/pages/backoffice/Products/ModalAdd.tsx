@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ModalLayout } from '../../../components/HeadlessUI';
 import { FileUploader, FormInput } from '../../../components';
 import Select from 'react-select'
-import { PostImageProducts, PostProductLinks, PostProductsTypes, Products } from '../../../dto/products';
+import { PostProductLinks, PostProductsTypes, Products } from '../../../dto/products';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import cloneDeep from 'clone-deep'
