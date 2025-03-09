@@ -55,6 +55,8 @@ Route::prefix('admin')
     Route::resource('product_link_visit', ProductLinkVisitController::class);
     Route::resource('variant', VariantController::class);
     Route::resource('variant_images', VariantImageController::class);
+    Route::post('variant_image_single', [VariantImageController::class, 'uploadOneImage']);
+    Route::delete('mass_delete_variant_image', [VariantImageController::class, 'destroyMany']);
     Route::resource('discount', DiscountController::class);
     Route::resource('banner', BannerController::class);
     Route::resource('size', SizeController::class);
