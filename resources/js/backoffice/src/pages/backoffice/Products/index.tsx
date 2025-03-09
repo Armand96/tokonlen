@@ -10,6 +10,7 @@ import { GetProducts, PostProductImages, PostProductLink, PostProducts } from '.
 import { HelperFunction } from '../../../helpers/HelpersFunction';
 import ModalPreview from '../../../components/ModalPreviewImage/ModalPreview';
 import { useNavigate } from 'react-router-dom';
+import ModalPreviewMulti from '../../../components/ModalPreviewImage/ModalPreviewMulti';
 
 const Index = () => {
   const [modal, setModal] = useState(false);
@@ -31,23 +32,12 @@ const Index = () => {
     fetchData();
   }, []);
 
-  const postData = async (formData) => {
-    setLoading(true);
-    const data = { ...formData, _method: formData.id ? 'PUT' : '' };
-      await PostProducts(data, formData?.id).then((res) => {
-        Promise.all([PostProductImages({ product_id: res?.data?.product_id, image_files: formData?.images}),PostProductLink({ product_id: res?.data?.product_id, image_files: formData?.images})])
-      })
-   
-    await fetchData();
-    setModal(false);
-  };
-
   const columns = [
     { name: 'Nama', row: (cell:Products) => <div>{cell.name}</div> },
     { name: 'Harga', row: (cell:Products) => <div>{HelperFunction.FormatToRupiah(cell.final_price)}</div> },
-    { name: 'Diskon', row: (cell:Products) => <div>{cell.discount_price}</div> },
+    // { name: 'Diskon', row: (cell:Products) => <div>{cell.discount_price}</div> },
     {
-      name: 'Image', row: (cell: Products) => <button className='btn bg-success text-white' onClick={() => { setPreviewImage(true); setFormData(cell.image) }}>
+      name: 'Image', row: (cell: Products) => <button className='btn bg-success text-white' onClick={() => { setPreviewImage(true); setFormData(cell) }}>
           Preview image
       </button>
   },      
@@ -69,7 +59,7 @@ const Index = () => {
   return (
     <>
       {loading && <LoadingScreen />}
-      <ModalPreview toggleModal={() => setPreviewImage(false)} isOpen={previewImage} img={formData?.image} />
+      <ModalPreviewMulti toggleModal={() => setPreviewImage(false)} isOpen={previewImage} img={formData?.images} />
       {modal && (
 		<ModalAdd reloadData={fetchData} isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} setLoading={setLoading} detailData={formData} />
       )}

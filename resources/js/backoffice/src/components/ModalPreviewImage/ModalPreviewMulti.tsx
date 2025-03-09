@@ -1,11 +1,26 @@
 import React from 'react'
 import { ModalLayout } from '../HeadlessUI'
 import { HelperFunction } from '../../helpers/HelpersFunction'
-import 'swiper/css/pagination'
+
 import { Swiper as Swiperjs, SwiperSlide } from 'swiper/react'
-import { Autoplay, Pagination } from 'swiper/modules'
+import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import 'swiper/css/scrollbar'
+import 'swiper/css/effect-fade'
+import 'swiper/css/effect-creative'
+import 'swiper/css/effect-flip'
 
+// images
+import picture1 from '@/assets/images/small/small-1.jpg'
+import picture2 from '@/assets/images/small/small-2.jpg'
+import picture3 from '@/assets/images/small/small-3.jpg'
+import picture4 from '@/assets/images/small/small-4.jpg'
+import picture5 from '@/assets/images/small/small-5.jpg'
+import picture6 from '@/assets/images/small/small-6.jpg'
+import picture7 from '@/assets/images/small/small-7.jpg'
 interface ModalPreviewTypes {
 	toggleModal: () => void,
 	isOpen: boolean,
@@ -13,24 +28,34 @@ interface ModalPreviewTypes {
 }
 
 const ModalPreviewMulti = ({ toggleModal, isOpen, img }: ModalPreviewTypes) => {
+	const pagination = {
+		clickable: true,
+		renderBullet: function (index: number, className: string) {
+			return '<span class="' + className + '">' + (index + 1) + '</span>'
+		},
+	}
 	return (
 
-		<ModalLayout showModal={isOpen} toggleModal={toggleModal} placement="items-center justify-center">
+		<ModalLayout showModal={isOpen} toggleModal={toggleModal} placement="items-center justify-center" panelClassName='overflow-x-hidden'>
 			<div className="duration-300 ease-in-out transition-all m-3 sm:mx-auto flex flex-col bg-white shadow-sm rounded dark:bg-gray-800">
-			<div className="card">
+			
+				<div className="card">
 					<div className="p-6">
-						<h4 className="card-title mb-4">Pagination Dynamic Swiper</h4>
+						<h4 className="card-title mb-4">Preview image</h4>
 
-						<Swiperjs className="pagination-dynamic-swiper rounded" loop={true} autoplay={{ delay: 2000 }} pagination={{ dynamicBullets: true }} modules={[Pagination, Autoplay]}>
+						<Swiperjs className="pagination-custom-swiper rounded w-[900px]" loop={true} navigation={true} autoplay={{ delay: 2000 }} pagination={{ type: 'bullets' }} modules={[Pagination, Autoplay, Navigation]}>
 							{
 								img?.map((image: any, index: number) => (
 									<SwiperSlide key={index}>
-							<img className='object-contain max-h-[80vh] w-full' src={HelperFunction.GetImage(image?.image)} alt="Preview" />
-							</SwiperSlide>
+										<img className='object-contain max-h-[80vh] w-full ' src={HelperFunction.GetImage(image?.image)} alt="Preview" />
+									</SwiperSlide>
 								))
 							}
 							
+
 						</Swiperjs>
+
+					
 					</div>
 				</div>
 				<div className="flex justify-end items-center gap-2 p-4 border-t dark:border-slate-700">
