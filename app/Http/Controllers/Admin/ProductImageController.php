@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductImageCreateReq;
 use App\Http\Requests\Product\ProductImageCreateSingleReq;
+use App\Http\Requests\Product\ProductImagesMassDeleteReq;
 use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
 use App\Models\ProductImage;
@@ -159,6 +160,26 @@ class ProductImageController extends Controller
                 if ($isExist) Storage::disk('public')->delete($value);
             }
             return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
+        }
+    }
+
+    /* DELETE MASS IMAGE */
+    public function destroyMany(ProductImagesMassDeleteReq $request)
+    {
+        try {
+            $validatedData = $request->validated();
+            foreach ($validatedData['ids'] as $key => $value) {
+                $productImage = ProductImage::find($value);
+                if($productImage) {
+                    $productImage->delete();
+                    Storage::disk('public')->delete($productImage->image);
+                }
+            }
+            return response()->json(new ResponseSuccess([],"Success", "Success Delete Product Image"));
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            //throw $th;
+            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()), 500);
         }
     }
 }

@@ -49,6 +49,7 @@ Route::prefix('admin')
     Route::resource('product', ProductController::class);
     Route::resource('product_images', ProductImageController::class);
     Route::post('product_image_single', [ProductImageController::class, 'uploadOneImage']);
+    Route::delete('mass_delete_product_image', [ProductImageController::class, 'destroyMany']);
     Route::resource('link_type', LinkTypeController::class);
     Route::resource('product_link', ProductLinkController::class);
     Route::resource('product_link_visit', ProductLinkVisitController::class);
