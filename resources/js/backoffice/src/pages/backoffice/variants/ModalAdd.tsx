@@ -47,8 +47,11 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
   const postData = () => {
     console.log(formData)
 
-    let postDataCreate: PostVariantsTypes[] =  selectedSized.map((size) =>  
+    let postDataCreate: PostVariantsTypes[] =  selectedSized.map((size) => ({
       variant: formData?.name,
+      size: size,
+      product_id: formData?.product_id
+    }) 
       
   )
     
