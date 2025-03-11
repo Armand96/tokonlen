@@ -55,7 +55,7 @@ const Index = () => {
 		<>
 			{loading && <LoadingScreen />}
 			{modal && (
-				<ModalAdd isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} handlePost={postData} detailData={formData} />
+				<ModalAdd reloadData={fetchData} setLoading={setLoading} isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} handlePost={postData} detailData={formData} />
 			)}
 			<PageBreadcrumb title='Variants' subName='Backoffice' />
 			<div className='bg-white p-4 '>

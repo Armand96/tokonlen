@@ -6,6 +6,10 @@ function PostVariants(body: any, update: any = "") {
     return api.create(`api/admin/variant/${update}`, body)
 }
 
+function PostVariantsBulks(body: any, update: any = "") {
+    return api.create(`api/admin/variant_bulk_insert/${update}`, body)
+}
+
 
 function GetVariants(params:any = "") {
     const baseUrl = `api/admin/variant${params}`
@@ -13,7 +17,11 @@ function GetVariants(params:any = "") {
 }
 
 function PostVariantsImage(body: any, update: any = "") {
-    return api.createWithFile(`api/admin/variant_images/${update}`, body)
+    return api.createWithFile(`api/admin/variant_image_single/${update}`, body)
 }
 
-export { PostVariants, GetVariants, PostVariantsImage }
+function PostDeleteVariantsImage(body: any, update: any = "") {
+    return api.create(`api/admin/mass_delete_variant_image/${update}`, body)
+}
+
+export { PostVariants, GetVariants, PostVariantsImage, PostVariantsBulks, PostDeleteVariantsImage }
