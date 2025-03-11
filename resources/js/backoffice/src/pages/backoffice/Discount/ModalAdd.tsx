@@ -86,7 +86,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
 
     await PostDiscount(postDataCreate, formData?.id).then((res) => {
       toggleModal();
-      Swal.fire('Success', 'Input Variant berhasil', 'success');
+      Swal.fire('Success', isCreate ? 'Input Variant berhasil' : 'Edit Variant berhasil', 'success');
       reloadData();
       setLoading(false)
     }).catch((error) => {
