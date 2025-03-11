@@ -40,11 +40,12 @@ const Index = () => {
 	};
 
 	const columns = [
-		{ name: 'Nama Produk', row: (cell: Discount) => <div>{cell.product?.name}</div> },
+		{ name: 'Produk', row: (cell: Discount) => <div>{cell.product?.name}</div> },
+		{ name: 'Variant', row: (cell: Discount) => <div>{cell?.variant?.variant}</div> },
 		{ name: 'Persen', row: (cell: Discount) => <div>{cell.discount_percentage}</div> },
 		{ name: 'Harga', row: (cell: Discount) => <div>{HelperFunction.FormatToRupiah(cell.discount_amount)}</div> },
-		{ name: 'Tanggal', row: (cell: Discount) => <div>{dayjs(cell.start_date).format("DD MMM YYYY")}</div> },
-		{ name: 'Tanggal', row: (cell: Discount) => <div>{dayjs(cell.end_date).format("DD MMM YYYY")}</div> },
+		{ name: 'Tanggal Awal', row: (cell: Discount) => <div>{dayjs(cell.start_date).format("DD MMM YYYY")}</div> },
+		{ name: 'Tanggal Akhir', row: (cell: Discount) => <div>{dayjs(cell.end_date).format("DD MMM YYYY")}</div> },
 		{ name: 'Status', row: (cell: Discount) => <div>{dayjs().isAfter(cell.end_date,'milliseconds') ? 'Expired' : 'Active'}</div> },
 		{
 			name: 'Action', row: (cell: Discount) => (
@@ -59,7 +60,7 @@ const Index = () => {
 		<>
 			{loading && <LoadingScreen />}
 			{modal && (
-				<ModalAdd isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} handlePost={postData} detailData={formData} />
+				<ModalAdd reloadData={fetchData} setLoading={setLoading}  isCreate={isCreate} toggleModal={() => setModal(false)} isOpen={modal} handlePost={postData} detailData={formData} />
 			)}
 			<PageBreadcrumb title='discount' subName='Backoffice' />
 			<div className='bg-white p-4 '>

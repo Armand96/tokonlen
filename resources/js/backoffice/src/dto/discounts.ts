@@ -27,7 +27,17 @@
     discount_price: number
     discount: Discount
   }
+
+  interface PostDiscountTypes {
+    "product_id"?: number,
+    "variant_id"?: number, 
+    "discount_percentage"?: string,
+    "discount_amount"?: number,
+    "start_date": string,
+    "end_date": string,
+    "_method": string
+  }
   
   
 
-export { Discount }
+export { Discount, PostDiscountTypes }

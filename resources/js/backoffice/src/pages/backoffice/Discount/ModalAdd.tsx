@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { ModalLayout } from '../../../components/HeadlessUI';
-import { FileUploader, FormInput } from '../../../components';
+import { FormInput } from '../../../components';
 import Select from 'react-select'
 import { Products } from '../../../dto/products';
 import 'react-quill/dist/quill.snow.css'
-import cloneDeep from 'clone-deep'
-import CustomFlatpickr from '../../../components/CustomFlatpickr';
 import { GetProducts } from '../../../helpers/api/Products';
 import { HelperFunction } from '../../../helpers/HelpersFunction';
 import { GetVariants } from '../../../helpers/api/variants';
 import dayjs from 'dayjs'
+import { PostDiscountTypes } from '../../../dto/discounts';
+import { GetDiscount, PostDiscount } from '../../../helpers/api/discounts';
+import Swal from 'sweetalert2';
 
 interface ModalAddTypes {
   isOpen: boolean,
@@ -21,7 +22,7 @@ interface ModalAddTypes {
   setLoading: (loading: any) => void,
 }
 
-export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData }: ModalAddTypes) => {
+export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading, reloadData }: ModalAddTypes) => {
   const [formData, setFormData] = useState<any>({
     discount_by: 0, // discount 1: by percentage, 2: by price
     is_by_product: 0, // 1: by product, 2: by variant
@@ -32,31 +33,68 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData }: ModalAdd
     discount_amount: 0
   })
   const [produkOptions, setProdukOptions] = useState<any[]>()
-  const [selectedProduk, setSelectedProduk] = useState<any>(null)
+  const [selectedProduk, setSelectedProduk] = useState<any>({ label: "", value: 0 })
+
 
   useEffect(() => {
-    if (formData?.is_by_product !== 0 && formData.discount_by !== 0) {
-      if (formData.is_by_product == 1) {
-        GetProducts(`?is_active=1&data_per_page=999999`).then((res) => {
-          setProdukOptions(HelperFunction.FormatOptions(res.data, 'name', 'id'))
-        })
-      } else {
-        GetVariants(`?is_active=1&data_per_page=999999`).then((res) => {
-          setProdukOptions(HelperFunction.FormatOptions(res.data, 'variant', 'id'))
-        })
+    if(!isCreate){
+      GetDiscount(`/${detailData?.id}`).then((res) => {
+        setFormData({...formData, ...res?.data, is_by_product: res?.data?.product ? 1 : 2, discount_by:  res?.data?.discount_percentage > 0  ?  1 : 2, start_date: dayjs( res?.data?.start_date).format("YYYY-MM-DD"), end_date: dayjs( res?.data?.end_date).format("YYYY-MM-DD") })
+        
+        if(res?.data?.product){
+          setSelectedProduk({ value: res?.data?.product?.id, label: res?.data?.product?.name })
+        }else{
+          setSelectedProduk({ value: res?.data?.variant?.id, label: res?.data?.variant?.variant })
+        }
+      })
+    }
+  },[detailData])
+
+
+  const updateProdukOptions = async (product = formData?.is_by_product, discount = formData?.discount_by) => {
+    try {
+      if (product !== 0 && discount !== 0) {
+        const endpoint = product === 1 ? GetProducts : GetVariants;
+        const key = product === 1 ? 'name' : 'variant';
+        
+        const res = await endpoint(`?is_active=1&data_per_page=999999`);
+        setProdukOptions(HelperFunction.FormatOptions(res.data, key, 'id'));
+        setSelectedProduk({ label: "", value: 0 });
       }
-      setSelectedProduk(null)
+      
+     setFormData({ ...formData, discount_percentage: 0, discount_amount: 0, is_by_product: product, discount_by: discount  });
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-    if (formData.discount_by !== 0) {
-      setFormData({ ...formData, discount_percentage: 0, discount_amount: 0 })
+  };
+
+
+
+
+  const postData = async () => {
+    setLoading(true)
+    let postDataCreate: PostDiscountTypes = {
+      product_id: formData?.is_by_product == 1 ? selectedProduk?.value : 0,
+      variant_id: formData?.is_by_product == 2 ? selectedProduk?.value : 0,
+      discount_percentage: formData?.discount_by == 1 ? formData?.discount_percentage : '0',
+      discount_amount: formData?.discount_by == 2 ? formData?.discount_amount : '0',
+      start_date: formData?.start_date,
+      end_date: formData?.end_date,
+      '_method': isCreate ? 'POST' : 'PUT'
     }
 
-  }, [formData?.is_by_product, formData.discount_by])
+    await PostDiscount(postDataCreate, formData?.id).then((res) => {
+      toggleModal();
+      Swal.fire('Success', 'Input Variant berhasil', 'success');
+      reloadData();
+      setLoading(false)
+    }).catch((error) => {
+      Swal.fire('Error', error.message || 'Terjadi kesalahan', 'error');
+      setLoading(false)
 
+    })
 
-
-
-  const postData = () => {
 
   }
 
@@ -79,13 +117,13 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData }: ModalAdd
             <h6 className="text-sm mb-2">Dipasang pada</h6>
             <div className="flex gap-5">
               <div className="flex items-center">
-                <input type="radio" className="form-radio text-primary" name="InlineRadio" id="InlineRadio01" onChange={() => setFormData({ ...formData, is_by_product: 1 })} checked={formData.is_by_product == 1} />
+                <input type="radio" className="form-radio text-primary" name="InlineRadio" id="InlineRadio01" onChange={() => {setFormData({ ...formData, is_by_product: 1 });updateProdukOptions(1,undefined)}} checked={formData.is_by_product == 1} />
                 <label className="ms-1.5" htmlFor="InlineRadio01">
                   produk
                 </label>
               </div>
               <div className="flex items-center">
-                <input type="radio" className="form-radio text-primary" name="InlineRadio" id="InlineRadio02" onChange={() => setFormData({ ...formData, is_by_product: 2 })} checked={formData.is_by_product == 2} />
+                <input type="radio" className="form-radio text-primary" name="InlineRadio" id="InlineRadio02" onChange={() => {setFormData({ ...formData, is_by_product: 2 });updateProdukOptions(2,undefined)}} checked={formData.is_by_product == 2} />
                 <label className="ms-1.5" htmlFor="InlineRadio02">
                   variant
                 </label>
@@ -97,13 +135,13 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData }: ModalAdd
             <h6 className="text-sm mb-2">diskon berdasarkan</h6>
             <div className="flex gap-5">
               <div className="flex items-center">
-                <input type="radio" className="form-radio text-primary" name="InlineRadio2" id="InlineRadio01" onChange={() => setFormData({ ...formData, discount_by: 1 })} checked={formData?.discount_by == 1} />
+                <input type="radio" className="form-radio text-primary" name="InlineRadio2" id="InlineRadio01" onChange={() => {setFormData({ ...formData, discount_by: 1 });updateProdukOptions(undefined,1)}} checked={formData?.discount_by == 1} />
                 <label className="ms-1.5" htmlFor="InlineRadio01">
                   Presentase
                 </label>
               </div>
               <div className="flex items-center">
-                <input type="radio" className="form-radio text-primary" name="InlineRadio2" id="InlineRadio02" onChange={() => setFormData({ ...formData, discount_by: 2 })} checked={formData?.discount_by == 2} />
+                <input type="radio" className="form-radio text-primary" name="InlineRadio2" id="InlineRadio02" onChange={() => {setFormData({ ...formData, discount_by: 2 });updateProdukOptions(undefined,2)}} checked={formData?.discount_by == 2} />
                 <label className="ms-1.5" htmlFor="InlineRadio02">
                   Harga
                 </label>
@@ -118,9 +156,9 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData }: ModalAdd
             <Select isDisabled={formData?.is_by_product == 0 || formData?.discount_by == 0} className="select2 z-5" options={produkOptions} value={selectedProduk} onChange={(e) => setSelectedProduk(e)} />
           </div>
 
-          {formData?.discount_by == 1 && <FormInput name='name' label='persentase' value={formData.discount_percentage} onChange={(e) => setFormData({ ...formData, discount_percentage: e.target.value })} className={`form-input mb-3`} />}
+          {formData?.discount_by == 1 && <FormInput name='name' label='persentase' value={formData?.discount_percentage} onChange={(e) => setFormData({ ...formData, discount_percentage: e.target.value })} className={`form-input mb-3`} />}
 
-          {formData?.discount_by == 2 && <FormInput name='name' label='Harga' value={HelperFunction.FormatToRupiah2(formData?.discount_amount || 0)} onChange={(e) => setFormData({ ...formData, discount_amount: parseInt(HelperFunction.onlyNumber(e.target.value)) })} className={`form-input mb-3`} />}
+          {formData?.discount_by == 2 && <FormInput name='name' label='Harga' value={HelperFunction.FormatToRupiah2(parseInt(formData?.discount_amount) || 0)} onChange={(e) => setFormData({ ...formData, discount_amount: parseInt(HelperFunction.onlyNumber(e.target.value)) })} className={`form-input mb-3`} />}
 
           <div className="mb-3">
             <FormInput label="Date" type="date" name="Tanggal Mulai" containerClass="mb-3" labelClassName="mb-2" className="form-input" key="date" value={formData?.start_date} onChange={(v) => setFormData({ ...formData, start_date: dayjs(v.target.value).format("YYYY-MM-DD") })} />
