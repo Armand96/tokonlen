@@ -28,6 +28,10 @@ class SizeController extends Controller
         if ($req->has('format_size')) {
             $query->where('format_size', 'like', '%' . $req->format_size . '%')->with(['variant', 'product']);
         }
+        // filter by is_active
+        if ($req->has('is_active')) {
+            $query->where('is_active', '=', $req->is_active);
+        }
 
         // paginate result
         $sizes = $query->paginate($dataPerPage);
