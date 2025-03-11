@@ -10,6 +10,7 @@ use App\Http\Requests\Variant\VariantCreateReq;
 use App\Http\Requests\Variant\VariantUpdateReq;
 use App\Models\Variant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class VariantController extends Controller
@@ -121,10 +122,20 @@ class VariantController extends Controller
     {
         try {
             $variants = $request->validated()['variants'];
-            Variant::insert($variants);
-            return response()->json(new ResponseSuccess(null,"Success","Success Create Bulk Variant"));
+            $returnVariants = [];
+            DB::beginTransaction();
+
+            foreach ($variants as $key => $value) {
+                $data = Variant::create($value);
+                array_push($returnVariants, $data);
+            }
+
+            DB::commit();
+
+            return response()->json(new ResponseSuccess($returnVariants,"Success","Success Create Bulk Variant"));
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollBack();
             Log::error($th->getMessage());
             return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()));
         }
