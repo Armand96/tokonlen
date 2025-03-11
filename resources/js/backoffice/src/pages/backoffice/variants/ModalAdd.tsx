@@ -8,7 +8,7 @@ import { GetSize } from '../../../helpers';
 import { GetProducts } from '../../../helpers/api/Products';
 import cloneDeep from 'clone-deep';
 import { PostVariantsTypes, Variants } from '../../../dto/variants';
-import { GetVariants, PostDeleteVariantsImage, PostVariantsBulks, PostVariantsImage } from '../../../helpers/api/variants';
+import { GetVariants, PostDeleteVariantsImage, PostVariants, PostVariantsBulks, PostVariantsImage } from '../../../helpers/api/variants';
 import Swal from 'sweetalert2';
 
 
@@ -72,8 +72,6 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
       stock: formData?.stock
     }))
 
-
-
     try {
       setLoading(true);
       let response;
@@ -113,13 +111,31 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
 
   }
 
-  const postDataEdit = async () => {
+  const postEdit = async () => {
+    setLoading(true)
+
     try {
-      setLoading(true)
-      await PostDeleteVariantsImage({
-        '_method': 'DELETE',
-        "ids": imageDelete
-      })
+      const postDataEdit: PostVariantsTypes = {
+        variant: formData?.variant,
+        product_id: selectedProducts?.value,
+        additional_price: formData?.additional_price,
+        is_active: formData?.is_active,
+        stock: formData?.stock,
+        size: formData?.size,
+        id: formData?.id,
+        _method: "PUT"
+      }
+
+      await PostVariants(postDataEdit, formData?.id);
+
+
+      if (imageDelete.length > 0) {
+        await PostDeleteVariantsImage({
+          '_method': 'DELETE',
+          "ids": imageDelete
+        })
+
+      }
 
       if (formData.image_files?.length > 0) {
         const uploadImagesSequentially = async () => {
@@ -142,6 +158,8 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
       }
 
       toggleModal();
+
+
       Swal.fire('Success', 'Edit Variant berhasil', 'success');
       reloadData();
       setLoading(false);
@@ -244,7 +262,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
         </div>
         <div className='flex justify-end p-4 border-t gap-x-4'>
           <button className='btn bg-light text-gray-800' onClick={() => toggleModal()}>Close</button>
-          <button className='btn bg-primary text-white' onClick={() => isCreate ? postDataAdd() : postDataEdit()}>Submit</button>
+          <button className='btn bg-primary text-white' onClick={() => isCreate ? postDataAdd() : postEdit()}>Submit</button>
         </div>
       </div>
     </ModalLayout>

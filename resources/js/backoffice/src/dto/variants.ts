@@ -18,7 +18,9 @@ interface PostVariantsTypes {
   "size": string,
   "additional_price": number,
   "stock":number,
-  "is_active": boolean
+  "is_active": boolean,
+  "_method"?: string,
+  "id"?: number
 }
   
 
