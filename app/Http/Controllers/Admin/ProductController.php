@@ -18,21 +18,17 @@ class ProductController extends Controller
      */
     public function index(Request $req)
     {
-        $dataPerPage = $req->data_per_page ? $req->data_per_page : 10;
-        $query = Product::query();
+        $dataPerPage = $req->input('data_per_page', 10);
 
-        // filter by name
-        if ($req->has('name')) {
-            $query->where('name', 'like', '%' . $req->name . '%');
-        }
-
-        // filter by category
-        if ($req->has('category_id')) {
-            $query->where('category_id', '=', $req->category_id);
-        }
-
-        // paginate result
-        $products = $query->with(['category', 'images', 'discount'])->orderBy('id', 'desc')->paginate($dataPerPage);
+        $products = Product::query()
+        ->when($req->filled('name'), fn ($q) => $q->where('name', 'like', "%{$req->name}%"))
+        ->when($req->filled('category_id'), fn ($q) => $q->where('category_id', $req->category_id))
+        ->when($req->filled('has_variants'), fn ($q) =>
+            strtolower($req->has_variants) == "y" ? $q->has('variant') : $q->doesntHave('variant')
+        )
+        ->with(['category', 'images', 'discount'])
+        ->orderBy('id', 'desc')
+        ->paginate($dataPerPage);
 
         return $products;
     }
