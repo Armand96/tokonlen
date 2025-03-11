@@ -8,6 +8,8 @@ import { GetSize } from '../../../helpers';
 import { GetProducts } from '../../../helpers/api/Products';
 import cloneDeep from 'clone-deep';
 import { PostVariantsTypes, Variants } from '../../../dto/variants';
+import { PostCategories } from '../../../helpers/api/categories';
+import { PostVariantsBulks, PostVariantsImage } from '../../../helpers/api/variants';
 
 
 interface ModalAddTypes {
@@ -44,19 +46,65 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
     setLoading(false)
   }, [])
 
-  const postData = () => {
-    console.log(formData)
+  const postDataAdd = async () => {
 
     let postDataCreate: PostVariantsTypes[] =  selectedSized.map((size) => ({
-      variant: formData?.name,
+      variant: formData?.variant,
       size: size,
-      product_id: formData?.product_id
-    }) 
+      product_id: selectedProducts?.value,
+      additional_price: formData?.additional_price,
+      is_active: formData?.is_active,
+      stock: formData?.stock
+    }))
+
+
+
+    try {
+        let response;
+        response = await PostVariantsBulks({
+          variants: postDataCreate,
+        });
+
+        console.log("response post",response)
+        
+        // if (formData.image_files?.length > 0) {
+        //   const uploadImagesSequentially = async () => {
+        //     for (const file of Array.from(formData.image_files)) {
+        //       await new Promise((resolve) => {
+        //         setTimeout(async () => {
+        //           await PostVariantsImage({
+        //             product_id: productId,
+        //             image_file: file,
+        //           });
+        //           resolve(null);
+        //         }, 1000);
+        //       });
+        //     }
+        //   };
+
+
+        //   await uploadImagesSequentially();
+
+        // }
+
+
+    } catch (error) {
       
-  )
-    
+    }
+
+
   
 
+
+
+
+
+    console.log("post add", postDataCreate)
+
+    
+  }
+
+  const postDataEdit = () => {
 
   }
 
@@ -102,7 +150,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
             <Select className="select2 z-5" options={productsOptions} onChange={(v) => setSelectedProducts(v)} />
           </div>
 
-          <FormInput name='variant' label='Nama Variant' value={formData.name} onChange={(e) => setFormData({ ...formData, variant: e.target.value })} className='form-input mb-3' />
+          <FormInput name='variant' label='Nama Variant' value={formData.variant} onChange={(e) => setFormData({ ...formData, variant: e.target.value })} className='form-input mb-3' />
 
           <FormInput  labelClassName='mb-2' name='additional_price' label='Harga Tambahan' value={HelperFunction.FormatToRupiah2(formData?.additional_price || 0)} onChange={(e) => setFormData({ ...formData, additional_price: parseInt(HelperFunction.onlyNumber( e.target.value ))})} className='form-input mb-3' />
 
@@ -154,7 +202,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
         </div>
         <div className='flex justify-end p-4 border-t gap-x-4'>
           <button className='btn bg-light text-gray-800' onClick={() => toggleModal()}>Close</button>
-          <button className='btn bg-primary text-white' onClick={postData}>Submit</button>
+          <button className='btn bg-primary text-white' onClick={() => isCreate ? postDataAdd() : postDataEdit()}>Submit</button>
         </div>
       </div>
     </ModalLayout>
