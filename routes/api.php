@@ -61,6 +61,8 @@ Route::prefix('admin')
     Route::resource('banner', BannerController::class);
     Route::resource('size', SizeController::class);
     Route::resource('web_setting', WebSettingController::class);
+    Route::post('create_with_upload', [WebSettingController::class, 'createWithUpload']);
+    Route::put('update_with_upload/{web_setting}', [WebSettingController::class, 'updateWithUpload']);
     /* CRUD ADMIN */
 
     //additional
