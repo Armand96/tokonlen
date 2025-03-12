@@ -7,9 +7,11 @@ use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
 use App\Http\Requests\WebSetting\WebSettingCreateReq;
 use App\Http\Requests\WebSetting\WebSettingUpdateReq;
+use App\Http\Requests\WebSetting\WebSettingUploadReq;
 use App\Models\WebSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class WebSettingController extends Controller
 {
@@ -61,6 +63,55 @@ class WebSettingController extends Controller
         }
     }
 
+    public function createWithUpload(WebSettingUploadReq $request)
+    {
+        $path = "";
+        try {
+            $validatedData = $request->validated();
+
+            if ($request->hasFile('image_file')) {
+                $imageName = time() . '.' . $request->file('image_file')->extension();
+                $path = $request->file('image_file')->storeAs('web_setting', $imageName, 'public');
+                $validatedData['value'] = $path;
+            } else {
+                $validatedData['value'] = '';
+            }
+            $webSetting = WebSetting::create($validatedData);
+            return response()->json(new ResponseSuccess($webSetting,"Success","Success Create Category"));
+        } catch (\Throwable $th) {
+            //throw $th;
+            $isExist = Storage::disk('public')->exists($path) ?? false;
+            if ($isExist) Storage::disk('public')->delete($path);
+            Log::error($th->getMessage());
+            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
+        }
+    }
+
+    public function updateWithUpload(WebSettingUploadReq $request, WebSetting $webSetting)
+    {
+        $path = "";
+        try {
+            $validatedData = $request->validated();
+
+            if ($request->hasFile('image_file')) {
+                $isExist = Storage::disk('public')->exists($webSetting->value) ?? false;
+                if ($isExist) Storage::disk('public')->delete($webSetting->value);
+
+                $imageName = time() . '.' . $request->file('image_file')->extension();
+                $path = $request->file('image_file')->storeAs('web_setting', $imageName, 'public');
+                $validatedData['value'] = $path;
+            } else {
+                $validatedData['value'] = '';
+            }
+            $webSetting->update($validatedData);
+            return response()->json(new ResponseSuccess($webSetting,"Success","Success Create Web Setting"));
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::error($th->getMessage());
+            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
+        }
+    }
+
     /**
      * Display the specified resource.
      */
@@ -99,6 +150,10 @@ class WebSettingController extends Controller
     public function destroy(WebSetting $webSetting)
     {
         try {
+            if($webSetting->type == 'file') {
+                $isExist = Storage::disk('public')->exists($webSetting->value) ?? false;
+                if ($isExist) Storage::disk('public')->delete($webSetting->value);
+            }
             $webSetting->delete();
             return response()->json(new ResponseSuccess($webSetting,"Success", "Success Delete Web Setting"));
         } catch (\Throwable $th) {

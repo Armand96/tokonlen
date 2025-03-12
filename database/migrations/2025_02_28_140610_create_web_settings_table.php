@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('web_settings', function (Blueprint $table) {
             $table->id();
             $table->string('name', 150);
+            $table->string('type', 10)->default('text');
             $table->text('value');
             $table->timestamps();
         });

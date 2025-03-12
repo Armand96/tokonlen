@@ -4,18 +4,18 @@ namespace App\Http\Requests\WebSetting;
 
 use App\Http\Requests\ApiRequest;
 
-class WebSettingUpdateReq extends ApiRequest
+class WebSettingUploadReq extends ApiRequest
 {
     public string $name;
-    public string $type;
+    public mixed $image_file;
     public string $value;
 
     public function rules(): array
     {
         return [
             'name' => 'required|string',
-            'type' => 'required|string',
-            'value' => 'required|string',
+            'image_file' => 'required|file',
+            'value' => 'string',
         ];
     }
 }

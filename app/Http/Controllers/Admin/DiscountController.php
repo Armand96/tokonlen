@@ -30,7 +30,7 @@ class DiscountController extends Controller
             $query->where('variant_id', 'like', '%' . $req->variant_id . '%')->with(['variant', 'product']);
         }
 
-        $query->with(['product', 'variant']);
+        $query->with(['product', 'variant.product']);
 
         // paginate result
         $discounts = $query->paginate($dataPerPage);
