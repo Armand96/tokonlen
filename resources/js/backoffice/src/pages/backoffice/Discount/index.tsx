@@ -40,7 +40,7 @@ const Index = () => {
 	};
 
 	const columns = [
-		{ name: 'Produk', row: (cell: Discount) => <div>{cell.product?.name}</div> },
+		{ name: 'Produk', row: (cell: Discount) => <div>{cell.product?.name || cell?.variant?.product?.name }</div> },
 		{ name: 'Variant', row: (cell: Discount) => <div>{cell?.variant?.variant}</div> },
 		{ name: 'Persen', row: (cell: Discount) => <div>{cell.discount_percentage}</div> },
 		{ name: 'Harga', row: (cell: Discount) => <div>{HelperFunction.FormatToRupiah(cell.discount_amount)}</div> },

@@ -25,6 +25,7 @@ interface ModalAddTypes {
 export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData, setLoading }: ModalAddTypes) => {
   const [formData, setFormData] = useState<any>({
     additional_price: 0,
+    is_active: 1
   })
   const [imageDelete, setImageDelete] = useState<any>([])
   const [oldImages, setOldImages] = useState<any>([])
@@ -67,7 +68,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
       variant: formData?.variant,
       size: size,
       product_id: selectedProducts?.value,
-      additional_price: formData?.additional_price,
+      additional_price: formData?.additional_price || 0,
       is_active: formData?.is_active,
       stock: formData?.stock
     }))

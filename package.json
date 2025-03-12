@@ -82,6 +82,7 @@
         "framer-motion": "^12.4.7",
         "postcss": "^8.4.24",
         "prettier": "^3.0.1",
+        "quill-delta-to-html": "^0.12.1",
         "rc-slider": "^11.1.8",
         "react-autocomplete-input": "^1.0.31",
         "react-fast-marquee": "^1.6.5",

@@ -9,7 +9,8 @@
   is_active: number
   final_price: any
   discount_price: number
-  discount: any
+  discount: any,
+  product?: any
 }
 
 interface PostVariantsTypes {

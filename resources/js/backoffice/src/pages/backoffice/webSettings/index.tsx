@@ -3,7 +3,7 @@ import { FormInput, PageBreadcrumb } from '../../../components';
 import { ModalLayout } from '../../../components/HeadlessUI';
 import TablePaginate from '../../../components/Table/tablePaginate';
 import LoadingScreen from '../../../components/Loading/loading';
-import { GetSize, getWebSettings, PostSize, postWebSettings } from '../../../helpers';
+import { getWebSettings, postWebSettings } from '../../../helpers';
 import Swal from 'sweetalert2';
 import { Size } from '../../../dto/size';
 import { WebSettings } from '../../../dto/web_settings';
@@ -11,7 +11,7 @@ import { WebSettings } from '../../../dto/web_settings';
 const Index = () => {
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<any>({ name: '', value: '', is_active: true });
+  const [formData, setFormData] = useState<any>({ name: '', value: '', is_active: true, type: 'text' });
   const [isCreate, setIsCreate] = useState<boolean>(false);
   const [dataPaginate, setDataPaginate] = useState<any>(null);
 
@@ -37,7 +37,7 @@ const Index = () => {
 
   const columns = [
     { name: 'Nama', row: (cell:WebSettings) => <div>{cell.name}</div> },
-    { name: 'content', row: (cell:WebSettings) => <div>{cell.value}</div> },
+    { name: 'content', row: (cell:WebSettings) => <div className=" whitespace-normal">{cell.value}</div> },
     { name: 'Action', row: (cell:WebSettings) => (
         <button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
           Edit

@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import { GetBrands, GetProducts, PostDeleteOLdLink, PostDeleteProductImage, PostProductImages, PostProductLink, PostProducts } from '../../../helpers/api/Products';
 import CustomFlatpickr from '../../../components/CustomFlatpickr';
 import dayjs from 'dayjs';
+import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
 
 interface ModalAddTypes {
@@ -240,6 +241,22 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
     toolbar: [[{ font: [] }, { size: [] }], ['bold', 'italic', 'underline', 'strike'], [{ color: [] }, { background: [] }], [{ script: 'super' }, { script: 'sub' }], [{ header: [false, 1, 2, 3, 4, 5, 6] }, 'blockquote', 'code-block'], [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }], ['direction', { align: [] }], ['link', 'clean']],
   }
 
+  const handleDesc = (value: string, delta: any) => {
+    if (!delta || !delta.ops) return; // Pastikan delta tidak undefined
+
+    const converter = new QuillDeltaToHtmlConverter(delta.ops, {
+      inlineStyles: true, // Pastikan hasilnya inline style
+    });
+  
+    const htmlWithInlineStyles = converter.convert();
+
+    console.log(htmlWithInlineStyles)
+
+    setFormData({ ...formData, description: value })
+
+  }
+
+
 
   return (
     <ModalLayout showModal={isOpen} toggleModal={() => toggleModal()} placement='justify-center items-start'>
@@ -261,7 +278,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
             </div>
 
             <div className="pt-3">
-              <ReactQuill defaultValue={`input deskripsi disini`} theme="snow" modules={modules} style={{ height: 300 }} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e })} />
+              <ReactQuill defaultValue={`input deskripsi disini`} theme="snow" modules={modules} style={{ height: 300 }} value={formData.description} onChange={handleDesc} />
             </div>
           </div>
 

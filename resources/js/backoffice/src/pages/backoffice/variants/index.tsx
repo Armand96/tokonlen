@@ -18,7 +18,7 @@ const Index = () => {
 
 	const fetchData = async (page = 1) => {
 		setLoading(true);
-		const res: Size[] = await GetVariants(`?page=${page}`);
+		const res: Size[] = await GetVariants(`?page=${page + 1}`);
 		setDataPaginate(res);
 		setLoading(false);
 	};
@@ -37,7 +37,7 @@ const Index = () => {
 	};
 
 	const columns = [
-		{ name: 'Nama Produk', row: (cell: Variants) => <div>{cell.variant}</div> },
+		{ name: 'Nama Produk', row: (cell: Variants) => <div>{cell?.product?.name}</div> },
 		{ name: 'Nama Variants', row: (cell: Variants) => <div>{cell.variant}</div> },
 		{ name: 'Ukuran Variants', row: (cell: Variants) => <div>{cell.size}</div> },
 		{ name: 'Harga Tambahan', row: (cell: Variants) => <div>{HelperFunction.FormatToRupiah(cell.additional_price)}</div> },

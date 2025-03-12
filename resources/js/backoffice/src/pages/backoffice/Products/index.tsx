@@ -23,7 +23,7 @@ const Index = () => {
 
   const fetchData = async (page = 1) => {
     setLoading(true);
-    const res:Size[] = await GetProducts(`?page=${page}&has_variants=Y`)
+    const res:Size[] = await GetProducts(`?page=${page}`)
     setDataPaginate(res);
     setLoading(false);
   };
