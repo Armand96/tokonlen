@@ -135,12 +135,12 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                         </Link>
                                     </li>
                                     <li className='h-full'>
-                                        <Link href="#!" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
+                                        <Link href="/tentang-kami" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
                                             Tentang Kami
                                         </Link>
                                     </li>
                                     <li className='h-full'>
-                                        <Link href="#!" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
+                                        <Link href="/contact" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
                                             Kontak Kami
                                         </Link>
                                     </li>
@@ -244,7 +244,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                             className={`${openSubNavMobile === categories?.length + 4 ? 'open' : ''}`}
                                             onClick={() => handleOpenSubNavMobile(categories?.length + 4)}
                                         >
-                                            <a href={'/wishlist'} className={`text-xl font-semibold flex items-center justify-between`}>
+                                            <a href={'/about-us'} className={`text-xl font-semibold flex items-center justify-between`}>
                                                 Tentang Kami
                                                 <span className='text-right'>
                                                     <Icon.CaretRight size={20} />
@@ -256,7 +256,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                             className={`${openSubNavMobile === categories?.length + 5 ? 'open' : ''}`}
                                             onClick={() => handleOpenSubNavMobile(categories?.length + 5)}
                                         >
-                                            <a href={'/wishlist'} className={`text-xl font-semibold flex items-center justify-between`}>
+                                            <a href={'/contact'} className={`text-xl font-semibold flex items-center justify-between`}>
                                                 Kontak Kami
                                                 <span className='text-right'>
                                                     <Icon.CaretRight size={20} />

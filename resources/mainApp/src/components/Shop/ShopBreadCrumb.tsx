@@ -21,13 +21,12 @@ interface Props {
 
 const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) => {
     const [showOnlySale, setShowOnlySale] = useState(false)
-    const [sortOption, setSortOption] = useState('');
+    const [selectedSort, setSelectedSort] = useState({ order_by: 'release_date', order_method: 'desc'  });
     const [isAvailable, setIsAvailable] = useState<boolean>(false)
     const [size, setSize] = useState<any[]>()
     const [brand, setBrand] = useState<any[]>()
     const [selectedBrand, setSelectedBrand] = useState<any>(null)
     const [selectedSize, setSelectedSize] = useState<any>(null)
-    const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 100 });
     const [listCategories, setListCategories] = useState<any>([])
     const [loading, setLoading] = useState(true)
     const [produk, setProduk] = useState<any>([])
@@ -49,12 +48,13 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
             const brand = brandRes?.data;
             const brandsSelect = selectedBrand ? `&brand=${selectedBrand}` : "";
             const available = isAvailable ? `&has_stock=${isAvailable}` : "";
-            const sortBy = isAvailable ? `&has_stock=${isAvailable}` : "";
+            const sortBy = selectedSort.order_by && selectedSort.order_method ? `order_by=${selectedSort.order_by}&order_method=${selectedSort.order_method}` : ""
 
             setSize(size);
+
             if (dataType) {
                 FetchData.GetProduk(
-                    `?category_id=${categories?.id}&order_by=release_date&order_method=desc${selectedSize ? `&size=${selectedSize}${brandsSelect}${available}` : ""}`
+                    `?category_id=${categories?.id}${selectedSize ? `&size=${selectedSize}${brandsSelect}${available}${sortBy && `&${sortBy}`}` : ""}`
                 ).then((produkRes) => {
                     setProduk(produkRes);
                     setLoading(false);
@@ -70,20 +70,27 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
             const sizeParam = selectedSize ? `&size=${selectedSize}` : "";
 
     
-            FetchData.GetProduk(`${categoryIdParam}&order_by=release_date&order_method=desc${sizeParam}${brandsSelect}${available}`)
+            FetchData.GetProduk(`${categoryIdParam}${sizeParam}${brandsSelect}${available}${sortBy && `${sortBy}`}`)
                 .then((produkRes) => {
                     setProduk(produkRes);
                     setLoading(false);
                 });
         });
-    }, [category, dataType, selectedSize, selectedBrand, isAvailable]);
+    }, [category, dataType, selectedSize, selectedBrand, isAvailable, selectedSort]);
 
     const handleShowOnlySale = () => {
         setShowOnlySale(toggleSelect => !toggleSelect)
     }
 
     const handleSortChange = (option: string) => {
-        setSortOption(option);
+        let listSort = [
+            { order_by: 'discount', order_method: 'desc'  },
+            { order_by: 'release_date', order_method: 'desc'  },
+            { order_by: 'release_date', order_method: 'asc'  },
+            { order_by: 'price', order_method: 'desc'  },
+            { order_by: 'price', order_method: 'asc'  },
+        ]
+        setSelectedSort(listSort[parseInt(option)]);
     };
 
     const handleType = (category: string, type: string | null) => {
@@ -257,11 +264,11 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                                             defaultValue={'Sorting'}
                                         >
                                             <option value="Sorting" disabled>Sorting</option>
-                                            <option value="diskon">Diskon</option>
-                                            <option value="hargatinggi">Harga tertinggi</option>
-                                            <option value="hargarendah">Harga terendah</option>
-                                            <option value="terbaru">Terbaru</option>
-                                            <option value="terlama">Terlama</option>
+                                            <option value="0">Diskon</option>
+                                            <option value="3">Harga tertinggi</option>
+                                            <option value="4">Harga terendah</option>
+                                            <option value="1">Terbaru</option>
+                                            <option value="2">Terlama</option>
                                         </select>
                                         <Icon.CaretDown size={12} className='absolute top-1/2 -translate-y-1/2 md:right-4 right-2' />
                                     </div>

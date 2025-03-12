@@ -1,18 +1,28 @@
 "use client"
+import FetchData from '@/services/FetchData'
 import { WhatsappLogo } from '@phosphor-icons/react/dist/ssr'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export const WhatsApp = () => {
         const router = useRouter()
+        const [phoneNumber, setPhoneNumber] = useState<any>([])
+
     
 
     const handleToShop = () => {
-        const phoneNumber = "6285310340777"; 
         const message = `Halo, saya tetarik untuk membeli di zhindaya store`; 
         const encodedMessage = encodeURIComponent(message);
         router.push(`https://wa.me/${phoneNumber}?text=${encodedMessage}`)
     }
+
+    
+
+    useEffect(() => {
+        FetchData.GetWebSettings(`?name=wa-general`).then((res) => {
+          setPhoneNumber(res?.data[0]?.value)
+        })
+    },[])
 
 
   return (

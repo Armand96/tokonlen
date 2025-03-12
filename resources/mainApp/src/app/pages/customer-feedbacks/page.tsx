@@ -1,6 +1,5 @@
 'use client'
 import React from 'react'
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
 import MenuOne from '@/components/Header/Menu/MenuOne'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
 import reviewData from '@/data/Testimonial.json'
@@ -10,7 +9,6 @@ import Footer from '@/components/Footer/Footer'
 const CustomerFeedbacks = () => {
     return (
         <>
-            <TopNavOne props="style-one bg-black" slogan="New customers save 10% with the code GET10" />
             <div id="header" className='relative w-full'>
                 <MenuOne props="bg-transparent" />
                 <Breadcrumb heading='Customer Feedbacks' subHeading='Customer Feedbacks' />

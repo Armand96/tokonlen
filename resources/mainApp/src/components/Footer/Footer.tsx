@@ -1,10 +1,21 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import * as Icon from "@phosphor-icons/react/dist/ssr";
-import dayjs from 'dayjs'
+import FetchData from '@/services/FetchData';
+import dayjs from 'dayjs';
 
 const Footer = () => {
+    
+    const [webSettings, setWebSettings] = useState<any>([])
+    
+
+    useEffect(() => {
+        FetchData.GetWebSettings(`?per_page=99999999`).then((res) => {
+            setWebSettings(res?.data)
+        })
+    },[])
+
+
     return (
         <>
             <div id="footer" className='footer'>
@@ -17,14 +28,14 @@ const Footer = () => {
                                 </Link>
                                 <div className='flex gap-3 mt-3'>
                                     <div className="flex flex-col ">
-                                        <span className="text-button">Mail:</span>
+                                        <span className="text-button">Email:</span>
                                         <span className="text-button mt-3">Phone:</span>
                                         <span className="text-button mt-3">Address:</span>
                                     </div>
                                     <div className="flex flex-col ">
-                                        <span className=''>hi.avitex@gmail.com</span>
-                                        <span className='mt-3'>1-333-345-6868</span>
-                                        <span className='mt-3 pt-px'>549 Oak St.Crystal Lake, IL 60014</span>
+                                        <span className=''>{webSettings?.filter((x: { name: string; }) => x.name == "email")[0]?.value}</span>
+                                        <span className='mt-3'>{webSettings?.filter((x: { name: string; }) => x.name == "wa-general")[0]?.value}</span>
+                                        <span className='mt-3 pt-px'>{webSettings?.filter((x: { name: string; }) => x.name == "alamat")[0]?.value}</span>
                                     </div>
                                 </div>
                             </div>
@@ -32,13 +43,13 @@ const Footer = () => {
                                 <div className="list-nav flex justify-between basis-2/3 max-md:basis-full grid-cols-2">
                                     <div className="item flex flex-col  ">
                                         <div className="text-button-uppercase pb-3">Informasi</div>
-                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/contact'}>Store</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/pages/contact'}>Contact us</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/pages/faqs'}>FaQs</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'#'}>Store</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'contact'}>Contact us</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'#'}>FaQs</Link>
                                     </div>
                     
                                     <div className="item flex flex-col  ">
-                                        <div className="text-button-uppercase pb-3">other</div>
+                                        <div className="text-button-uppercase pb-3">Lain nya</div>
                                         <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/pages/faqs'}>Privacy Policy</Link>
                                         <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/order-tracking'}>Return & Refund</Link>
                                     </div>
@@ -48,7 +59,7 @@ const Footer = () => {
                         </div>
                         <div className="footer-bottom py-3 flex items-center justify-between gap-5 max-lg:justify-center max-lg:flex-col border-t border-line">
                             <div className="left flex items-center gap-8">
-                                <div className="copyright caption1 text-secondary">2025 @ Zhindaya. All Rights Reserved.</div>
+                                <div className="copyright caption1 text-secondary">{dayjs().format("YYYY")} @ Zhindaya. All Rights Reserved.</div>
                             </div>
                         </div>
                     </div>

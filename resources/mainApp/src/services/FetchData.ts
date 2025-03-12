@@ -21,6 +21,10 @@ const FetchData = {
         const res = await apiService.getData(`api/brand${params}`);
         return res.data;
     },
+    GetWebSettings: async (params: string = '' ) => {
+        const res = await apiService.getData(`api/admin/web_setting${params}`);
+        return res.data;
+    },
     SearchAll: async (params: string = '' ) => {
         const res = await apiService.getData(`api/search?words=${params}`);
         return res.data;

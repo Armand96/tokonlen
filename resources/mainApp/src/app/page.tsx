@@ -7,6 +7,7 @@ import Testimonial from '@/components/Home/Testimonial'
 import Brand from '@/components/Home/Brand'
 import Footer from '@/components/Footer/Footer'
 import SliderFour from '@/components/Slider/SliderFour'
+import ModalNewsletter from '@/components/Modal/ModalNewsletter'
 
 export default async function Home() {
 
@@ -20,6 +21,7 @@ export default async function Home() {
       <Collection />
       <Benefit props="md:py-20 py-10" />
       <Testimonial data={testimonialData} limit={6} />
+      <ModalNewsletter />
       <Brand />
       <Footer />
     </>

@@ -15,6 +15,7 @@ import Helpers from '@/Helpers/Helpers'
 import Loading from '@/components/Other/Loading'
 import { useRouter } from 'next/navigation'
 import { WhatsappLogo } from '@phosphor-icons/react/dist/ssr'
+import Swal from 'sweetalert2'
 
 
 SwiperCore.use([Navigation, Thumbs]);
@@ -31,12 +32,12 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
     const [activeVariant, setActiveVariant] = useState<any>('')
     const [activeSize, setActiveSize] = useState<string>('')
-    const [activeTab, setActiveTab] = useState<string | undefined>('specifications')
     const [loading, setLoading] = useState(true)
     const [produk, setProduk] = useState<any>()
     const [categories, setCategories] = useState<any>([])
     const [relatedProduk, setRelatedProduk] = useState<any>([])
     const router = useRouter()
+    const [phoneNumber, setPhoneNumber] = useState<any>([])
 
     let productMain = data.find(product => product.id === productId) as ProductType
 
@@ -62,6 +63,9 @@ const Default: React.FC<Props> = ({ data, productId }) => {
 
             setLoading(false)
         })
+        FetchData.GetWebSettings(`?name=wa-order`).then((res) => {
+            setPhoneNumber(res?.data[0]?.value)
+        })
     }, [])
 
 
@@ -70,19 +74,25 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     }
 
 
-    const handleActiveTab = (tab: string) => {
-        setActiveTab(tab)
-    }
-
     const handleActiveColor = (item: any) => {
         setActiveVariant(item)
     }
 
     const handleToShop = () => {
-        const phoneNumber = "6285310340777";
         const message = `Halo, saya tetarik dengan produk ${produk?.name} ${activeVariant.variant ? `warna ${activeVariant?.variant}` : ""}  ${activeSize && `ukuran ${activeSize}`} `;
         const encodedMessage = encodeURIComponent(message);
         router.push(`https://wa.me/${phoneNumber}?text=${encodedMessage}`)
+    }
+
+    const copyCurrentLink = () => {
+        navigator.clipboard.writeText(window.location.href);
+        Swal.fire({
+            title: 'Berhasil!',
+            text: 'Link produk berhasil di copy!',
+            icon: 'success',
+            confirmButtonText: 'Oke',
+            confirmButtonColor: 'green'
+        })
     }
 
 
@@ -103,7 +113,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             modules={[Thumbs]}
                                             className="mySwiper2 rounded-2xl "
                                         >
-                                            {produk?.images?.map((item: any, index: number) => (
+                                            {(activeVariant ? activeVariant?.images : produk?.images)?.map((item: any, index: number) => (
                                                 <SwiperSlide
                                                     key={index}
                                                     onClick={() => {
@@ -132,18 +142,17 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             modules={[Navigation, Thumbs]}
                                             className="mySwiper swiper-float"
                                         >
-                                            {produk?.images?.map((item: any, index: number) => (
-                                                <SwiperSlide
-                                                    key={index}
-                                                >
-                                                    <Image
-                                                        src={Helpers.GetImage(item?.image)}
-                                                        width={1000}
-                                                        height={1000}
-                                                        alt='prd-img'
-                                                        className='w-full aspect-[3/4] object-cover rounded-xl'
-                                                    />
-                                                </SwiperSlide>
+                                            {(activeVariant ? activeVariant?.images : produk?.images)?.map((item: any, index: number) => (<SwiperSlide
+                                                key={index}
+                                            >
+                                                <Image
+                                                    src={Helpers.GetImage(item?.image)}
+                                                    width={1000}
+                                                    height={1000}
+                                                    alt='prd-img'
+                                                    className='w-full aspect-[3/4] object-cover rounded-xl'
+                                                />
+                                            </SwiperSlide>
                                             ))}
                                         </Swiper>
 
@@ -199,94 +208,100 @@ const Default: React.FC<Props> = ({ data, productId }) => {
 
                             </div>
                             <div className="flex items-center gap-3  flex-wrap mt-5 ">
-                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant.discount ? activeVariant?.discount_price ? produk?.price -  activeVariant?.discount_price : produk?.price - (produk?.price * activeVariant.discount?.discount_percentage / 100) : produk?.final_price)}</div>
+                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant.discount ? activeVariant?.discount_price ? produk?.price - activeVariant?.discount_price : produk?.price - (produk?.price * activeVariant.discount?.discount_percentage / 100) : produk?.final_price)}</div>
                                 <div className={`w-px h-4 bg-line ${produk?.final_price !== produk?.price || activeVariant.discount ? "" : "hidden"}`}></div>
                                 <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || activeVariant.discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(produk?.price)}</del></div>
 
                                 {(produk?.discount_price > 0 || activeVariant.discount) && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
-                                        -{( parseInt(activeVariant?.discount_price) / parseInt(produk?.price)) * 100  || (produk?.discount_price / produk?.price) * 100 || activeVariant?.discount?.discount_percentage}%
+                                        -{(parseInt(activeVariant?.discount_price) / parseInt(produk?.price)) * 100 || (produk?.discount_price / produk?.price) * 100 || activeVariant?.discount?.discount_percentage}%
                                     </div>
                                 )}
 
                             </div>
                             <div className={`list-action mt-6`}>
-                                <div className={produk?.variant.length > 1 ? "" :"hidden"}>
-                                <div className={`choose-color`}>
-                                    <div className="text-title">Warna: <span className='text-title color'>{activeVariant?.variant}</span></div>
-                                    <div className="list-color flex items-center gap-2 flex-wrap mt-3">
-                                        {produk?.variant.map((item: any, index: number) => (
-                                            <div
-                                                className={`color-item w-12 relative  rounded-xl duration-300  object-cover  ${activeVariant?.variant === item.variant ? 'active' : ''}`}
-                                                key={index}
-                                                datatype={item.image}
-                                                onClick={() => {
-                                                    handleActiveColor(item)
-                                                }}
-                                            >
-                                                {item.discount ? <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div> : <div className={` py-2 text-xs rounded-t-xl inset-0 text-center`}></div>}
-                                                <Image
-                                                    src={Helpers.GetImage(item?.images[0]?.image)}
-                                                    width={100}
-                                                    height={100}
-                                                    alt='color'
-                                                    className='rounded-xl'
-                                                />
-                                                <div className="tag-action bg-black text-white caption2 capitalize px-1.5 py-0.5 rounded-sm ">
-                                                    {item.variant}
+                                <div className={produk?.variant.length > 1 ? "" : "hidden"}>
+                                    <div className={`choose-color`}>
+                                        <div className="text-title">Warna: <span className='text-title color'>{activeVariant?.variant}</span></div>
+                                        <div className="list-color flex items-center gap-2 flex-wrap mt-3">
+                                            {produk?.variant.map((item: any, index: number) => (
+                                                <div
+                                                    className={`color-item w-12 relative  rounded-xl duration-300  object-cover  ${activeVariant?.variant === item.variant ? 'active' : ''}`}
+                                                    key={index}
+                                                    datatype={item.image}
+                                                    onClick={() => {
+                                                        handleActiveColor(item)
+                                                    }}
+                                                >
+                                                    {item.discount ? <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div> : <div className={` py-2 text-xs rounded-t-xl inset-0 text-center`}></div>}
+                                                    <Image
+                                                        src={Helpers.GetImage(item?.images[0]?.image)}
+                                                        width={100}
+                                                        height={100}
+                                                        alt='color'
+                                                        className='rounded-xl'
+                                                    />
+                                                    <div className="tag-action bg-black text-white caption2 capitalize px-1.5 py-0.5 rounded-sm ">
+                                                        {item.variant}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="choose-size mt-5">
-                                    <div className="heading flex items-center justify-between">
-                                        <div className="text-title">Ukuran: <span className='text-title size'>{activeSize}</span></div>
-                                        {/* <div
+                                    <div className="choose-size mt-5">
+                                        <div className="heading flex items-center justify-between">
+                                            <div className="text-title">Ukuran: <span className='text-title size'>{activeSize}</span></div>
+                                            {/* <div
                                             className="caption1 size-guide text-red  flex gap-x-2 items-center cursor-pointer"
                                             onClick={handleOpenSizeGuide}
                                         >
                                            Bingung ? <div className='underline caption1 font-bold'>Saran Ukuran</div>
                                         </div> */}
-                                        <ModalSizeguide data={productMain} isOpen={openSizeGuide} onClose={handleCloseSizeGuide} />
-                                    </div>
-                                    <div className="list-size flex items-center gap-2 flex-wrap mt-3">
-                                        {produk?.variant.map((item: any, index: number) => (
-                                            <div
-                                                className={`size-item w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
-                                                key={index}
-                                                onClick={() => handleActiveSize(item?.size)}
-                                            >
-                                                {item?.size}
-                                            </div>
-                                        ))}
+                                            <ModalSizeguide data={productMain} isOpen={openSizeGuide} onClose={handleCloseSizeGuide} />
+                                        </div>
+                                        <div className="list-size flex items-center gap-2 flex-wrap mt-3">
+                                            {produk?.variant.map((item: any, index: number) => (
+                                                <div
+                                                    className={`size-item w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
+                                                    key={index}
+                                                    onClick={() => handleActiveSize(item?.size)}
+                                                >
+                                                    {item?.size}
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                                </div>
-                             
+
 
                                 <div className="button-block mt-5" >
-                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${produk?.stock < 1 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 1} > <WhatsappLogo className={produk?.stock < 1 ? 'hidden' : 'block'} weight='fill' size={27}  />  {produk?.stock < 1 ? "Stok Habis" : "Beli sekarang"}</button>
+                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${produk?.stock < 1 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 1} > <WhatsappLogo className={produk?.stock < 1 ? 'hidden' : 'block'} weight='fill' size={27} />  {produk?.stock < 1 ? "Stok Habis" : "Beli sekarang"}</button>
                                 </div>
                                 <div className="list-payment mt-7">
                                     <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative max-md:w-2/3 max-sm:w-full">
                                         <div className="heading6 px-5 bg-white absolute -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">Atau lanjutkan via</div>
                                         <div className="list grid grid-cols-6">
-                                            <div className="item flex items-center justify-center lg:px-3 px-1">
-                                                <Image
-                                                    src={'/images/payment/Frame-0.png'}
-                                                    width={500}
-                                                    height={450}
-                                                    alt='payment'
-                                                    className='w-full'
-                                                />
+                                            <div className="item flex items-center justify-center lg:px-5 px-1">
+                                                {
+                                                    produk?.links?.map((link: any, key: any) => (
+                                                        <Image
+                                                            key={key}
+                                                            src={Helpers.GetImage(link?.link_type?.image)}
+                                                            width={500}
+                                                            height={450}
+                                                            alt='alternate'
+                                                            className='w-full cursor-pointer bg-gray-200'
+                                                            onClick={() => router.push(link.link)}
+                                                        />
+                                                    ))
+                                                }
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="flex items-center lg:gap-20 gap-8 mt-5 pb-6 border-b border-line">
 
-                                    <div className="share flex items-center gap-3 cursor-pointer">
+                                    <div className="share flex items-center gap-3 cursor-pointer" onClick={copyCurrentLink}>
                                         <div className="share-btn md:w-12 md:h-12 w-10 h-10 flex items-center justify-center border border-line cursor-pointer rounded-xl duration-300 hover:bg-black hover:text-white">
                                             <Icon.ShareNetwork weight='fill' className='heading6' />
                                         </div>
@@ -309,31 +324,31 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         <div className="text-title">Estimated Delivery:</div>
                                         <div className="text-secondary">14 January - 18 January</div>
                                     </div> */}
-                                    <div className="flex items-center gap-1 mt-3">
+                                    {/* <div className="flex items-center gap-1 mt-3">
                                         <Icon.Eye className='body1' />
                                         <div className="text-title">38</div>
                                         <div className="text-secondary">orang melihat produk ini</div>
-                                    </div>
+                                    </div> */}
                                     {/* <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">Stock:</div>
                                         <div className="text-secondary">{produk?.stock}</div>
                                     </div> */}
-                                    <div className="flex items-center gap-1 mt-3">
+                                    {/* <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">SKU:</div>
                                         <div className="text-secondary">53453412</div>
-                                    </div>
+                                    </div> */}
                                     <div className="flex items-center gap-1 mt-3">
                                         <div className="text-title">Categories:</div>
                                         <div className="text-secondary">{produk?.category?.name}</div>
                                     </div>
                                 </div>
-                              
+
                             </div>
-                            <div className='desc text-secondary mt-3 pt-6 border-t  border-line'>{produk?.description}</div>
+                            <div className='desc text-secondary mt-3 pt-6 border-t  border-line' dangerouslySetInnerHTML={{ __html: produk?.description }} />
                         </div>
                     </div>
                 </div>
-               
+
                 <div className="related-product md:py-20 py-10">
                     <div className="container">
                         <div className="heading3 text-center">Related Produk</div>

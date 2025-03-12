@@ -16,8 +16,6 @@ import Rate from '../Other/Rate';
 import ModalSizeguide from './ModalSizeguide';
 
 const ModalQuickview = () => {
-    const [photoIndex, setPhotoIndex] = useState(0)
-    const [openPopupImg, setOpenPopupImg] = useState(false)
     const [openSizeGuide, setOpenSizeGuide] = useState<boolean>(false)
     const { selectedProduct, closeQuickview } = useModalQuickviewContext()
     const [activeColor, setActiveColor] = useState<string>('')
