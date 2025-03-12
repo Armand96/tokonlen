@@ -51,10 +51,43 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     };
 
 
+    const groupVariants = (data: any) => {
+        return data?.reduce((acc: any, item: any) => {
+          const existingVariant = acc.find((v: any) => v.variant === item.variant);
+      
+          if (existingVariant) {
+            // Tambahkan ukuran ke varian yang sudah ada
+            existingVariant.sizes.push({
+              size: item.size,
+              stock: item.stock,
+              is_active: item.is_active,
+            });
+      
+            // Gabungkan gambar (hindari duplikasi)
+            item.images.forEach((img: any) => {
+              if (!existingVariant.images.some((i: any) => i.image === img.image)) {
+                existingVariant.images.push(img);
+              }
+            });
+          } else {
+            // Jika varian belum ada, buat entri baru
+            acc.push({
+              variant: item.variant,
+              sizes: [{ size: item.size, stock: item.stock, is_active: item.is_active }],
+              images: [...item.images],
+            });
+          }
+      
+          return acc;
+        }, []);
+      };
+
 
     useEffect(() => {
         setLoading(true)
         FetchData.GetProduk(`/${productId}`).then((resp) => {
+            console.log(groupVariants(resp?.data?.variant))
+            // resp.data.variant = groupVariants(resp?.data?.variant)
             setProduk(resp?.data)
             document.title = `${resp?.data?.name} - Zhindaya `;
             FetchData.GetProduk(`?category_id=${resp?.data?.category?.parent_id}`).then((res) => {
@@ -220,7 +253,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
 
                             </div>
                             <div className={`list-action mt-6`}>
-                                <div className={produk?.variant.length > 1 ? "" : "hidden"}>
+                                <div className={produk?.variant.length > 0 ? "" : "hidden"}>
                                     <div className={`choose-color`}>
                                         <div className="text-title">Warna: <span className='text-title color'>{activeVariant?.variant}</span></div>
                                         <div className="list-color flex items-center gap-2 flex-wrap mt-3">
@@ -275,7 +308,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
 
 
                                 <div className="button-block mt-5" >
-                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${produk?.stock < 1 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 1} > <WhatsappLogo className={produk?.stock < 1 ? 'hidden' : 'block'} weight='fill' size={27} />  {produk?.stock < 1 ? "Stok Habis" : "Beli sekarang"}</button>
+                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${produk?.stock < 0 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 0} > <WhatsappLogo className={produk?.stock < 0 ? 'hidden' : 'block'} weight='fill' size={27} />  {produk?.stock < 0 ? "Stok Habis" : "Beli sekarang"}</button>
                                 </div>
                                 <div className="list-payment mt-7">
                                     <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative max-md:w-2/3 max-sm:w-full">
