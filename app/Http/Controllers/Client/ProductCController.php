@@ -33,13 +33,13 @@ class ProductCController extends Controller
         }
         // filter by category_parent_id
         if ($req->has('category_parent_id')) {
-            $query->whereHas('category', function($qry) use($req) {
+            $query->whereHas('category', function ($qry) use ($req) {
                 $qry->where('parent_id', $req->category_parent_id);
             });
         }
         // filter by size
         if ($req->has('size')) {
-            $query->whereHas('variant', function($qry) use ($req) {
+            $query->whereHas('variant', function ($qry) use ($req) {
                 $qry->where('size', '=', $req->size);
             });
         }
@@ -50,16 +50,20 @@ class ProductCController extends Controller
         // filter by brand
         if ($req->has('brand_in')) {
             $data = explode(",", $req->brand_in);
-            $query->whereIn('brand',$data);
+            $query->whereIn('brand', $data);
         }
         // filter by brand
         if ($req->has('has_stock')) {
             $query->where('stock', '>', 0);
         }
 
-        $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount', 'category.parentCat', 'links.linkType']);
 
-        if($orderBy == "discount") {
+        $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount', 'category.parentCat', 'links.linkType']);
+        $query->with('variant', function ($query) {
+            $query->where('is_active', true);
+        });
+
+        if ($orderBy == "discount") {
             $query->orderByRaw(
                 "(SELECT COALESCE(discount_percentage, discount_amount, 0)
                 FROM discounts
@@ -73,6 +77,28 @@ class ProductCController extends Controller
         }
 
         $products = $query->paginate($data_per_page);
+
+        collect($products->items())->transform(function ($product) {
+            $groupedVariants = $product->variant->groupBy('variant')->map(function ($sizes, $variantName) {
+                return [
+                    'name' => $variantName,
+                    'sizes' => $sizes->map(function ($size) {
+                        return [
+                            'size' => $size->size,
+                            'additional_price' => $size->additional_price,
+                            'stock' => $size->stock,
+                            'discount' => $size->discount,
+                            'image' =>$size->image,
+                            'is_active' => $size->is_active
+                        ];
+                    })->values()
+                ];
+            })->values();
+
+            $product->variants = $groupedVariants;
+            unset($product->variant);
+            return $product;
+        });
         // dd(DB::getQueryLog());
         return $products;
         // return response()->json(new ResponseSuccess($products, "Success", "Success Get Products"));
@@ -118,11 +144,11 @@ class ProductCController extends Controller
             $product->increment('visited');
 
             DB::commit();
-            return response()->json(new ResponseSuccess($linkVisit,"Success","Success insert increment visit"));
+            return response()->json(new ResponseSuccess($linkVisit, "Success", "Success insert increment visit"));
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());
-            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
+            return response()->json(new ResponseFail((object) null, "Server Error", $th->getMessage()), 500);
         }
     }
 }
