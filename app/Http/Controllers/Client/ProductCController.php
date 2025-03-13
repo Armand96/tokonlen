@@ -57,7 +57,21 @@ class ProductCController extends Controller
             $query->where('stock', '>', 0);
         }
 
-        $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount', 'category.parentCat', 'links.linkType'])->orderBy($orderBy, $orderMethod);
+        $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount', 'category.parentCat', 'links.linkType']);
+
+        if($orderBy == "discount") {
+            $query->orderByRaw(
+                "(SELECT COALESCE(discount_percentage, discount_amount, 0)
+                FROM discounts
+                WHERE discounts.product_id = products.id
+                AND start_date <= NOW()
+                AND end_date >= NOW()
+                LIMIT 1) $orderMethod"
+            );
+        } else {
+            $query->orderBy($orderBy, $orderMethod);
+        }
+
         $products = $query->paginate($data_per_page);
         // dd(DB::getQueryLog());
         return $products;
