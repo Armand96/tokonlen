@@ -16,7 +16,7 @@ const Index = () => {
 	const [isCreate, setIsCreate] = useState<boolean>(false);
 	const [dataPaginate, setDataPaginate] = useState<any>(null);
 
-	const fetchData = async (page = 1) => {
+	const fetchData = async (page = 0) => {
 		setLoading(true);
 		const res: Size[] = await GetVariants(`?page=${page + 1}`);
 		setDataPaginate(res);

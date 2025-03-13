@@ -38,12 +38,14 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                         New
                                     </div>
                                 )}
-                                {(data?.stock < 1 || data.variant.filter((x: any) => x.variant?.stock < 1).length > 0) && (
+                                {(data?.stock < 0 || data?.variants?.filter((x: any) => x.variant?.stock < 1).length > 0) && (
                                     <div className="product-tag text-button-uppercase bg-black text-white px-3 py-0.5 inline-block rounded-full absolute bottom-4 md:bottom-auto md:top-3 md:right-3 z-[1]">
                                         Stock Habis
                                     </div>
-                                )}
-                                {(data?.final_price !== data?.price || data.variant.filter((x: any) => x.variant !== null)[0]) && (
+                                )}{
+                                    console.log("test", data.variants?.flatMap((x: any) => x.sizes?.map((size: any) =>( { ...size, name: x?.name})) ))
+                                }
+                                {(data?.final_price !== data?.price || data.variants?.flatMap((x: any) => x.sizes?.map((size: any) =>( { ...size, name: x?.name})))?.filter((variant: any) => variant.discount !== null)[0] ) && (
                                     <div className="product-tag text-button-uppercase text-white bg-red px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
                                         Promo
                                     </div>
