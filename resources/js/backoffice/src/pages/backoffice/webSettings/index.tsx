@@ -31,9 +31,6 @@ const Index = () => {
     setLoading(true);
     const data = { ...formData, value: "image", type: formData.image_file ? 'file' : 'text', _method: formData.id ? 'PUT' : 'POST' };
     if(formData.image_file){
-      if(isCreate){
-        delete data._method
-      }
       await postWebSettingsWithFile(data, formData?.id);
     }else{
       await postWebSettings(data, formData?.id);

@@ -7,7 +7,7 @@ function postWebSettings(body: any, update: any = "") {
 }
 
 function postWebSettingsWithFile(body: any, update: any = "") {
-    return api.createWithFile(`api/admin/update_with_upload/${update}`, body)
+    return api.createWithFile(`api/admin/web_setting_with_upload/${update}`, body)
 }
 
 
