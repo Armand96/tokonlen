@@ -99,7 +99,7 @@ class DiscountController extends Controller
      */
     public function show(Discount $discount)
     {
-        return response()->json(new ResponseSuccess($discount->with(['product', 'variant'])->where('id', $discount->id)->first(),"Success","Success Get Discount"));
+        return response()->json(new ResponseSuccess($discount->with(['product', 'variant.product'])->where('id', $discount->id)->first(),"Success","Success Get Discount"));
     }
 
     /**
