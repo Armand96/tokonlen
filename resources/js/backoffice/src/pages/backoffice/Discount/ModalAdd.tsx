@@ -44,7 +44,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
         if(res?.data?.product){
           setSelectedProduk({ value: res?.data?.product?.id, label: res?.data?.product?.name })
         }else{
-          setSelectedProduk({ value: res?.data?.variant?.id, label: res?.data?.variant?.variant })
+          setSelectedProduk({ value: res?.data?.variant?.id, label: `${res?.data?.variant?.variant} - ${res?.data?.product?.name} `})
         }
       })
     }
@@ -58,7 +58,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
         const key = product === 1 ? 'name' : 'variant';
         
         const res = await endpoint(`?is_active=1&data_per_page=999999`);
-        setProdukOptions(HelperFunction.FormatOptions(res.data, key, 'id'));
+        setProdukOptions(product === 1 ?  HelperFunction.FormatOptions(res.data, key, 'id', ) :  HelperFunction.FormatOptionsVariants(res.data, key, 'id'));
         setSelectedProduk({ label: "", value: 0 });
       }
       
@@ -161,11 +161,11 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
           {formData?.discount_by == 2 && <FormInput name='name' label='Harga' value={HelperFunction.FormatToRupiah2(parseInt(formData?.discount_amount) || 0)} onChange={(e) => setFormData({ ...formData, discount_amount: parseInt(HelperFunction.onlyNumber(e.target.value)) })} className={`form-input mb-3`} />}
 
           <div className="mb-3">
-            <FormInput label="Date" type="date" name="Tanggal Mulai" containerClass="mb-3" labelClassName="mb-2" className="form-input" key="date" value={formData?.start_date} onChange={(v) => setFormData({ ...formData, start_date: dayjs(v.target.value).format("YYYY-MM-DD") })} />
+            <FormInput label="Tanggal Mulai" type="date" name="Tanggal Mulai"  containerClass="mb-3" labelClassName="mb-2" className="form-input" key="Tanggal Mulai" value={formData?.start_date} onChange={(v) => setFormData({ ...formData, start_date: dayjs(v.target.value).format("YYYY-MM-DD") })} />
           </div>
 
           <div className="mb-3">
-            <FormInput label="Date" type="date" name="Tanggal Akhir" containerClass="mb-3" labelClassName="mb-2" className="form-input" key="date" value={formData?.end_date} onChange={(v) => setFormData({ ...formData, end_date: dayjs(v.target.value).format("YYYY-MM-DD") })} />
+            <FormInput label="Tanggal Akhir" type="date" name="Tanggal Akhir" containerClass="mb-3" labelClassName="mb-2" className="form-input"  key="Tanggal Akhir" value={formData?.end_date} onChange={(v) => setFormData({ ...formData, end_date: dayjs(v.target.value).format("YYYY-MM-DD") })} />
           </div>
 
 
