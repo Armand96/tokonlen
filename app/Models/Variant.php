@@ -53,7 +53,7 @@ class Variant extends Model
                 return (float) ($this->product->price + $this->additional_price) - (float) $this->discount->discount_amount;
             }
         }
-        return $this->product->price;
+        return $this->product->price + $this->additional_price;
     }
 
     public function getDiscountPriceAttribute()
