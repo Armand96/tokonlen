@@ -48,19 +48,19 @@ class Variant extends Model
     {
         if ($this->discount) {
             if($this->discount->discount_percentage > 0) {
-                return (float) $this->price - ((float) $this->price * ((float)$this->discount->discount_percentage / 100));
+                return (float) ($this->product->price + $this->additional_price) - ((float) ($this->price+$this->additional_price) * ((float)$this->discount->discount_percentage / 100));
             } else {
-                return (float) $this->price - (float) $this->discount->discount_amount;
+                return (float) ($this->product->price + $this->additional_price) - (float) $this->discount->discount_amount;
             }
         }
-        return $this->price;
+        return $this->product->price;
     }
 
     public function getDiscountPriceAttribute()
     {
         if($this->discount) {
             if($this->discount->discount_percentage > 0) {
-                return (float) $this->price * ((float) $this->discount->discount_percentage / 100);
+                return (float) ($this->product->price+$this->additional_price) * ((float) $this->discount->discount_percentage / 100);
             } else {
                 return (float) $this->discount->discount_amount;
             }

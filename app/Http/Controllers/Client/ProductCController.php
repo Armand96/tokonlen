@@ -89,7 +89,9 @@ class ProductCController extends Controller
                             'stock' => $size->stock,
                             'discount' => $size->discount,
                             'image' =>$size->image,
-                            'is_active' => $size->is_active
+                            'is_active' => $size->is_active,
+                            'final_price'=>$size->final_price,
+                            'discount_price'=>$size->discount_price
                         ];
                     })->values()
                 ];
@@ -122,7 +124,9 @@ class ProductCController extends Controller
                             'stock' => $size->stock,
                             'discount' => $size->discount,
                             'images' =>$size->images,
-                            'is_active' => $size->is_active
+                            'is_active' => $size->is_active,
+                            'final_price'=>$size->final_price,
+                            'discount_price'=>$size->discount_price
                         ];
                     })->values()
                 ];
