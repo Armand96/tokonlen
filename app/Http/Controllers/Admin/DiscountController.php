@@ -131,9 +131,6 @@ class DiscountController extends Controller
             } else {
                 $product = Product::find( $validated['variant_id']);
                 $existingDiscount = Discount::where('variant', $product->variant->id)->first();
-                if($existingDiscount) {
-                    $existingDiscount->delete();
-                }
                 $canProcess = $this->canProcessDiscount($validated['discount_amount'], $validated['discount_percentage'], $product->price);
             }
 
