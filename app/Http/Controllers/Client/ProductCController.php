@@ -106,14 +106,38 @@ class ProductCController extends Controller
 
     public function getOneActiveProductWithProducts(Product $product)
     {
-        if ($product) return response()->json(
-            new ResponseSuccess(
-                $product->with(['images', 'variant.images', 'links.linkType', 'discount', 'category'])
-                    ->where('is_active', true)->where('id', $product->id)->first(),
-                "Success",
-                "Success Get Product"
-            )
-        );
+        if ($product) {
+            $product->with(['images', 'variant.images', 'links.linkType', 'discount', 'category', 'variant' => function($q) {
+                $q->where('is_active', true);
+            }])->where('is_active', true)->where('id', $product->id)->first();
+
+            $groupedVariants = $product->variant->groupBy('variant')->map(function ($sizes, $variantName) {
+                return [
+                    'name' => $variantName,
+                    'sizes' => $sizes->map(function ($size) {
+                        return [
+                            'size' => $size->size,
+                            'additional_price' => $size->additional_price,
+                            'stock' => $size->stock,
+                            'discount' => $size->discount,
+                            'image' =>$size->image,
+                            'is_active' => $size->is_active
+                        ];
+                    })->values()
+                ];
+            })->values();
+
+            $product->variants = $groupedVariants;
+            unset($product->variant);
+
+            return response()->json(
+                new ResponseSuccess(
+                    $product,
+                    "Success",
+                    "Success Get Product"
+                )
+            );
+        }
         else return response()->json(new ResponseFail((object) null, "Error", "Not Found"), 404);
     }
 
