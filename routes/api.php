@@ -20,6 +20,7 @@ use App\Http\Controllers\Client\SearchController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Client\SizeCController;
+use App\Http\Controllers\Client\WebSettingCController;
 use App\Http\Requests\ResponseFail;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -86,6 +87,10 @@ Route::prefix('admin')
     Route::get('size', [SizeCController::class, 'getListActiveSize']);
     Route::get('size/{size}', [SizeCController::class, 'getOneActiveSize']);
     Route::get('size_distinct/{product}', [ProductCController::class, 'getDistinctSize']);
+
+    //WEB SETTING
+    Route::get('web_setting', [WebSettingCController::class, 'index']);
+    Route::get('web_setting/{web_setting}', [WebSettingCController::class, 'show']);
 
     Route::get('search', [SearchController::class, 'search']);
 // });
