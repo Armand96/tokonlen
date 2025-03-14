@@ -38,6 +38,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const [relatedProduk, setRelatedProduk] = useState<any>([])
     const router = useRouter()
     const [phoneNumber, setPhoneNumber] = useState<any>([])
+    const [discount,setDiscount] = useState<any>(null)
 
     let productMain = data.find(product => product.id === productId) as ProductType
 
@@ -58,7 +59,6 @@ const Default: React.FC<Props> = ({ data, productId }) => {
         FetchData.GetProduk(`/${productId}`).then((resp) => {
             // resp.data.variants = resp.data.variants.flatMap((variant: any) => variant.sizes.map((size: any) => ({ ...size, name: variant.name})))
             setProduk(resp?.data)
-            setActiveVariant(resp?.data?.variants[0])
             document.title = `${resp?.data?.name} - Zhindaya `;
             FetchData.GetProduk(`?category_id=${resp?.data?.category_id}`).then((res) => {
                 setRelatedProduk(res?.data)
@@ -116,7 +116,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             modules={[Thumbs]}
                                             className="mySwiper2 rounded-2xl "
                                         >
-                                            {(activeVariant ? activeVariant?.images : produk?.images)?.map((item: any, index: number) => (
+                                            {(activeVariant ? activeVariant?.sizes[0]?.images : produk?.images)?.map((item: any, index: number) => (
                                                 <SwiperSlide
                                                     key={index}
                                                     onClick={() => {
@@ -145,7 +145,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             modules={[Navigation, Thumbs]}
                                             className="mySwiper swiper-float"
                                         >
-                                            {(activeVariant ? activeVariant?.images : produk?.images)?.map((item: any, index: number) => (<SwiperSlide
+                                            {(activeVariant ? activeVariant?.sizes[0]?.images  : produk?.images)?.map((item: any, index: number) => (<SwiperSlide
                                                 key={index}
                                             >
                                                 <Image
@@ -180,7 +180,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                     swiperRef.current = swiper
                                                 }}
                                             >
-                                                {produk?.images?.map((item: any, index: number) => (
+                                                {(activeVariant ? activeVariant?.sizes[0]?.images  : produk?.images)?.map((item: any, index: number) => (
                                                     <SwiperSlide
                                                         key={index}
                                                     >
@@ -211,13 +211,13 @@ const Default: React.FC<Props> = ({ data, productId }) => {
 
                             </div>
                             <div className="flex items-center gap-3  flex-wrap mt-5 ">
-                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant.discount ? activeVariant?.discount_price ? produk?.price - activeVariant?.discount_price : produk?.price - (produk?.price * activeVariant.discount?.discount_percentage / 100) : produk?.final_price)}</div>
-                                <div className={`w-px h-4 bg-line ${produk?.final_price !== produk?.price || activeVariant.discount ? "" : "hidden"}`}></div>
-                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || activeVariant.discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(produk?.price)}</del></div>
+                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(discount ? discount?.discount_amount ? produk?.price - discount?.discount_amount : produk?.price - (produk?.price * discount?.discount_percentage / 100) : produk?.final_price)}</div>
+                                <div className={`w-px h-4 bg-line ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}></div>
+                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(produk?.price)}</del></div>
 
-                                {(produk?.discount_price > 0 || activeVariant.discount) && (
+                                {(produk?.discount_price > 0 || discount) && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
-                                        -{(parseInt(activeVariant?.discount_price) / parseInt(produk?.price)) * 100 || (produk?.discount_price / produk?.price) * 100 || activeVariant?.discount?.discount_percentage}%
+                                        -{(parseInt(discount?.discount_amount) / parseInt(produk?.price)) * 100 || (produk?.discount_amount / produk?.price) * 100 || discount?.discount_percentage}%
                                     </div>
                                 )}
 
@@ -236,9 +236,9 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                         handleActiveColor(item)
                                                     }}
                                                 >
-                                                    {item?.discount ? <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div> : <div className={` py-2 text-xs rounded-t-xl inset-0 text-center`}></div>}
+                                                    { item?.sizes?.filter((x: any) => x.discount !== null).length > 0 ? <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div> : <div className={` py-2 text-xs rounded-t-xl inset-0 text-center`}></div>}
                                                     <Image
-                                                        src={Helpers.GetImage(item?.sizes[0]?.image?.image)}
+                                                        src={Helpers.GetImage(item?.sizes[0]?.images[0]?.image)}
                                                         width={100}
                                                         height={100}
                                                         alt='color'
@@ -252,7 +252,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         </div>
                                     </div>
                                     <div className="choose-size mt-5">
-                                        <div className="heading flex items-center justify-between">
+                                        <div className={`heading  items-center justify-between ${activeVariant.sizes ? "flex" :  "hidden" }`}>
                                             <div className="text-title">Ukuran: <span className='text-title size'>{activeSize}</span></div>
                                             {/* <div
                                             className="caption1 size-guide text-red  flex gap-x-2 items-center cursor-pointer"
@@ -265,10 +265,11 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         <div className="list-size flex items-center gap-2 flex-wrap mt-3">
                                             {activeVariant?.sizes?.map((item: any, index: number) => (
                                                 <div
-                                                    className={`size-item w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
+                                                    className={`size-item relative w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
                                                     key={index}
-                                                    onClick={() => handleActiveSize(item?.size)}
+                                                    onClick={() => {handleActiveSize(item?.size);setDiscount(item?.discount)}}
                                                 >
+                                                    <span className={`${item.discount !== null ? "flex" : "hidden"} absolute bg-red text-white rounded-t-full -top-3 left-8 rotate-45`}>%</span>
                                                     {item?.size}
                                                 </div>
                                             ))}
@@ -345,7 +346,6 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         <div className="text-secondary">{produk?.category?.name}</div>
                                     </div>
                                 </div>
-
                             </div>
                             <div className='desc text-secondary mt-3 pt-6 border-t  border-line' dangerouslySetInnerHTML={{ __html: produk?.description }} />
                         </div>
