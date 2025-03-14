@@ -71,14 +71,14 @@ class DiscountController extends Controller
 
             if($validated['variant_id']){
                 $variant = Variant::where('id', $validated['variant_id'])->first();
-                $canProcess = $this->canProcessDiscount($request->discount_amount, $request->discount_percentage, $variant->product->price+$variant->additional_price);
+                $canProcess = $this->canProcessDiscount($validated['discount_amount'], $validated['discount_percentage'], $variant->product->price+$variant->additional_price);
                 $existingDiscount = Discount::where('product_id', $variant->product_id)->first();
                 if($existingDiscount) {
                     $existingDiscount->delete();
                 }
             } else {
                 $product = Product::find( $validated['variant_id']);
-                $canProcess = $this->canProcessDiscount($request->discount_amount, $request->discount_percentage, $product->price);
+                $canProcess = $this->canProcessDiscount($validated['discount_amount'], $validated['discount_percentage'], $product->price);
             }
 
             if(!$canProcess) return response()->json(new ResponseFail($validated,"Bad Request", "Discount melebihi harga produk"));
@@ -123,7 +123,7 @@ class DiscountController extends Controller
 
             if($validated['variant_id']){
                 $variant = Variant::where('id', $validated['variant_id'])->first();
-                $canProcess = $this->canProcessDiscount($request->discount_amount, $request->discount_percentage, $variant->product->price+$variant->additional_price);
+                $canProcess = $this->canProcessDiscount($validated['discount_amount'], $validated['discount_percentage'], $variant->product->price+$variant->additional_price);
                 $existingDiscount = Discount::where('product_id', $variant->product_id)->first();
                 if($existingDiscount) {
                     $existingDiscount->delete();
@@ -134,7 +134,7 @@ class DiscountController extends Controller
                 if($existingDiscount) {
                     $existingDiscount->delete();
                 }
-                $canProcess = $this->canProcessDiscount($request->discount_amount, $request->discount_percentage, $product->price);
+                $canProcess = $this->canProcessDiscount($validated['discount_amount'], $validated['discount_percentage'], $product->price);
             }
 
             if(!$canProcess) return response()->json(new ResponseFail($validated,"Bad Request", "Discount melebihi harga produk"));
