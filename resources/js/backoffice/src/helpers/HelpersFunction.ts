@@ -28,10 +28,21 @@ export const HelperFunction = {
         return parse
 
     },
-    FormatOptions: (data: any[], label: string, value: string ) => {
+    FormatOptions: (data: any[], label: string, value: string,  label2?: string  ) => {
         const options = data?.map((x: { [key: string]: unknown }) => {
             return {
-                label: x?.[label as keyof typeof x] as string,
+                label: label2 ?`${ x?.[label as keyof typeof x] as string } - ${x?.[label2 as keyof typeof x] as string }` :  x?.[label as keyof typeof x] as string ,
+                value: x?.[value as keyof typeof x]as string,
+                detail: x
+            };
+        });
+
+        return options
+    },
+    FormatOptionsVariants: (data: any[], label: string, value: string,    ) => {
+        const options = data?.map((x: { [key: string]: unknown }) => {
+            return {
+                label: `${ x?.[label as keyof typeof x] as string } - ${ x?.product?.["name"] as string } - ${ x?.["size"] as string }`,
                 value: x?.[value as keyof typeof x]as string,
                 detail: x
             };

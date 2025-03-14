@@ -34,7 +34,7 @@ const FileUploader = ({
     showPreview = true,
     onFileUpload,
     onFileDelete,
-    maxSizeParms = 2,
+    maxSizeParms = import.meta.env.VITE_REACT_APP_MAX_UPLOAD_SIZE,
     icon,
     text,
     singleFile = false,
