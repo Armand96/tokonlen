@@ -58,7 +58,7 @@ class ProductCController extends Controller
         }
 
 
-        $query->where('is_active', true)->with(['image', 'discount', 'variant.image', 'variant.discount', 'category.parentCat', 'links.linkType']);
+        $query->where('is_active', true)->with(['image', 'discount', 'variant.images', 'variant.discount', 'category.parentCat', 'links.linkType']);
         $query->with('variant', function ($query) {
             $query->where('is_active', true);
         });
@@ -106,8 +106,9 @@ class ProductCController extends Controller
 
     public function getOneActiveProductWithProducts(Product $product)
     {
+        DB::enableQueryLog();
         if ($product) {
-            $product->with(['images', 'variant.images', 'links.linkType', 'discount', 'category', 'variant' => function($q) {
+            $product = Product::with(['images', 'variant.images', 'links.linkType', 'discount', 'category.parentCat', 'variant' => function($q) {
                 $q->where('is_active', true);
             }])->where('is_active', true)->where('id', $product->id)->first();
 
@@ -120,7 +121,7 @@ class ProductCController extends Controller
                             'additional_price' => $size->additional_price,
                             'stock' => $size->stock,
                             'discount' => $size->discount,
-                            'image' =>$size->image,
+                            'images' =>$size->images,
                             'is_active' => $size->is_active
                         ];
                     })->values()
@@ -130,6 +131,7 @@ class ProductCController extends Controller
             $product->variants = $groupedVariants;
             unset($product->variant);
 
+            // dd(DB::getQueryLog());
             return response()->json(
                 new ResponseSuccess(
                     $product,

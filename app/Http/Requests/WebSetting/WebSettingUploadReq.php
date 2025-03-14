@@ -8,6 +8,7 @@ class WebSettingUploadReq extends ApiRequest
 {
     public string $name;
     public mixed $image_file;
+    public string $type;
     public string $value;
 
     public function rules(): array
@@ -16,6 +17,7 @@ class WebSettingUploadReq extends ApiRequest
             'name' => 'required|string',
             'image_file' => 'required|file',
             'value' => 'string',
+            'type' => 'string'
         ];
     }
 }
