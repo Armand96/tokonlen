@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\WebSetting;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -27,7 +28,8 @@ class DatabaseSeeder extends Seeder
             ProductImageSeeder::class,
             VariantImageSeeder::class,
             Userseeder::class,
-            BannerSeeder::class
+            BannerSeeder::class,
+            WebSetting::class
         ]);
     }
 }

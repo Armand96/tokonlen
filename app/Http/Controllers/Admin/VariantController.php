@@ -35,6 +35,12 @@ class VariantController extends Controller
         if ($req->has('product_id')) {
             $query->where('product_id', '=', $req->product_id);
         }
+        // filter by product_id
+        if ($req->has('product_name')) {
+            $query->whereHas('product', function ($qry) use ($req) {
+                $qry->where('name', 'like', '%'.$req->product_name.'%');
+            });
+        }
         // filter by is_active
         if ($req->has('is_active')) {
             $query->where('is_active', '=', $req->is_active);
