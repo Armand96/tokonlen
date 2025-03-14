@@ -42,9 +42,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                                     <div className="product-tag text-button-uppercase bg-black text-white px-3 py-0.5 inline-block rounded-full absolute bottom-4 md:bottom-auto md:top-3 md:right-3 z-[1]">
                                         Stock Habis
                                     </div>
-                                )}{
-                                    console.log("test", data.variants?.flatMap((x: any) => x.sizes?.map((size: any) =>( { ...size, name: x?.name})) ))
-                                }
+                                )}
                                 {(data?.final_price !== data?.price || data.variants?.flatMap((x: any) => x.sizes?.map((size: any) =>( { ...size, name: x?.name})))?.filter((variant: any) => variant.discount !== null)[0] ) && (
                                     <div className="product-tag text-button-uppercase text-white bg-red px-3 py-0.5 inline-block rounded-full absolute top-3 left-3 z-[1]">
                                         Promo

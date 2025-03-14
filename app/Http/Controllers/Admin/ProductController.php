@@ -62,7 +62,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()->json(new ResponseSuccess($product->with(['variant.discount', 'links.linkType', 'images', 'discount', 'category.subCat', 'category.parentCat'])->where('id', $product->id)->first(), "Success", "Success Get Product"));
+        return response()->json(new ResponseSuccess($product->with(['variant.images', 'links.linkType', 'images', 'discount', 'category.subCat', 'category.parentCat'])->where('id', $product->id)->first(), "Success", "Success Get Product"));
     }
 
     /**

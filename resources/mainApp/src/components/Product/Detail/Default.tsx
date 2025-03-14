@@ -51,46 +51,16 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     };
 
 
-    const groupVariants = (data: any) => {
-        return data?.reduce((acc: any, item: any) => {
-          const existingVariant = acc.find((v: any) => v.variant === item.variant);
-      
-          if (existingVariant) {
-            // Tambahkan ukuran ke varian yang sudah ada
-            existingVariant.sizes.push({
-              size: item.size,
-              stock: item.stock,
-              is_active: item.is_active,
-            });
-      
-            // Gabungkan gambar (hindari duplikasi)
-            item.images.forEach((img: any) => {
-              if (!existingVariant.images.some((i: any) => i.image === img.image)) {
-                existingVariant.images.push(img);
-              }
-            });
-          } else {
-            // Jika varian belum ada, buat entri baru
-            acc.push({
-              variant: item.variant,
-              sizes: [{ size: item.size, stock: item.stock, is_active: item.is_active }],
-              images: [...item.images],
-            });
-          }
-      
-          return acc;
-        }, []);
-      };
 
 
     useEffect(() => {
         setLoading(true)
         FetchData.GetProduk(`/${productId}`).then((resp) => {
-            console.log(groupVariants(resp?.data?.variant))
-            // resp.data.variant = groupVariants(resp?.data?.variant)
+            // resp.data.variants = resp.data.variants.flatMap((variant: any) => variant.sizes.map((size: any) => ({ ...size, name: variant.name})))
             setProduk(resp?.data)
+            setActiveVariant(resp?.data?.variants[0])
             document.title = `${resp?.data?.name} - Zhindaya `;
-            FetchData.GetProduk(`?category_id=${resp?.data?.category?.parent_id}`).then((res) => {
+            FetchData.GetProduk(`?category_id=${resp?.data?.category_id}`).then((res) => {
                 setRelatedProduk(res?.data)
             })
 
@@ -253,29 +223,29 @@ const Default: React.FC<Props> = ({ data, productId }) => {
 
                             </div>
                             <div className={`list-action mt-6`}>
-                                <div className={produk?.variant.length > 0 ? "" : "hidden"}>
+                                <div className={produk?.variants?.length > 0 ? "" : "hidden"}>
                                     <div className={`choose-color`}>
-                                        <div className="text-title">Warna: <span className='text-title color'>{activeVariant?.variant}</span></div>
+                                        <div className="text-title">Warna: <span className='text-title color'>{activeVariant?.name}</span></div>
                                         <div className="list-color flex items-center gap-2 flex-wrap mt-3">
-                                            {produk?.variant.map((item: any, index: number) => (
+                                            {produk?.variants?.map((item: any, index: number) => (
                                                 <div
-                                                    className={`color-item w-12 relative  rounded-xl duration-300  object-cover  ${activeVariant?.variant === item.variant ? 'active' : ''}`}
+                                                    className={`color-item w-12 relative  rounded-xl duration-300  object-cover  ${activeVariant?.name === item?.name ? 'active' : ''}`}
                                                     key={index}
                                                     datatype={item.image}
                                                     onClick={() => {
                                                         handleActiveColor(item)
                                                     }}
                                                 >
-                                                    {item.discount ? <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div> : <div className={` py-2 text-xs rounded-t-xl inset-0 text-center`}></div>}
+                                                    {item?.discount ? <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div> : <div className={` py-2 text-xs rounded-t-xl inset-0 text-center`}></div>}
                                                     <Image
-                                                        src={Helpers.GetImage(item?.images[0]?.image)}
+                                                        src={Helpers.GetImage(item?.sizes[0]?.image?.image)}
                                                         width={100}
                                                         height={100}
                                                         alt='color'
                                                         className='rounded-xl'
                                                     />
                                                     <div className="tag-action bg-black text-white caption2 capitalize px-1.5 py-0.5 rounded-sm ">
-                                                        {item.variant}
+                                                        {item.name}
                                                     </div>
                                                 </div>
                                             ))}
@@ -293,7 +263,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             <ModalSizeguide data={productMain} isOpen={openSizeGuide} onClose={handleCloseSizeGuide} />
                                         </div>
                                         <div className="list-size flex items-center gap-2 flex-wrap mt-3">
-                                            {produk?.variant.map((item: any, index: number) => (
+                                            {activeVariant?.sizes?.map((item: any, index: number) => (
                                                 <div
                                                     className={`size-item w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
                                                     key={index}
