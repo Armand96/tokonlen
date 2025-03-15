@@ -213,7 +213,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                
                             </div>
                             <div className="flex items-center gap-3  flex-wrap mt-5 ">
-                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant ? discount ?  discount?.final_price : discount?.final_price + activeVariant?.size?.filter((x: any) => x.size === activeSize)[0]?.final_price || produk?.final_price : produk?.final_price)}</div>
+                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant ? discount ?  discount?.final_price : produk?.final_price + activeVariant?.size?.filter((x: any) => x.size === activeSize)[0]?.final_price || produk?.final_price : produk?.final_price)}</div>
                                 <div className={`w-px h-4 bg-line ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}></div>
                                 <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(produk?.price +  parseInt(activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.additional_price || 0))}</del></div>
 
