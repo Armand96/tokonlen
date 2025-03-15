@@ -219,7 +219,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
 
                                 {(produk?.discount_price > 0 || discount) && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
-                                        -{(parseInt(discount?.discount_amount) / parseInt(produk?.price)) * 100 || (produk?.discount_amount / produk?.price) * 100 || discount?.discount_percentage}%
+                                        -{(parseInt(discount?.discount_amount) / parseInt(produk?.price)) * 100 || produk?.discount?.discount_percentage || discount?.discount_percentage}%
                                     </div>
                                 )}
 
@@ -283,7 +283,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                 <div className="button-block mt-5" >
                                     <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${produk?.stock < 0 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 0} > <WhatsappLogo className={produk?.stock < 0 ? 'hidden' : 'block'} weight='fill' size={27} />  {produk?.stock < 0 ? "Stok Habis" : "Beli sekarang"}</button>
                                 </div>
-                                <div className="list-payment mt-7">
+                                <div className={`list-payment mt-7 ${produk?.links.length > 0 ? "block" : "hidden"}`}>
                                     <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative max-md:w-2/3 max-sm:w-full">
                                         <div className="heading6 px-5 bg-white absolute -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">Atau lanjutkan via</div>
                                         <div className="list grid grid-cols-6">
