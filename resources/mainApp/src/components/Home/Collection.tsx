@@ -57,17 +57,17 @@ const Collection = () => {
                      {
                         listCategories.map((item: any, index: number) => (
                             <SwiperSlide key={index}>
-                            <div className="collection-item block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick(item?.slug)}>
+                            <div className="collection-item w-[300px] h-[250px] block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick(item?.slug)}>
                                 <div className="bg-img">
                                     <Image
                                         src={Helpers.GetImage(item?.image)}
                                         width={300}
                                         height={300}
                                         alt={item?.name}
-                                        className='w-[346px] h-[154px] object-cover'
+                                        className=' object-cover'
                                     />
                                 </div>
-                                <div className="collection-name heading5 text-center sm:bottom-8 bottom-4 lg:w-[200px] md:w-[160px] w-[100px] md:py-3 py-1.5 bg-white rounded-xl duration-500">{item?.name}</div>
+                                <div className="collection-name heading5 text-center sm:bottom-8 bottom-1 lg:w-[200px] md:w-[160px] w-[100px] md:py-3  py-1.5 bg-white rounded-xl text-xl duration-500">{item?.name}</div>
                             </div>
                         </SwiperSlide>
                         ))
