@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('image_thumb')->nullable();
             $table->boolean('is_active')->default(false);
+            $table->boolean('is_show_header')->default(false);
             $table->timestamps();
         });
     }
