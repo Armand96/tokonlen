@@ -213,11 +213,11 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                
                             </div>
                             <div className="flex items-center gap-3  flex-wrap mt-5 ">
-                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant ? discount ?  discount?.final_price : produk?.final_price + activeVariant?.size?.filter((x: any) => x.size === activeSize)[0]?.final_price || produk?.final_price : produk?.final_price)}</div>
+                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant ? discount ?  discount?.final_price  : activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.final_price || produk?.final_price : produk?.final_price)}</div>
                                 <div className={`w-px h-4 bg-line ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}></div>
-                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(produk?.price +  parseInt(activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.additional_price || 0))}</del></div>
+                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(activeVariant ?  parseInt(activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.additional_price || 0) + parseInt( produk?.price ): produk?.price)}</del></div>
 
-                                {(produk?.discount?.discount_percentage || discount?.discount_percentage) && (
+                                {((produk?.discount?.discount_percentage && produk?.discount?.discount_amount == 0)  || (discount && discount?.discount_percentage && discount?.discount_amount == 0) ) && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
                                         -{ produk?.discount?.discount_percentage || discount?.discount_percentage}%
                                     </div>
@@ -227,7 +227,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                             <div className={`list-action mt-6`}>
                                 <div className={produk?.variants?.length > 0 ? "" : "hidden"}>
                                     <div className={`choose-color`}>
-                                        <div className="text-title">Warna: <span className='text-title color'>{activeVariant?.name}</span></div>
+                                        <div className="text-title">Variant: <span className='text-title color'>{activeVariant?.name}</span></div>
                                         <div className="list-color flex items-center gap-2 flex-wrap mt-3">
                                             {produk?.variants?.map((item: any, index: number) => (
                                                 <div

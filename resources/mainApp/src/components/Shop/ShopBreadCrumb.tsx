@@ -54,7 +54,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
 
             if (dataType) {
                 FetchData.GetProduk(
-                    `?category_id=${categories?.id}${selectedSize ? `&size=${selectedSize}${brandsSelect}${available}${sortBy && `&${sortBy}`}` : ""}`
+                    `?category_id=${categories?.id}${ `&size=${selectedSize}${brandsSelect}${available}${sortBy && `&${sortBy}`}`}`
                 ).then((produkRes) => {
                     setProduk(produkRes);
                     setLoading(false);
@@ -66,7 +66,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
             setListCategories(categories);
     
             const filterFromSlug = categories?.find((x: any) => x.slug === category);
-            const categoryIdParam = filterFromSlug ? `?category_id=${filterFromSlug.id}` : "?";
+            const categoryIdParam = filterFromSlug ? `?parent_category_id=${filterFromSlug.id}&` : "?";
             const sizeParam = selectedSize ? `&size=${selectedSize}` : "";
 
     
