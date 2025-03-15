@@ -2,7 +2,7 @@
 list command:
 - composer install
 - npm i
-- php artisan migrate
+- php artisan migrate --seed
 
 buka 2 terminal untuk jalanin tanpa server apache/nginx
 - php artisan serve (untuk menjalankan php server)
