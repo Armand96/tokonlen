@@ -26,6 +26,14 @@ class Product extends Model
         'updated_at'
     ];
 
+    protected $casts = [
+        'price' => 'float',
+        'final_price' => 'float',
+        'discount_amount' => 'float',
+        'discount_percentage' => 'float',
+        'discount_price' => 'float',
+    ];
+
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;

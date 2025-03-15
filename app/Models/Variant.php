@@ -21,6 +21,14 @@ class Variant extends Model
         'updated_at'
     ];
 
+    protected $casts = [
+        'additional_price' => 'float',
+        'final_price' => 'float',
+        'discount_amount' => 'float',
+        'discount_percentage' => 'float',
+        'discount_price' => 'float',
+    ];
+
     protected $appends = ['final_price', 'discount_price'];
 
     public function product()
