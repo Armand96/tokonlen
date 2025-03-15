@@ -29,7 +29,10 @@ class ProductCController extends Controller
         }
         // filter by category_id
         if ($req->has('category_id')) {
-            $query->where('category_id', '=', $req->category_id);
+            $query->where('category_id', '=', $req->category_id)
+            ->orWhereHas('category', function($q) use($req) {
+                $q->where('parent_id', $req->category_id);
+            });
         }
         // filter by category_parent_id
         if ($req->has('category_parent_id')) {
