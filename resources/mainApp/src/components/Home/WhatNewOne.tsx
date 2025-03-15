@@ -36,7 +36,7 @@ const WhatNewOne: React.FC<Props> = ({ start, limit }) => {
 
     const changeList = (categories: any,index: string) => {
         setLoading(true)
-        FetchData.GetProduk(`${categories?.id ?  `?category_id=${categories?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc" } `).then((res) => {
+        FetchData.GetProduk(`${categories?.id ?  `?category_parent_id=${categories?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc" } `).then((res) => {
             handleTabClick(index)
             setProduk(res.data);
             setLoading(false)

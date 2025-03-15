@@ -13,8 +13,8 @@ const ModalNewsletter = () => {
 
 
     useEffect(() => {
-        FetchData.GetWebSettings(`?name=popup`).then((res) => {
-            setWebSettings(res?.data[0])
+        FetchData.GetWebSettings(``).then((res) => {
+            setWebSettings(res?.data)
             if(!sessionStorage.getItem("modal")){
                 setTimeout(() => {
                     setOpen(true)
@@ -32,9 +32,9 @@ const ModalNewsletter = () => {
                     className={`modal-newsletter-main ${open ? 'open' : ''}`}
                     onClick={(e) => { e.stopPropagation() }}
                 >
-                    <div className="main-content flex rounded-[20px] overflow-hidden w-full">
+                    <div className="main-content flex rounded-[20px] overflow-hidden w-full" onClick={() => router.push(webSettings?.filter((x: any) => x.name === "link-popup")[0]?.value)}>
                        <div className="w-full bg-white h-[40vh] flex items-center justify-center">
-                           <Image width="300" height="300" src={Helpers.GetImage(webSettings?.value)}  className='w-full h-full object-cover' alt={'popup'}  />
+                           <Image width="300" height="300" src={Helpers.GetImage(webSettings?.filter((x: any) => x.name === "popup")[0]?.value)}  className='w-full h-full object-cover' alt={'popup'}  />
                        </div>
 
                     </div>
