@@ -217,9 +217,9 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                 <div className={`w-px h-4 bg-line ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}></div>
                                 <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(produk?.price +  parseInt(activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.additional_price || 0))}</del></div>
 
-                                {(produk?.discount_price > 0 || discount) && (
+                                {(produk.discount?.discount_percentage || discount?.discount_percentage) && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
-                                        -{(parseInt(discount?.discount_amount) / parseInt(produk?.price)) * 100 || produk?.discount?.discount_percentage || discount?.discount_percentage}%
+                                        -{ produk?.discount?.discount_percentage || discount?.discount_percentage}%
                                     </div>
                                 )}
 
@@ -269,7 +269,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                 <div
                                                     className={`size-item relative w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
                                                     key={index}
-                                                    onClick={() => {handleActiveSize(item?.size);setDiscount({...item?.discount, final_price: item?.discount_price})}}
+                                                    onClick={() => {handleActiveSize(item?.size);setDiscount({...item?.discount, final_price: item?.final_price})}}
                                                 >
                                                     <span className={`${item.discount !== null ? "flex" : "hidden"} absolute bg-red text-white rounded-t-full -top-3 left-8 rotate-45`}>%</span>
                                                     {item?.size}
