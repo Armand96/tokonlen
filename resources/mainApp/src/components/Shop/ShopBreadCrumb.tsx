@@ -66,7 +66,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
             setListCategories(categories);
     
             const filterFromSlug = categories?.find((x: any) => x.slug === category);
-            const categoryIdParam = filterFromSlug ? `?category_id=${filterFromSlug.id}&` : "?";
+            const categoryIdParam = filterFromSlug ? `?parent_category_id=${filterFromSlug.id}&` : "?";
             const sizeParam = selectedSize ? `&size=${selectedSize}` : "";
 
     
