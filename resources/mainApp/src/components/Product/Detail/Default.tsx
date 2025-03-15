@@ -99,6 +99,8 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     }
 
 
+
+
     return (
         <>
             {loading && <Loading />}
@@ -208,12 +210,12 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                     <div className="heading4 mt-1 ">{produk?.name}</div>
                                 </div>
                                 <div className="border-b pb-6 border-line "></div>
-
+                               
                             </div>
                             <div className="flex items-center gap-3  flex-wrap mt-5 ">
-                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(discount ? discount?.discount_amount ? produk?.price - discount?.discount_amount : produk?.price - (produk?.price * discount?.discount_percentage / 100) : produk?.final_price)}</div>
+                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant ? discount ?  discount?.final_price : activeVariant?.size?.filter((x: any) => x.size === activeSize)[0]?.final_price || produk?.final_price : produk?.final_price)}</div>
                                 <div className={`w-px h-4 bg-line ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}></div>
-                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(produk?.price)}</del></div>
+                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(produk?.price +  parseInt(activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.additional_price || 0))}</del></div>
 
                                 {(produk?.discount_price > 0 || discount) && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
@@ -267,7 +269,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                 <div
                                                     className={`size-item relative w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
                                                     key={index}
-                                                    onClick={() => {handleActiveSize(item?.size);setDiscount(item?.discount)}}
+                                                    onClick={() => {handleActiveSize(item?.size);setDiscount({...item?.discount, final_price: item?.discount_price})}}
                                                 >
                                                     <span className={`${item.discount !== null ? "flex" : "hidden"} absolute bg-red text-white rounded-t-full -top-3 left-8 rotate-45`}>%</span>
                                                     {item?.size}

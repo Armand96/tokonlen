@@ -41,7 +41,7 @@ const Index = () => {
 
 	const columns = [
 		{ name: 'Produk', row: (cell: Discount) => <div>{cell.product?.name || cell?.variant?.product?.name }</div> },
-		{ name: 'Variant', row: (cell: Discount) => <div>{cell?.variant?.variant}</div> },
+		{ name: 'Variant', row: (cell: Discount) => <div>{cell?.variant?.variant} - {cell?.variant?.size}</div> },
 		{ name: 'Persen', row: (cell: Discount) => <div>{cell.discount_percentage}</div> },
 		{ name: 'Harga', row: (cell: Discount) => <div>{HelperFunction.FormatToRupiah(cell.discount_amount)}</div> },
 		{ name: 'Tanggal Awal', row: (cell: Discount) => <div>{dayjs(cell.start_date).format("DD MMM YYYY")}</div> },

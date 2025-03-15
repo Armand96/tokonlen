@@ -22,7 +22,7 @@ const FetchData = {
         return res.data;
     },
     GetWebSettings: async (params: string = '' ) => {
-        const res = await apiService.getData(`api/admin/web_setting${params}`);
+        const res = await apiService.getData(`api/web_setting${params}`);
         return res.data;
     },
     SearchAll: async (params: string = '' ) => {

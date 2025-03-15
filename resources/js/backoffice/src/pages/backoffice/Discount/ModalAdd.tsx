@@ -44,7 +44,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
         if(res?.data?.product){
           setSelectedProduk({ value: res?.data?.product?.id, label: res?.data?.product?.name })
         }else{
-          setSelectedProduk({ value: res?.data?.variant?.id, label: `${res?.data?.variant?.variant} - ${res?.data?.product?.name} `})
+          setSelectedProduk({ value: res?.data?.variant?.id, label: `${res?.data?.variant?.variant} - ${res?.data?.variant?.product?.name} -  ${res?.data?.variant?.size} `})
         }
       })
     }
