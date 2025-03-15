@@ -269,7 +269,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                 <div
                                                     className={`size-item relative w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
                                                     key={index}
-                                                    onClick={() => {handleActiveSize(item?.size);setDiscount({...item?.discount, final_price: item?.final_price})}}
+                                                    onClick={() => {handleActiveSize(item?.size);setDiscount(item?.discount ? {...item?.discount, final_price: item?.final_price} : null)}}
                                                 >
                                                     <span className={`${item.discount !== null ? "flex" : "hidden"} absolute bg-red text-white rounded-t-full -top-3 left-8 rotate-45`}>%</span>
                                                     {item?.size}
