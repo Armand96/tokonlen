@@ -10,6 +10,7 @@ import HandlePagination from '../Other/HandlePagination';
 import FetchData from '@/services/FetchData';
 import Loading from '../Other/Loading';
 import { useRouter } from 'next/navigation';
+import qs from 'qs'
 
 interface Props {
     data: Array<ProductType>
@@ -19,9 +20,9 @@ interface Props {
     category: string | null
 }
 
-const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) => {
+const Shopbreadcrumb: React.FC<Props> = ({ data, dataType, gender, category }) => {
     const [showOnlySale, setShowOnlySale] = useState(false)
-    const [selectedSort, setSelectedSort] = useState({ order_by: 'release_date', order_method: 'desc'  });
+    const [selectedSort, setSelectedSort] = useState({ order_by: 'release_date', order_method: 'desc' });
     const [isAvailable, setIsAvailable] = useState<boolean>(false)
     const [size, setSize] = useState<any[]>()
     const [brand, setBrand] = useState<any[]>()
@@ -32,51 +33,68 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
     const [produk, setProduk] = useState<any>([])
     const router = useRouter()
 
-    
 
 
-    useEffect(() => {
+
+    const generateParams = ({
+        dataType,
+        selectedBrand,
+        isAvailable,
+        selectedSort,
+        selectedSize,
+        category,
+        categories
+      }: any) => {
+        const queryObject = {
+          category_id: dataType ? categories?.id : undefined,
+          brand: selectedBrand || undefined,
+          has_stock: isAvailable || undefined,
+          order_by: selectedSort?.order_by || undefined,
+          order_method: selectedSort?.order_method || undefined,
+          size: selectedSize || undefined,
+          parent_category_id: !dataType ? categories?.find((x: any) => x.slug === category)?.id : undefined
+        };
+      
+        return `?${qs.stringify(queryObject, { skipNulls: true, encode: false })}`;
+      };
+      
+      useEffect(() => {
         setLoading(true);
-    
+      
         Promise.all([
-            FetchData.GetCategories(dataType ? `/${dataType}` : ''),
-            FetchData.GetSize(),
-            FetchData.GetBrand()
+          FetchData.GetCategories(dataType ? `/${dataType}` : ''),
+          FetchData.GetSize(),
+          FetchData.GetBrand()
         ]).then(([categoriesRes, sizeRes, brandRes]) => {
-            const categories = categoriesRes?.data;
-            const size = sizeRes?.data;
-            const brand = brandRes?.data;
-            const brandsSelect = selectedBrand ? `&brand=${selectedBrand}` : "";
-            const available = isAvailable ? `&has_stock=${isAvailable}` : "";
-            const sortBy = selectedSort.order_by && selectedSort.order_method ? `order_by=${selectedSort.order_by}&order_method=${selectedSort.order_method}` : ""
-
-            setSize(size);
-
-            if (dataType) {
-                FetchData.GetProduk(
-                    `?category_id=${categories?.id}${ `&size=${selectedSize}${brandsSelect}${available}${sortBy && `&${sortBy}`}`}`
-                ).then((produkRes) => {
-                    setProduk(produkRes);
-                    setLoading(false);
-                });
-                return;
-            }
-            
+          const categories = categoriesRes?.data;
+          const size = sizeRes?.data;
+          const brand = brandRes?.data;
+      
+          setSize(size);
+      
+          const queryParams = generateParams({
+            dataType,
+            selectedBrand,
+            isAvailable,
+            selectedSort,
+            selectedSize,
+            category,
+            categories
+          });
+      
+          FetchData.GetProduk(queryParams)
+            .then((produkRes) => {
+              setProduk(produkRes);
+              setLoading(false);
+            });
+      
+          if (!dataType) {
             setBrand(brand);
             setListCategories(categories);
-    
-            const filterFromSlug = categories?.find((x: any) => x.slug === category);
-            const categoryIdParam = filterFromSlug ? `?parent_category_id=${filterFromSlug.id}&` : "?";
-            const sizeParam = selectedSize ? `&size=${selectedSize}` : "";
-
-    
-            FetchData.GetProduk(`${categoryIdParam}${sizeParam}${brandsSelect}${available}${sortBy && `${sortBy}`}`)
-                .then((produkRes) => {
-                    setProduk(produkRes);
-                    setLoading(false);
-                });
+          }
         });
-    }, [category, dataType, selectedSize, selectedBrand, isAvailable, selectedSort]);
+      }, [category, dataType, selectedSize, selectedBrand, isAvailable, selectedSort]);
+
 
     const handleShowOnlySale = () => {
         setShowOnlySale(toggleSelect => !toggleSelect)
@@ -84,11 +102,11 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
 
     const handleSortChange = (option: string) => {
         let listSort = [
-            { order_by: 'discount', order_method: 'desc'  },
-            { order_by: 'release_date', order_method: 'desc'  },
-            { order_by: 'release_date', order_method: 'asc'  },
-            { order_by: 'price', order_method: 'desc'  },
-            { order_by: 'price', order_method: 'asc'  },
+            { order_by: 'discount', order_method: 'desc' },
+            { order_by: 'release_date', order_method: 'desc' },
+            { order_by: 'release_date', order_method: 'asc' },
+            { order_by: 'price', order_method: 'desc' },
+            { order_by: 'price', order_method: 'asc' },
         ]
         setSelectedSort(listSort[parseInt(option)]);
     };
@@ -124,7 +142,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
 
     return (
         <>
-            { loading && <Loading />}
+            {loading && <Loading />}
             <div className="breadcrumb-block style-img">
                 <div className="breadcrumb-main bg-linear overflow-hidden">
                     <div className="container lg:pt-[134px] pt-24 pb-10 relative">
@@ -138,7 +156,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                                 </div>
                             </div>
                             <div className="list-tab flex flex-wrap items-center justify-center gap-y-5 gap-8 lg:mt-[70px] mt-12 overflow-hidden">
-                            {listCategories.map((item: any, index: string) => (
+                                {listCategories.map((item: any, index: string) => (
                                     <div
                                         key={index}
                                         className={`tab-item text-button-uppercase cursor-pointer has-line-before line-2px ${category === item?.slug ? 'active' : ''}`}
@@ -161,17 +179,17 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                                 <div className="heading6">Sub Kategori</div>
                                 <div className="list-type mt-4">
                                     {listCategories.filter((y: any) => y.slug == category).map((item: any, index: string) => {
-                                       return item?.sub_cat?.map((x: any) => (
+                                        return item?.sub_cat?.map((x: any) => (
                                             <div
-                                            key={index}
-                                            className={`item flex items-center justify-between cursor-pointer ${x === item ? 'active' : ''}`}
-                                            onClick={() => handleType(category!, x?.slug)}
-                                        >
-                                            <div className='text-secondary has-line-before hover:text-black capitalize'>{item?.name}</div>
-                                            <div className='text-secondary2'>
-                                            {x?.name}
+                                                key={index}
+                                                className={`item flex items-center justify-between cursor-pointer ${x === item ? 'active' : ''}`}
+                                                onClick={() => handleType(category!, x?.slug)}
+                                            >
+                                                <div className='text-secondary has-line-before hover:text-black capitalize'>{item?.name}</div>
+                                                <div className='text-secondary2'>
+                                                    {x?.name}
+                                                </div>
                                             </div>
-                                        </div>
                                         ))
                                     })}
                                 </div>
@@ -198,8 +216,8 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                                     </div>
                                 </div>
                             </div>
-                          
-                           
+
+
                             <div className="filter-brand mt-8">
                                 <div className="heading6">Brands</div>
                                 <div className="list-brand mt-4">
@@ -281,11 +299,11 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
                                     <span className='text-secondary pl-1'>Total produk</span>
                                 </div>
                                 {
-                                    ( selectedSize ||  selectedBrand) && (
+                                    (selectedSize || selectedBrand) && (
                                         <>
                                             <div className="list flex items-center gap-3">
                                                 <div className='w-px h-4 bg-line'></div>
-                                               
+
                                                 {selectedSize && (
                                                     <div className="item flex items-center px-2 py-1 gap-1 bg-linear rounded-full capitalize" onClick={() => { setSelectedSize(null) }}>
                                                         <Icon.X className='cursor-pointer' />
@@ -306,9 +324,9 @@ const Shopbreadcrumb: React.FC<Props> = ({ data,  dataType, gender, category }) 
 
                             <div className="list-product hide-product-sold grid lg:grid-cols-3 grid-cols-2 sm:gap-[30px] gap-[20px] mt-7">
                                 {produk ? produk?.data?.map((item: any, index: string) => (
-                                        <Product key={index} data={item} type='grid' style={''} />
-                                )) :  <div  className="no-data-product">Produk tidak ditemukan</div>}
-                                                                       
+                                    <Product key={index} data={item} type='grid' style={''} />
+                                )) : <div className="no-data-product">Produk tidak ditemukan</div>}
+
                             </div>
 
                             {produk?.last_page > 1 && (
