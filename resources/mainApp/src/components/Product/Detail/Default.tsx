@@ -217,7 +217,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                 <div className={`w-px h-4 bg-line ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}></div>
                                 <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(produk?.price +  parseInt(activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.additional_price || 0))}</del></div>
 
-                                {(produk.discount?.discount_percentage || discount?.discount_percentage) && (
+                                {(produk?.discount?.discount_percentage || discount?.discount_percentage) && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
                                         -{ produk?.discount?.discount_percentage || discount?.discount_percentage}%
                                     </div>
