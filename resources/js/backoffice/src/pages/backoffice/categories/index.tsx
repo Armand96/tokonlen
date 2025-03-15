@@ -130,7 +130,11 @@ const Index = () => {
                 <div className="flex justify-between items-center">
                   <h4 className="card-title mb-1">Image</h4>
                 </div>
-                <FileUploader  singleFile multipleUploads={false} onFileUpload={onFileUpload} icon="ri-upload-cloud-line text-4xl text-gray-300 dark:text-gray-200" text=" klik untuk upload." />
+                <FileUploader  singleFile multipleUploads={false} onFileUpload={onFileUpload} icon="ri-upload-cloud-line text-4xl text-gray-300 dark:text-gray-200" text=" klik untuk upload." onFileDelete={function (index: any): void {
+                throw new Error('Function not implemented.');
+              } } handleDeletePrevImage={function (parms: any, idx: any): void {
+                throw new Error('Function not implemented.');
+              } } detailData={undefined} />
 
               {!isCreate && (
                 <div className='mt-5'>
