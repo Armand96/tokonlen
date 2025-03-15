@@ -19,14 +19,22 @@ const Index = () => {
   const [dataPaginate, setDataPaginate] = useState<any>(null);
   const [categoriesOptions, setCategoriesOptions] = useState<any[]>()
   const [selectedCategories, setSelectedCategories] = useState<any>()
-    const [previewImage, setPreviewImage] = useState(false)
+  const [previewImage, setPreviewImage] = useState(false)
+  const [selectedOrderMenu, setSelectedOrderMenu] = useState<any>(null)
+  const [orderMenuOptions, setOrderMenuOptions] = useState<any>([
+    { value: 1, label: 1 },
+    { value: 2, label: 2 },
+    { value: 3, label: 3 },
+    { value: 4, label: 4 },
+    { value: 5, label: 5 },
+  ])
 
   const fetchData = async (page = 1) => {
     setLoading(true);
     const res: Categories[] = await GetCategories(`?data_per_page=100000`).then((res: any) => {
       const categories: Categories[] = [];
-     res.data.forEach((parent) => {
-      categories.push(parent);
+      res.data.forEach((parent) => {
+        categories.push(parent);
 
         if (parent.sub_cat) {
           parent.sub_cat.forEach((child) => {
@@ -34,7 +42,7 @@ const Index = () => {
           })
         }
 
-      
+
       });
 
       res.data = categories
@@ -54,7 +62,7 @@ const Index = () => {
 
   const postData = async () => {
     setLoading(true);
-    if(!isCreate){
+    if (!isCreate) {
       delete formData.parent_id
       delete formData.image_thumb
       delete formData.image
@@ -68,27 +76,27 @@ const Index = () => {
     }).catch((err) => {
       setModal(false);
       console.log(err)
-      Swal.fire('Error', err.name[0],  'error');
+      Swal.fire('Error', err.name[0], 'error');
     })
     await fetchData();
-   
+
   };
 
   const clickDetail = (detail: Categories) => {
-    setModal(true); 
-    setFormData(detail); 
-    setIsCreate(false); 
+    setModal(true);
+    setFormData(detail);
+    setIsCreate(false);
     setSelectedCategories(categoriesOptions?.filter((item) => item.value == detail.parent_id)[0])
   }
 
   const columns = [
-    { name: 'Nama', row: (cell: Categories) => <div className={`${cell.parent_id && "pl-4 border-l"} ${cell.parent_id == null && 'font-bold' }`}>{cell.name}</div> },
+    { name: 'Nama', row: (cell: Categories) => <div className={`${cell.parent_id && "pl-4 border-l"} ${cell.parent_id == null && 'font-bold'}`}>{cell.name}</div> },
     { name: 'Status', row: (cell: Categories) => <div>{cell.is_active ? 'Active' : 'Non Active'}</div> },
     {
       name: 'Image', row: (cell: Categories) => <button className='btn bg-success text-white' onClick={() => { setPreviewImage(true); setFormData(cell) }}>
-          Preview image
+        Preview image
       </button>
-  },    
+    },
     {
       name: 'Action', row: (cell: Categories) => (
         <button className='btn bg-primary text-white' onClick={() => clickDetail(cell)}>
@@ -106,7 +114,7 @@ const Index = () => {
 
   return (
     <>
-          <ModalPreview toggleModal={() => setPreviewImage(false)} isOpen={previewImage} img={formData?.image} />
+      <ModalPreview toggleModal={() => setPreviewImage(false)} isOpen={previewImage} img={formData?.image} />
       {loading && <LoadingScreen />}
       {modal && (
         <ModalLayout showModal={modal} toggleModal={() => setModal(false)} placement='justify-center items-start'>
@@ -124,17 +132,38 @@ const Index = () => {
                 <label className="mb-2" htmlFor="choices-text-remove-button">
                   Product
                 </label>
-                <Select isDisabled={isCreate ? false : true} className="select2 z-5" value={selectedCategories} options={categoriesOptions} onChange={(v) => {setSelectedCategories(v);setFormData({...formData, parent_id: v.value})}} />
+                <Select isDisabled={isCreate ? false : true} className="select2 z-5" value={selectedCategories} options={categoriesOptions} onChange={(v) => { setSelectedCategories(v); setFormData({ ...formData, parent_id: v.value }) }} />
               </div>
 
-                <div className="flex justify-between items-center">
-                  <h4 className="card-title mb-1">Image</h4>
-                </div>
-                <FileUploader  singleFile multipleUploads={false} onFileUpload={onFileUpload} icon="ri-upload-cloud-line text-4xl text-gray-300 dark:text-gray-200" text=" klik untuk upload." onFileDelete={function (index: any): void {
+              <div className='mb-2'>
+                <h6 className='text-sm mb-2'>Tampilkan di header</h6>
+                <input type='checkbox' checked={formData.is_show_menu === 1 ? true : false} onChange={(e) => setFormData({ ...formData, is_show_menu: e.target.checked ? 1 : 0 })} />
+                <label className='ml-2'>Ya</label>
+              </div>
+
+              {
+                formData?.is_show_menu === 1 && (
+
+                  <div className='mb-2'>
+                    <label className="mb-2" htmlFor="choices-text-remove-button">
+                      Urut Ke
+                    </label>
+                    <Select className="select2 z-5" options={orderMenuOptions} value={selectedOrderMenu} onChange={(e) => setSelectedOrderMenu(e)} />
+                  </div>
+                )
+              }
+
+              <div className="flex justify-between items-center">
+                <h4 className="card-title mb-1">Image</h4>
+              </div>
+
+              <FileUploader singleFile multipleUploads={false} onFileUpload={onFileUpload} icon="ri-upload-cloud-line text-4xl text-gray-300 dark:text-gray-200" text=" klik untuk upload." onFileDelete={function (index: any): void {
                 throw new Error('Function not implemented.');
-              } } handleDeletePrevImage={function (parms: any, idx: any): void {
+              }} handleDeletePrevImage={function (parms: any, idx: any): void {
                 throw new Error('Function not implemented.');
-              } } detailData={undefined} />
+              }} detailData={undefined} />
+
+
 
               {!isCreate && (
                 <div className='mt-5'>
@@ -143,6 +172,9 @@ const Index = () => {
                   <label className='ml-2'>Aktif</label>
                 </div>
               )}
+
+
+
             </div>
             <div className='flex justify-end p-4 border-t gap-x-4'>
               <button className='btn bg-light text-gray-800' onClick={() => setModal(false)}>Close</button>
@@ -158,7 +190,7 @@ const Index = () => {
           <button className='btn bg-primary mb-4 text-white' onClick={() => { setModal(true); setIsCreate(true); setFormData({ name: '', is_active: 1 }); }}>Tambah Data</button>
         </div>
         <p className='mb-2'>Total Data : {dataPaginate?.total}</p>
-				<TablePaginate totalPage={dataPaginate?.last_page || 0} data={dataPaginate?.data} columns={columns} onPageChange={(val) => fetchData(val.selected)} />
+        <TablePaginate totalPage={dataPaginate?.last_page || 0} data={dataPaginate?.data} columns={columns} onPageChange={(val) => fetchData(val.selected)} />
       </div>
     </>
   );

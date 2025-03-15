@@ -74,7 +74,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                             <div className="menu-main h-full max-lg:hidden">
                                 <ul className='flex items-center gap-8 h-full'>
                                     {
-                                        categories?.slice(0, 5).map((category, index) => (
+                                        categories?.slice(0, 4).map((category, index) => (
                                             <li className='h-full' key={index}>
                                                 <Link
                                                     href={`/shop/breadcrumb?category=${category?.slug}`}
