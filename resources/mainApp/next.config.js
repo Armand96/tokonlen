@@ -3,7 +3,7 @@
 const nextConfig = {
   output: 'export',
   distDir: 'dist',
-  // assetPrefix: '/mainApp',
+  assetPrefix: '/mainApp',
   eslint: {
     ignoreDuringBuilds: true,
   },
