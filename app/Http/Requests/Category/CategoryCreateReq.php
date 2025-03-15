@@ -11,6 +11,7 @@ class CategoryCreateReq extends ApiRequest
     public string $image;
     public int $parent_id;
     public bool $is_active;
+    public bool $is_show_header;
 
     public function rules(): array
     {
@@ -19,7 +20,8 @@ class CategoryCreateReq extends ApiRequest
             'image_file' => 'required|image',
             'image' => 'string',
             'parent_id' => 'numeric',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
+            'is_show_header' => 'boolean'
         ];
     }
 }

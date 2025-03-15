@@ -30,6 +30,10 @@ class CategoryController extends Controller
         if ($req->has('is_active')) {
             $query->where('is_active', '=', $req->is_active);
         }
+        // filter by is_show_header
+        if ($req->has('is_show_header')) {
+            $query->where('is_show_header', '=', $req->is_show_header);
+        }
 
         $query->where('parent_id', null)->with('subCat');
 

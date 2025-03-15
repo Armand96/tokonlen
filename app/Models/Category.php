@@ -13,6 +13,7 @@ class Category extends Model
         'slug',
         'image',
         'image_thumb',
+        'is_show_header',
         'is_active'
     ];
 
