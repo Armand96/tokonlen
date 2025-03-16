@@ -316,7 +316,6 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                     <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative max-md:w-2/3 max-sm:w-full">
                                         <div className="heading6 px-5 bg-white absolute -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">Atau lanjutkan via</div>
                                         <div className="list grid grid-cols-6">
-                                            <div className="item flex items-center justify-center lg:px-5 px-1">
                                                 {
                                                     produk?.links?.map((link: any, key: any) => (
                                                         <Image
@@ -330,7 +329,6 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                         />
                                                     ))
                                                 }
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
