@@ -135,7 +135,7 @@ const Index = () => {
                 <Select isDisabled={isCreate ? false : true} className="select2 z-5" value={selectedCategories} options={categoriesOptions} onChange={(v) => { setSelectedCategories(v); setFormData({ ...formData, parent_id: v.value }) }} />
               </div>
 
-              <div className='mb-2'>
+              {/* <div className='mb-2'>
                 <h6 className='text-sm mb-2'>Tampilkan di header</h6>
                 <input type='checkbox' checked={formData.is_show_menu === 1 ? true : false} onChange={(e) => setFormData({ ...formData, is_show_menu: e.target.checked ? 1 : 0 })} />
                 <label className='ml-2'>Ya</label>
@@ -151,7 +151,7 @@ const Index = () => {
                     <Select className="select2 z-5" options={orderMenuOptions} value={selectedOrderMenu} onChange={(e) => setSelectedOrderMenu(e)} />
                   </div>
                 )
-              }
+              } */}
 
               <div className="flex justify-between items-center">
                 <h4 className="card-title mb-1">Image</h4>

@@ -16,7 +16,7 @@ const Collection = () => {
     
 
     const handleTypeClick = (type: string) => {
-        router.push(`/shop/breadcrumb?category=${type}`);
+        router.push(`/shop/?category=${type}`);
     };
 
     useEffect(() => {

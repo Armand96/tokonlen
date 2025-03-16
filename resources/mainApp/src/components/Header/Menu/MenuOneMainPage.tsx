@@ -57,7 +57,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
 
     const handleTypeClick = (type: string, category: string) => {
         setSelectedType(type)
-        router.push(`/shop/breadcrumb?type=${type}&category=${category}`);
+        router.push(`/shop/?type=${type}&category=${category}`);
     };
 
     return (
@@ -79,7 +79,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                         categories?.slice(0, 4).map((category, index) => (
                                             <li className='h-full' key={index}>
                                                 <Link
-                                                    href={`/shop/breadcrumb?category=${category?.slug}`}
+                                                    href={`/shop/?category=${category?.slug}`}
                                                     className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === category?.name ? 'active' : ''}`}
                                                 >
                                                     {category?.name}
@@ -110,7 +110,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
 
                                     <li className='h-full relative '>
                                         <Link
-                                            href={`/shop/breadcrumb`}
+                                            href={`/shop/`}
                                             className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === '/prempuan' ? 'active' : ''}`}
                                         >
                                             Kategori
@@ -120,7 +120,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                                 {
                                                     categories?.map((category, index) => (
                                                         <li key={index}>
-                                                            <Link href={`/shop/breadcrumb?type=&category=${category?.slug}`} className={`link text-secondary duration-300`}>
+                                                            <Link href={`/shop/?type=&category=${category?.slug}`} className={`link text-secondary duration-300`}>
                                                                 {category?.name}
                                                             </Link>
                                                         </li>
@@ -130,7 +130,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                         </div>
                                     </li>
                                     <li className='h-full'>
-                                        <Link href="/shop/breadcrumb" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
+                                        <Link href="/shop/" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
                                             all
                                         </Link>
                                     </li>
@@ -183,7 +183,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                                     key={index}
                                                     onClick={() => handleOpenSubNavMobile(index)}
                                                 >
-                                                    <a href={`/shop/breadcrumb`} className={`text-xl font-semibold flex items-center justify-between`}> {category?.name}
+                                                    <a href={`/shop/`} className={`text-xl font-semibold flex items-center justify-between`}> {category?.name}
                                                         <span className='text-right'>
                                                             <Icon.CaretRight size={20} />
                                                         </span>
@@ -201,7 +201,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                                                 {
                                                                     category?.sub_cat?.map((item: any, index: string) => (
                                                                         <li key={index}>
-                                                                            <Link href={`/shop/breadcrumb?type=${item?.slug}&category=${category?.slug}`} className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
+                                                                            <Link href={`/shop/?type=${item?.slug}&category=${category?.slug}`} className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
                                                                                 {item?.name}
                                                                             </Link>
                                                                         </li>
@@ -220,7 +220,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                             className={`${openSubNavMobile === categories?.length + 1 ? 'open' : ''}`}
                                             onClick={() => handleOpenSubNavMobile(categories?.length + 1)}
                                         >
-                                            <a href={'/shop/breadcrumb'} className={`text-xl font-semibold flex items-center justify-between`}>
+                                            <a href={'/shop/'} className={`text-xl font-semibold flex items-center justify-between`}>
                                                 Kategori
                                                 <span className='text-right'>
                                                     <Icon.CaretRight size={20} />
@@ -232,7 +232,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                             className={`${openSubNavMobile === categories?.length + 2 ? 'open' : ''}`}
                                             onClick={() => handleOpenSubNavMobile(categories?.length + 2)}
                                         >
-                                            <a href={'/shop/breadcrumb'} className={`text-xl font-semibold flex items-center justify-between`}>
+                                            <a href={'/shop/'} className={`text-xl font-semibold flex items-center justify-between`}>
                                                 all
                                                 <span className='text-right'>
                                                     <Icon.CaretRight size={20} />

@@ -22,11 +22,10 @@ import {useCookies} from 'react-cookie'
 SwiperCore.use([Navigation, Thumbs]);
 
 interface Props {
-    data: Array<ProductType>
     productId: string | number | null
 }
 
-const Default: React.FC<Props> = ({ data, productId }) => {
+const Default: React.FC<Props> = ({  productId }) => {
     const swiperRef: any = useRef();
     const [openPopupImg, setOpenPopupImg] = useState(false)
     const [openSizeGuide, setOpenSizeGuide] = useState<boolean>(false)
@@ -42,19 +41,10 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const [discount,setDiscount] = useState<any>(null)
     const [cookies, setCookie, removeCookie] = useCookies(['qwe3dsf4wrsd']);
 
-    
-    let productMain = data.find(product => product.id === productId) as ProductType
-
-
-    const handleCloseSizeGuide = () => {
-        setOpenSizeGuide(false);
-    };
 
     const handleSwiper = (swiper: SwiperCore) => {
         setThumbsSwiper(swiper);
     };
-
-
 
 
     useEffect(() => {
@@ -291,7 +281,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         >
                                            Bingung ? <div className='underline caption1 font-bold'>Saran Ukuran</div>
                                         </div> */}
-                                            <ModalSizeguide data={productMain} isOpen={openSizeGuide} onClose={handleCloseSizeGuide} />
+                                            {/* <ModalSizeguide data={productMain} isOpen={openSizeGuide} onClose={handleCloseSizeGuide} /> */}
                                         </div>
                                         <div className="list-size flex items-center gap-2 flex-wrap mt-3">
                                             {activeVariant?.sizes?.map((item: any, index: number) => (
@@ -313,8 +303,8 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                     <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${produk?.stock < 0 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 0} > <WhatsappLogo className={produk?.stock < 0 ? 'hidden' : 'block'} weight='fill' size={27} />  {produk?.stock < 0 ? "Stok Habis" : "Beli sekarang"}</button>
                                 </div>
                                 <div className={`list-payment mt-7 ${produk?.links.length > 0 ? "block" : "hidden"}`}>
-                                    <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative max-md:w-2/3 max-sm:w-full">
-                                        <div className="heading6 px-5 bg-white absolute -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">Atau lanjutkan via</div>
+                                    <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative  w-full">
+                                        <div className="heading6 px-5 bg-white absolute  -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">Atau lanjutkan via</div>
                                         <div className="list grid grid-cols-6">
                                                 {
                                                     produk?.links?.map((link: any, key: any) => (

@@ -1,12 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import Image from 'next/image'
-import * as Icon from "@phosphor-icons/react/dist/ssr";
-import productData from '@/data/Product.json'
-import Product from '../Product/Product';
+import * as Icon from "@phosphor-icons/react/dist/ssr"
 import { useModalSearchContext } from '@/context/ModalSearchContext'
 
 const ModalSearch = () => {

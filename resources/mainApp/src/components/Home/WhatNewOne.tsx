@@ -2,9 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Product from '../Product/Product'
-import { ProductType } from '@/type/ProductType'
 import { motion } from 'framer-motion'
-import productData from '@/data/Product.json'
 import FetchData from '@/services/FetchData'
 import Loading from '../Other/Loading';
 import { useRouter } from 'next/navigation'
@@ -75,7 +73,7 @@ const WhatNewOne: React.FC<Props> = ({ start, limit }) => {
                     </div>
                 </div>
             </div>
-            <button onClick={() => router.push('/shop/breadcrumb')} className={`button-main block mt-[20px] md:mt-[100px] mb-[50px] mx-auto text-center`} >Lihat Semua Produk</button>
+            <button onClick={() => router.push('/shop/')} className={`button-main block mt-[20px] md:mt-[100px] mb-[50px] mx-auto text-center`} >Lihat Semua Produk</button>
         </>
     )
 }

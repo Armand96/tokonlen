@@ -43,8 +43,7 @@ const Footer = () => {
                                 <div className="list-nav flex justify-between basis-2/3 max-md:basis-full grid-cols-2">
                                     <div className="item flex flex-col  ">
                                         <div className="text-button-uppercase pb-3">Informasi</div>
-                                        {/* <Link className='caption1 has-line-before duration-300 w-fit' href={'#'}>Store</Link> */}
-                                        <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/contact-us'}>Kontak kami</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/contact'}>Kontak kami</Link>
                                         <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/about-us'}>Tentang Kami</Link>
                                     </div>
                     

@@ -5,7 +5,6 @@ import MenuOne from '@/components/Header/Menu/MenuOne'
 import BreadcrumbProduct from '@/components/Breadcrumb/BreadcrumbProduct'
 import Default from '@/components/Product/Detail/Default';
 import Footer from '@/components/Footer/Footer'
-import productData from '@/data/Product.json'
 import { CookiesProvider } from 'react-cookie';
 
 
@@ -22,13 +21,15 @@ const ProductDefault = () => {
             <CookiesProvider>
                 <div id="header" className='relative w-full'>
                     <MenuOne props="bg-white" />
-                    <BreadcrumbProduct data={productData} productPage='detail' productId={null} />
+                    <BreadcrumbProduct  productPage='detail'  />
                 </div>
-                <Default data={productData} productId={productId} />
+                <Default productId={productId} />
                 <Footer />
             </CookiesProvider>
         </>
     )
 }
+
+
 
 export default ProductDefault

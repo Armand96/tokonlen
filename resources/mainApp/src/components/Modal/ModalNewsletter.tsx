@@ -33,7 +33,7 @@ const ModalNewsletter = () => {
                     onClick={(e) => { e.stopPropagation() }}
                 >
                     <div className="main-content flex rounded-[20px] overflow-hidden w-full" onClick={() => router.push(webSettings?.filter((x: any) => x.name === "link-popup")[0]?.value)}>
-                       <div className="w-full bg-white h-[40vh] flex items-center justify-center">
+                       <div className="w-full bg-white h-[40vh] lg:h-[60vh] flex items-center justify-center">
                            <Image width="300" height="300" src={Helpers.GetImage(webSettings?.filter((x: any) => x.name === "popup")[0]?.value)}  className='w-full h-full object-cover' alt={'popup'}  />
                        </div>
 

@@ -6,7 +6,6 @@ import MenuOne from '@/components/Header/Menu/MenuOne'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import Footer from '@/components/Footer/Footer'
 import { ProductType } from '@/type/ProductType'
-import productData from '@/data/Product.json'
 import Product from '@/components/Product/Product'
 import HandlePagination from '@/components/Other/HandlePagination'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
@@ -20,7 +19,6 @@ const SearchResult = () => {
     const [loading, setLoading] = useState(false)
     const productsPerPage = 8;
     const offset = currentPage * productsPerPage;
-    let filteredData = productData
 
     const router = useRouter()
 
@@ -41,27 +39,6 @@ const SearchResult = () => {
     },[query])
 
 
-
-    // Find page number base on filteredData
-    const pageCount = Math.ceil(filteredData.length / productsPerPage);
-
-    // If page number 0, set current page = 0
-    if (pageCount === 0) {
-        setCurrentPage(0);
-    }
-
-    // Get product data for current page
-    let currentProducts: ProductType[];
-
-    if (filteredData.length > 0) {
-        currentProducts = filteredData.slice(offset, offset + productsPerPage);
-    } else {
-        currentProducts = []
-    }
-
-    const handlePageChange = (selected: number) => {
-        setCurrentPage(selected);
-    };
 
 
     return (

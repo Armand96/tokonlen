@@ -3,16 +3,13 @@
 import React from 'react'
 import Link from 'next/link'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import { ProductType } from '@/type/ProductType'
 import { useRouter } from 'next/navigation'
 
 interface Props {
-    data: Array<ProductType>
     productPage: string | null
-    productId: string | number | null
 }
 
-const BreadcrumbProduct: React.FC<Props> = ({ data, productPage, productId }) => {
+const BreadcrumbProduct: React.FC<Props> = ({ productPage }) => {
     const router = useRouter()
     
     return (

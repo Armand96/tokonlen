@@ -1,12 +1,4 @@
 const groupByFields = (array: Array<any>, f: any): Array<any> => {
-	/*
-    params description :
-        f : function which returnf the array of fields 
-        e.g. :  (item) => {
-            return [itemField1, itemField2];
-        }
-        array : array of data to group e.g. : [{...}, {...}]       
-    */
 	const groups: { [key: string]: any[] } = {}
 	array.forEach((o) => {
 		const group = JSON.stringify(f(o))
@@ -18,13 +10,6 @@ const groupByFields = (array: Array<any>, f: any): Array<any> => {
 		return groups[group]
 	})
 }
-
-/**
- * split array into chunks
- * @param array - array to split
- * @param chunkSize - chunk size
- * @returns
- */
 const splitArray = (array: Array<any>, chunkSize: number) => {
 	const chunks = Array(Math.ceil(array.length / chunkSize))
 		.fill(1)

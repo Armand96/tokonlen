@@ -1,10 +1,7 @@
 import type { Metadata } from 'next'
 import '@/styles/styles.scss'
 import GlobalProvider from './GlobalProvider'
-import ModalWishlist from '@/components/Modal/ModalWishlist'
 import ModalSearch from '@/components/Modal/ModalSearch'
-import ModalQuickview from '@/components/Modal/ModalQuickview'
-import ModalCompare from '@/components/Modal/ModalCompare'
 import { Suspense } from 'react'
 import Loading from '@/components/Other/Loading'
 import { WhatsApp } from '@/components/Other/WhatsApp'
@@ -27,10 +24,7 @@ export default function RootLayout({
           <Suspense fallback={<Loading />} >
             {children}
             </Suspense>
-            <ModalWishlist />
             <ModalSearch />
-            <ModalQuickview />
-            <ModalCompare />
             <WhatsApp />
           </body>
         </html>
