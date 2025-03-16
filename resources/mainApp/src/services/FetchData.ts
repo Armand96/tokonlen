@@ -29,6 +29,10 @@ const FetchData = {
         const res = await apiService.getData(`api/search?words=${params}`);
         return res.data;
     },
+    PostClickToOtherShop: async (body: any ) => {
+        const res = await apiService.postDataWithFormData(`api/link_visit/`, body);
+        return res.data;
+    },
 };
 
 export default FetchData

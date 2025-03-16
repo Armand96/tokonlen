@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { PageBreadcrumb } from '../../../components';
+import { FormInput, PageBreadcrumb } from '../../../components';
 import TablePaginate from '../../../components/Table/tablePaginate';
 import LoadingScreen from '../../../components/Loading/loading';
-import Swal from 'sweetalert2';
 import { Size } from '../../../dto/size';
 import { ModalAdd } from './ModalAdd';
 import { Products } from '../../../dto/products';
-import { GetProducts, PostProductImages, PostProductLink, PostProducts } from '../../../helpers/api/Products';
+import { GetProducts } from '../../../helpers/api/Products';
 import { HelperFunction } from '../../../helpers/HelpersFunction';
-import ModalPreview from '../../../components/ModalPreviewImage/ModalPreview';
 import { useNavigate } from 'react-router-dom';
 import ModalPreviewMulti from '../../../components/ModalPreviewImage/ModalPreviewMulti';
+import { useDebounce } from 'use-debounce';
+
 
 const Index = () => {
   const [modal, setModal] = useState(false);
@@ -19,11 +19,23 @@ const Index = () => {
   const [isCreate, setIsCreate] = useState<boolean>(false);
   const [dataPaginate, setDataPaginate] = useState<any>(null);
     const [previewImage, setPreviewImage] = useState(false)
+    const [search, setSearch] = useState<any>('')
     const navigate = useNavigate()
+    const [ProductName] = useDebounce(search, 1000);
 
-  const fetchData = async (page = 1) => {
+
+  const fetchData = async (page = 1, product_name = undefined) => {
     setLoading(true);
-    const res:Size[] = await GetProducts(`?page=${page}`)
+    const params = {
+			page,
+			product_name
+		}
+
+    const queryString = new URLSearchParams(
+			JSON.parse(JSON.stringify(params))
+		).toString();
+
+    const res:Size[] = await GetProducts(`?${queryString}`)
     setDataPaginate(res);
     setLoading(false);
   };
@@ -31,6 +43,13 @@ const Index = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+
+  useEffect(() => {
+    fetchData(0, search.length > 0 ? search : undefined)
+  },[ProductName])
+
+
 
   const columns = [
     { name: 'Nama', row: (cell:Products) => <div>{cell.name}</div> },
@@ -48,9 +67,9 @@ const Index = () => {
          <button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
           Edit
         </button>
-          <button className='btn bg-secondary text-white' onClick={() => { navigate('/backoffice/variants')}}>
+          {/* <button className='btn bg-secondary text-white' onClick={() => { navigate('/backoffice/variants')}}>
           Settings Variant
-        </button>
+        </button> */}
        </div>
       )
     }
@@ -69,6 +88,13 @@ const Index = () => {
           <h3 className='text-2xl font-bold'>Products</h3>
           <button className='btn bg-primary mb-4 text-white' onClick={() => { setModal(true); setIsCreate(true); setFormData({ name: '', format_size: '', is_active: 1 }); }}>Tambah Data</button>
         </div>
+        <h3 className='text-lg mb-2'>Search</h3>
+				<div className="mb-3 bg-gray-50 px-4 py-6 flex ">
+					<div className="flex flex-col flex-1">
+						
+            <FormInput label="Nama Product" type="input" containerClass="mb-3" labelClassName="mb-2" className="form-input" value={search} onChange={(v) => setSearch(v.target.value)} name={'search'} />
+					</div>
+				</div>
         <p className='mb-2'>Total Data : {dataPaginate?.total}</p>
         <TablePaginate totalPage={dataPaginate?.last_page || 0} data={dataPaginate?.data} columns={columns} onPageChange={(val) => fetchData(val.selected + 1)} />
       </div>
