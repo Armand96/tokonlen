@@ -15,6 +15,7 @@ const api = axios.create({
 const apiService = {
   getData: (endpoint: string, params = {}) => api.get(endpoint, { params }),
   postData: (endpoint: string, data: any) => api.post(endpoint, data),
+  postDataWithFormData: (endpoint: string, data: any) => api.postForm(endpoint, data),
 };
 
 export default apiService;

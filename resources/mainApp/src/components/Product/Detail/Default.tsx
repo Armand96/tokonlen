@@ -16,7 +16,8 @@ import Loading from '@/components/Other/Loading'
 import { useRouter } from 'next/navigation'
 import { WhatsappLogo } from '@phosphor-icons/react/dist/ssr'
 import Swal from 'sweetalert2'
-
+import { v4 as uuidv4 } from 'uuid';
+import {useCookies} from 'react-cookie'
 
 SwiperCore.use([Navigation, Thumbs]);
 
@@ -39,7 +40,9 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const router = useRouter()
     const [phoneNumber, setPhoneNumber] = useState<any>([])
     const [discount,setDiscount] = useState<any>(null)
+    const [cookies, setCookie, removeCookie] = useCookies(['qwe3dsf4wrsd']);
 
+    
     let productMain = data.find(product => product.id === productId) as ProductType
 
 
@@ -80,6 +83,32 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const handleActiveColor = (item: any) => {
         setActiveVariant(item)
     }
+
+    const clickToOut = (item:any) => {
+        
+        let id: string = uuidv4()
+
+        if(cookies.qwe3dsf4wrsd){
+           id = cookies.qwe3dsf4wrsd
+        }else{
+            setCookie('qwe3dsf4wrsd', id)
+        }
+
+        setLoading(true)
+        FetchData.PostClickToOtherShop({
+            "product_link_id": item?.id,
+            "product_id": produk?.id,
+            "ip_address": id ,
+            "user_agent":  navigator.userAgent
+        }).then((res) => {
+            window.open(item.link, '_blank')
+            setLoading(false)
+        }).catch(() => {
+            window.open(item.link, '_blank')
+            setLoading(false)
+        })
+    }
+
 
     const handleToShop = () => {
         const message = `Halo, saya tetarik dengan produk ${produk?.name} ${activeVariant.variant ? `warna ${activeVariant?.variant}` : ""}  ${activeSize && `ukuran ${activeSize}`} `;
@@ -297,7 +326,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                             height={450}
                                                             alt='alternate'
                                                             className='w-full cursor-pointer bg-gray-200'
-                                                            onClick={() => router.push(link.link)}
+                                                            onClick={() =>  clickToOut(link)}
                                                         />
                                                     ))
                                                 }
