@@ -8,6 +8,7 @@ import { logoutUser, resetAuth } from '../../redux/actions'
 import AuthContainer from '../../components/AuthPageLayout/AuthContainer'
 import { PageBreadcrumb } from '../../components'
 import { AuthLayout } from '../../components/AuthPageLayout'
+import React from 'react'
 
 /**
  * Logout Icon
@@ -50,7 +51,7 @@ const Logout = () => {
 			<PageBreadcrumb title="Logout" />
 			<AuthContainer>
 				<div className="relative flex flex-col items-center justify-center h-screen">
-					<AuthLayout authTitle="See You Again !" helpText="You are now successfully sign out." bottomLinks={<BottomLink />}>
+					<AuthLayout authTitle="Dadah" helpText="You are now successfully sign out." bottomLinks={<BottomLink />}>
 						<div className="w-36 ml-[100px] mr-[100px]">
 							<LogoutIcon />
 						</div>

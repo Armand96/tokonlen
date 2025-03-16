@@ -40,14 +40,14 @@ axios.interceptors.response.use(
 	}
 )
 
-const AUTH_SESSION_KEY = 'attex_user'
+const AUTH_SESSION_KEY = 'resfsresrdsresr'
 
 /**
  * Sets the default authorization
  * @param {*} token
  */
 const setAuthorization = (token: string | null) => {
-	if (token) axios.defaults.headers.common['Authorization'] = 'JWT ' + token
+	if (token) axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 	else delete axios.defaults.headers.common['Authorization']
 }
 
@@ -173,17 +173,23 @@ class APICore {
 	isUserAuthenticated = () => {
 		const user = this.getLoggedInUser()
 
-		if (!user) {
-			return false
-		}
-		const decoded: any = jwtDecode(user.token)
-		const currentTime = Date.now() / 1000
-		if (decoded.exp < currentTime) {
-			console.warn('access token expired')
-			return false
-		} else {
+		if(user?.token){
 			return true
+		}else{
+			return false
 		}
+
+		// if (!user) {
+		// 	return false
+		// }
+		// const decoded: any = jwtDecode(user.token)
+		// const currentTime = Date.now() / 1000
+		// if (decoded.exp < currentTime) {
+		// 	console.warn('access token expired')
+		// 	return false
+		// } else {
+		// 	return true
+		// }
 	}
 
 	setLoggedInUser = (session: any) => {

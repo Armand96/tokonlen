@@ -5,7 +5,7 @@ import { SagaIterator } from '@redux-saga/core'
 import { APICore, setAuthorization } from '../../helpers/api/apiCore'
 
 // helpers
-import { login as loginApi, logout as logoutApi, signup as signupApi, forgotPassword as forgotPasswordApi } from '../../helpers/api/auth'
+import { login as loginApi, logout as logoutApi } from '../../helpers/api/auth'
 
 // actions
 import { authApiResponseSuccess, authApiResponseError } from './actions'
@@ -30,9 +30,9 @@ const api = new APICore()
  * @param {*} payload - username and password
  */
 
-function* login({ payload: { username, password } }: UserData): SagaIterator {
+function* login({ payload: { email, password } }: UserData): SagaIterator {
 	try {
-		const response = yield call(loginApi, { username, password })
+		const response = yield call(loginApi, { email, password })
 		const user = response.data
 		// NOTE - You can change this according to response format from your api
 		api.setLoggedInUser(user)
@@ -50,8 +50,8 @@ function* login({ payload: { username, password } }: UserData): SagaIterator {
  */
 function* logout(): SagaIterator {
 	try {
-		yield call(logoutApi)
-		api.setLoggedInUser(null)
+		// yield call(logoutApi)
+		// api.setLoggedInUser(null)
 		setAuthorization(null)
 		yield put(authApiResponseSuccess(AuthActionTypes.LOGOUT_USER, {}))
 	} catch (error: any) {
@@ -59,28 +59,7 @@ function* logout(): SagaIterator {
 	}
 }
 
-function* signup({ payload: { fullname, email, password } }: UserData): SagaIterator {
-	try {
-		const response = yield call(signupApi, { fullname, email, password })
-		const user = response.data
-		// api.setLoggedInUser(user);
-		// setAuthorization(user['token']);
-		yield put(authApiResponseSuccess(AuthActionTypes.SIGNUP_USER, user))
-	} catch (error: any) {
-		yield put(authApiResponseError(AuthActionTypes.SIGNUP_USER, error))
-		api.setLoggedInUser(null)
-		setAuthorization(null)
-	}
-}
 
-function* forgotPassword({ payload: { username } }: UserData): SagaIterator {
-	try {
-		const response = yield call(forgotPasswordApi, { username })
-		yield put(authApiResponseSuccess(AuthActionTypes.FORGOT_PASSWORD, response.data))
-	} catch (error: any) {
-		yield put(authApiResponseError(AuthActionTypes.FORGOT_PASSWORD, error))
-	}
-}
 export function* watchLoginUser() {
 	yield takeEvery(AuthActionTypes.LOGIN_USER, login)
 }
@@ -89,16 +68,9 @@ export function* watchLogout() {
 	yield takeEvery(AuthActionTypes.LOGOUT_USER, logout)
 }
 
-export function* watchSignup(): any {
-	yield takeEvery(AuthActionTypes.SIGNUP_USER, signup)
-}
-
-export function* watchForgotPassword(): any {
-	yield takeEvery(AuthActionTypes.FORGOT_PASSWORD, forgotPassword)
-}
 
 function* authSaga() {
-	yield all([fork(watchLoginUser), fork(watchLogout), fork(watchSignup), fork(watchForgotPassword)])
+	yield all([fork(watchLoginUser), fork(watchLogout)])
 }
 
 export default authSaga

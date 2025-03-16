@@ -8,17 +8,9 @@ import { RootState } from '../redux/store'
 import { changeHTMLAttribute } from '../utils'
 import React from 'react'
 
-interface DefaultLayoutProps {
-	layout: {
-		layoutType: string
-		layoutWidth: string
-		sideBarTheme: string
-		sideBarType: string
-	}
-	children?: any
-}
+const loading = () => <div />
 
-const DefaultLayout = (props: DefaultLayoutProps) => {
+const DefaultLayout = ({children}) => {
 	const { layoutTheme } = useSelector((state: RootState) => ({
 		layoutTheme: state.Layout.layoutTheme,
 	}))
@@ -27,12 +19,10 @@ const DefaultLayout = (props: DefaultLayoutProps) => {
 		changeHTMLAttribute('data-mode', layoutTheme)
 	}, [layoutTheme])
 
-	// get the child view which we would like to render
-	const children = props['children'] || null
 
 	return (
 		<>			
-			{/* <Suspense fallback={<LoadingScreen />}>{children}</Suspense> */}
+			<Suspense fallback={loading()}>{children}</Suspense>
 		</>
 	)
 }

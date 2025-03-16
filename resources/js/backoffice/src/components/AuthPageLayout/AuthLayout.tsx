@@ -23,12 +23,12 @@ const AuthLayout = ({ pageImage, authTitle, helpText, bottomLinks, children }: A
 				<div className="flex justify-center">
 					<div className="max-w-md px-4 mx-auto">
 						<div className="card overflow-hidden">
-							<div className="p-9 bg-primary">
+							{/* <div className="p-9 bg-primary">
 								<Link to="/" className="flex justify-center">
 									<img src={logo} alt="logo" className="h-6 block dark:hidden" />
 									<img src={logoDark} alt="logo" className="h-6 hidden dark:block" />
 								</Link>
-							</div>
+							</div> */}
 							<div className="p-9">
 								<div className="text-center mx-auto w-3/4">
 									{pageImage && <img src={pageImage} alt="mail sent image" className="h-16 mx-auto" />}
@@ -45,7 +45,7 @@ const AuthLayout = ({ pageImage, authTitle, helpText, bottomLinks, children }: A
 			</div>
 
 			<footer className="absolute bottom-0 inset-x-0">
-				<p className="font-medium text-center p-6">{new Date().getFullYear()} © Attex - Coderthemes.com</p>
+				<p className="font-medium text-center p-6">{new Date().getFullYear()} © Zhindaya</p>
 			</footer>
 		</>
 	)

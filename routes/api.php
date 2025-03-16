@@ -42,7 +42,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::prefix('admin')
-    // ->middleware('auth:sanctum')
+    ->middleware('auth:sanctum')
     ->group(function () {
     /* CRUD ADMIN */
     Route::resource('user', UserController::class);
