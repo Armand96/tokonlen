@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('product_link_id');
             $table->string('ip_address', 50);
-            $table->string('user_agent', 100);
+            $table->string('user_agent');
             $table->timestamps();
         });
     }
