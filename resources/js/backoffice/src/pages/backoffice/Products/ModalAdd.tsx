@@ -53,9 +53,10 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
       setCategoriesOptions(HelperFunction.FormatOptions(res[0].data, 'name', 'id'))
       setLinkOptions(HelperFunction.FormatOptions(res[1].data, 'name', 'id'))
       setSuggestBrand(res[2]?.data)
+
       if (detailData?.id) {
         GetProducts(`/${detailData?.id}`).then((resp) => {
-          if (resp.data.category.parent_id) {
+          if (resp?.data?.category?.parent_id) {
             setSelectedSubCategories({ value: resp?.data?.category?.id, label: resp?.data?.category?.name })
             setSelectedCategories({ value: resp?.data?.category?.parent_cat?.id, label: resp?.data?.category?.parent_cat?.name })
             GetCategories(`/${resp?.data?.category?.parent_id}`).then((catOptions) => {

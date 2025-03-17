@@ -6,6 +6,8 @@ import config from '../../config'
 // content type
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 axios.defaults.baseURL = config.API_URL
+const AUTH_SESSION_KEY = 'resfsresrdsresr'
+
 
 // intercepting to capture errors
 axios.interceptors.response.use(
@@ -21,12 +23,14 @@ axios.interceptors.response.use(
 		} else if (error && error.response && error.response.status === 403) {
 			window.location.href = '/access-denied'
 		} else {
+			console.log(error.response.status)
 			switch (error.response.status) {
 				case 401:
 					message = 'Invalid credentials'
+					sessionStorage.removeItem(AUTH_SESSION_KEY)
 					break
 				case 403:
-					message = 'Access Forbidden'
+					sessionStorage.removeItem(AUTH_SESSION_KEY)
 					break
 				case 404:
 					message = 'Sorry! the data you are looking for could not be found'
@@ -40,7 +44,6 @@ axios.interceptors.response.use(
 	}
 )
 
-const AUTH_SESSION_KEY = 'resfsresrdsresr'
 
 /**
  * Sets the default authorization
