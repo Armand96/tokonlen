@@ -358,13 +358,13 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
             <h6 className="text-sm mb-2">Product Tersedia ?</h6>
             <div className="flex gap-5">
               <div className="flex items-center" >
-                <input type="radio" className="form-radio text-primary" name="product-available" onChange={() => setFormData({ ...formData, stock: 1 })} checked={formData?.stock > 1} />
+                <input type="radio" className="form-radio text-primary" name="product-available" onChange={() => setFormData({ ...formData, stock: 1 })} checked={formData?.stock === 1} />
                 <label className="ms-1.5" htmlFor="InlineRadio01">
                   Ya
                 </label>
               </div>
               <div className="flex items-center">
-                <input type="radio" className="form-radio text-primary" onChange={() => setFormData({ ...formData, stock: 0 })} name="product-available" checked={formData?.stock < 0} />
+                <input type="radio" className="form-radio text-primary" onChange={() => setFormData({ ...formData, stock: 0 })} name="product-available" checked={formData?.stock === 0} />
                 <label className="ms-1.5" htmlFor="InlineRadio02">
                   tidak
                 </label>
