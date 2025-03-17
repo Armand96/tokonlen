@@ -46,6 +46,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
   const [deleteOldLink, setDeleteOldLink] = useState<any>([])
   const [imageDelete, setImageDelete] = useState<any>([])
   const [oldImages, setOldImages] = useState<any>([])
+  const [firstLoad, setFirstLoad] = useState<any>(false)
 
   useEffect(() => {
     setLoading(true)
@@ -77,6 +78,8 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
 
           setFormData({ ...formData, ...resp?.data, link: prevData, prevLinks })
 
+        }).then(() => {
+          setFirstLoad(true)
         })
       }
 
@@ -87,6 +90,8 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
       Swal.fire('Error', err.name[0], 'error');
     })
   }, [])
+
+
 
 
   const postData = async () => {
@@ -243,20 +248,16 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
   }
 
   const handleDesc = (value: string, delta: any) => {
-    if (!delta || !delta.ops) return; // Pastikan delta tidak undefined
 
-    const converter = new QuillDeltaToHtmlConverter(delta.ops, {
-      inlineStyles: true, // Pastikan hasilnya inline style
-    });
-  
-    const htmlWithInlineStyles = converter.convert();
+    if (!delta || !delta.ops || firstLoad === false ) return; 
 
-    console.log(htmlWithInlineStyles)
 
-    setFormData({ ...formData, description: value })
-
+      setFormData({ ...formData, description: value })
+    
   }
 
+
+  console.log(formData)
 
 
   return (
@@ -279,7 +280,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
             </div>
 
             <div className="pt-3">
-              <ReactQuill defaultValue={`input deskripsi disini`} theme="snow" modules={modules} style={{ height: 300 }} value={formData.description} onChange={handleDesc} />
+              <ReactQuill defaultValue={  `input deskripsi disini`} theme="snow" modules={modules} style={{ height: 300 }}    value={formData.description} onChange={handleDesc} />
             </div>
           </div>
 
@@ -357,13 +358,13 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
             <h6 className="text-sm mb-2">Product Tersedia ?</h6>
             <div className="flex gap-5">
               <div className="flex items-center" >
-                <input type="radio" className="form-radio text-primary" name="product-available" onChange={() => setFormData({ ...formData, stock: 1 })} checked={formData?.stock === 1} />
+                <input type="radio" className="form-radio text-primary" name="product-available" onChange={() => setFormData({ ...formData, stock: 1 })} checked={formData?.stock > 1} />
                 <label className="ms-1.5" htmlFor="InlineRadio01">
                   Ya
                 </label>
               </div>
               <div className="flex items-center">
-                <input type="radio" className="form-radio text-primary" onChange={() => setFormData({ ...formData, stock: 0 })} name="product-available" checked={formData?.stock === 0} />
+                <input type="radio" className="form-radio text-primary" onChange={() => setFormData({ ...formData, stock: 0 })} name="product-available" checked={formData?.stock < 0} />
                 <label className="ms-1.5" htmlFor="InlineRadio02">
                   tidak
                 </label>
