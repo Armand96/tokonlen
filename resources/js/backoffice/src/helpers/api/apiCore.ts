@@ -28,6 +28,7 @@ axios.interceptors.response.use(
 				case 401:
 					message = 'Invalid credentials'
 					sessionStorage.removeItem(AUTH_SESSION_KEY)
+					window.location.href = '/admin/login'
 					break
 				case 403:
 					sessionStorage.removeItem(AUTH_SESSION_KEY)
