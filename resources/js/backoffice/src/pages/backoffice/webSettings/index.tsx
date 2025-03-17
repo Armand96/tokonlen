@@ -29,11 +29,11 @@ const Index = () => {
 
   const postData = async () => {
     setLoading(true);
-    const data = { ...formData, type: formData.image_file ? 'file' : 'text', _method: formData.id ? 'PUT' : 'POST' };
+    const data = { ...formData, value: formData.value , type: formData.image_file ? 'file' : 'text', _method: formData.id ? 'PUT' : 'POST' };
     if(formData.image_file){
       await postWebSettingsWithFile(data, formData?.id);
     }else{
-      await postWebSettingsWithFile(data, formData?.id);
+      await postWebSettings(data, formData?.id);
 
     }
     await fetchData();

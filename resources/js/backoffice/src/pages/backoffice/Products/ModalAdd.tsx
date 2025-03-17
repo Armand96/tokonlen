@@ -14,7 +14,6 @@ import Swal from 'sweetalert2';
 import { GetBrands, GetProducts, PostDeleteOLdLink, PostDeleteProductImage, PostProductImages, PostProductLink, PostProducts } from '../../../helpers/api/Products';
 import CustomFlatpickr from '../../../components/CustomFlatpickr';
 import dayjs from 'dayjs';
-import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
 
 interface ModalAddTypes {
