@@ -56,7 +56,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
 
       if (detailData?.id) {
         GetProducts(`/${detailData?.id}`).then((resp) => {
-          if (resp?.data?.category?.parent_id) {
+          if (resp?.data?.category?.parent_id !== null) {
             setSelectedSubCategories({ value: resp?.data?.category?.id, label: resp?.data?.category?.name })
             setSelectedCategories({ value: resp?.data?.category?.parent_cat?.id, label: resp?.data?.category?.parent_cat?.name })
             GetCategories(`/${resp?.data?.category?.parent_id}`).then((catOptions) => {
