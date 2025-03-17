@@ -249,7 +249,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
 
   const handleDesc = (value: string, delta: any) => {
 
-    if (!delta || !delta.ops || firstLoad === false ) return; 
+    if (!delta || !delta.ops || firstLoad == true ) return; 
 
 
       setFormData({ ...formData, description: value })
