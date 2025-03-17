@@ -33,7 +33,7 @@ const Index = () => {
     if(formData.image_file){
       await postWebSettingsWithFile(data, formData?.id);
     }else{
-      await postWebSettings(data, formData?.id);
+      await postWebSettingsWithFile(data, formData?.id);
 
     }
     await fetchData();
