@@ -56,7 +56,7 @@ const FileUploader = ({
         if (invalidFiles.length > 0) {
             Swal.fire(
                 "warning",
-                "Beberapa file tidak diunggah karena ukurannya lebih dari 2MB.",
+                `Beberapa file tidak diunggah karena ukurannya lebih dari ${import.meta.env.VITE_REACT_APP_MAX_UPLOAD_SIZE}MB.`,
                 "warning",
             );
         }
