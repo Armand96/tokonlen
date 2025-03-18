@@ -72,19 +72,16 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
 
   const postData = async () => {
     setLoading(true)
+    console.log("SELECTED PRODUK", selectedProduk?.value);
     if (formData?.is_by_product === 1 ) {
       await GetProducts(`/${selectedProduk?.value}`).then((res) => {
         if (res?.data?.discount?.id && res?.data?.discount?.id !== formData?.id) {
           PostDiscount({ '_method': 'DELETE' }, res?.data?.discount?.id)
         }
       })
-      
+
     } else {
-      await GetProducts(`/${selectedProduk?.value}`).then((res) => {
-        if (res?.data?.discount?.id) {
-          PostDiscount({ '_method': 'DELETE' }, res?.data?.discount?.id)
-        }
-      })
+        console.log("DI MARI");
       await GetVariants(`/${selectedProduk?.value}`).then((res) => {
         if (res?.data?.discount?.id && res?.data?.discount?.id !== formData?.id) {
           PostDiscount({ '_method': 'DELETE' }, res?.data?.discount?.id)

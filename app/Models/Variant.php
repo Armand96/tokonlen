@@ -49,14 +49,15 @@ class Variant extends Model
     public function discount()
     {
         return $this->hasOne(Discount::class, 'variant_id', 'id')
-        ->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
+            ->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
     }
 
     public function getFinalPriceAttribute()
     {
         if ($this->discount) {
-            if($this->discount->discount_percentage > 0) {
-                return (float) ($this->product->price + $this->additional_price) - ((float) ($this->price+$this->additional_price) * ((float)$this->discount->discount_percentage / 100));
+            if ($this->discount->discount_percentage > 0) {
+                // dd($this->discount->discount_percentage);
+                return (float) ($this->product->price + $this->additional_price) - ((float) ($this->product->price + $this->additional_price) * ((float)$this->discount->discount_percentage / 100));
             } else {
                 return (float) ($this->product->price + $this->additional_price) - (float) $this->discount->discount_amount;
             }
@@ -66,9 +67,9 @@ class Variant extends Model
 
     public function getDiscountPriceAttribute()
     {
-        if($this->discount) {
-            if($this->discount->discount_percentage > 0) {
-                return (float) ($this->product->price+$this->additional_price) * ((float) $this->discount->discount_percentage / 100);
+        if ($this->discount) {
+            if ($this->discount->discount_percentage > 0) {
+                return (float) ($this->product->price + $this->additional_price) * ((float) $this->discount->discount_percentage / 100);
             } else {
                 return (float) $this->discount->discount_amount;
             }
