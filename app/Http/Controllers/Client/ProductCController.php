@@ -172,6 +172,16 @@ class ProductCController extends Controller
         try {
             DB::beginTransaction();
             $validatedReq = $linkVisitCreate->validated();
+
+            //validasi data existing
+            $linkVisit = ProductLinkVisit::where('product_link_id', $validatedReq['product_link_id'])
+                                            ->where('ip_address', $validatedReq['ip_address'])
+                                            ->where('user_agent', $validatedReq['user_agent'])->first();
+
+            if($linkVisit) {
+                return response()->json(new ResponseFail((object) null, "Server Error", "Data sudah ada"), 400);
+            }
+
             $linkVisit = ProductLinkVisit::create($validatedReq);
             $product = Product::find($linkVisitCreate['product_id']);
             $product->increment('visited');
