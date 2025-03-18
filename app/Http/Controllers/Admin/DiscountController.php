@@ -69,7 +69,7 @@ class DiscountController extends Controller
 
             DB::beginTransaction();
 
-            if($validated['variant_id']){
+            if($validated['variant_id'] && $validated['variant_id'] != 0){
                 $variant = Variant::where('id', $validated['variant_id'])->first();
                 $canProcess = $this->canProcessDiscount($validated['discount_amount'], $validated['discount_percentage'], $variant->product->price+$variant->additional_price);
                 $existingDiscount = Discount::where('product_id', $variant->product_id)->first();
@@ -121,7 +121,7 @@ class DiscountController extends Controller
 
             DB::beginTransaction();
 
-            if($validated['variant_id']){
+            if($validated['variant_id'] && $validated['variant_id'] != 0){
                 $variant = Variant::where('id', $validated['variant_id'])->first();
                 $canProcess = $this->canProcessDiscount($validated['discount_amount'], $validated['discount_percentage'], $variant->product->price+$variant->additional_price);
                 $existingDiscount = Discount::where('product_id', $variant->product_id)->first();
@@ -130,7 +130,6 @@ class DiscountController extends Controller
                 }
             } else {
                 $product = Product::find( $validated['product_id']);
-                $existingDiscount = Discount::where('variant', $product->variant->id)->first();
                 $canProcess = $this->canProcessDiscount($validated['discount_amount'], $validated['discount_percentage'], $product->price);
             }
 
