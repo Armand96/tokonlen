@@ -27,11 +27,11 @@ axios.interceptors.response.use(
 			switch (error.response.status) {
 				case 401:
 					message = 'Invalid credentials'
-					sessionStorage.removeItem(AUTH_SESSION_KEY)
+					localStorage.removeItem(AUTH_SESSION_KEY)
 					window.location.href = '/admin/auth/login'
 					break
 				case 403:
-					sessionStorage.removeItem(AUTH_SESSION_KEY)
+					localStorage.removeItem(AUTH_SESSION_KEY)
 					break
 				case 404:
 					message = 'Sorry! the data you are looking for could not be found'
@@ -56,7 +56,7 @@ const setAuthorization = (token: string | null) => {
 }
 
 const getUserFromCookie = () => {
-	const user = sessionStorage.getItem(AUTH_SESSION_KEY)
+	const user = localStorage.getItem(AUTH_SESSION_KEY)
 	return user ? (typeof user == 'object' ? user : JSON.parse(user)) : null
 }
 class APICore {
@@ -197,9 +197,9 @@ class APICore {
 	}
 
 	setLoggedInUser = (session: any) => {
-		if (session) sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session))
+		if (session) localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session))
 		else {
-			sessionStorage.removeItem(AUTH_SESSION_KEY)
+			localStorage.removeItem(AUTH_SESSION_KEY)
 		}
 	}
 	/**
@@ -210,7 +210,7 @@ class APICore {
 	}
 
 	setUserInSession = (modifiedUser: any) => {
-		const userInfo = sessionStorage.getItem(AUTH_SESSION_KEY)
+		const userInfo = localStorage.getItem(AUTH_SESSION_KEY)
 		if (userInfo) {
 			const { token, user } = JSON.parse(userInfo)
 			this.setLoggedInUser({ token, ...user, ...modifiedUser })
