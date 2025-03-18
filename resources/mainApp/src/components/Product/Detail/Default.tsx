@@ -117,6 +117,7 @@ const Default: React.FC<Props> = ({  productId }) => {
     }
 
 
+console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
 
 
     return (
@@ -299,7 +300,7 @@ const Default: React.FC<Props> = ({  productId }) => {
 
 
                                 <div className="button-block mt-5" >
-                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${activeVariant?.stock < 0 || produk?.stock < 0 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={activeVariant?.stock < 0 || produk?.stock < 0} > <WhatsappLogo className={activeVariant?.stock < 0  || produk?.stock < 0 ? 'hidden' : 'block'} weight='fill' size={27} />  {activeVariant?.stock < 0 || produk?.stock < 0 ? "Stok Habis" : "Beli sekarang"}</button>
+                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${(activeSize ? activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.stock === 0 : produk?.stock === 0) ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={activeSize ? activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.stock === 0 : produk?.stock === 0} > <WhatsappLogo className={(activeSize ? activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.stock === 0 : produk?.stock === 0) ? 'hidden' : 'block'} weight='fill' size={27} />  {(activeSize ? activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.stock === 0 : produk?.stock === 0 )? "Stok Habis" : "Beli sekarang"}</button>
                                 </div>
                                 <div className={`list-payment mt-7 ${produk?.links.length > 0 ? "block" : "hidden"}`}>
                                     <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative  w-full">
