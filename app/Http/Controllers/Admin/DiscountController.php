@@ -81,7 +81,7 @@ class DiscountController extends Controller
                 $canProcess = $this->canProcessDiscount($validated['discount_amount'], $validated['discount_percentage'], $product->price);
             }
 
-            if(!$canProcess) return response()->json(new ResponseFail($validated,"Bad Request", "Discount melebihi harga produk"));
+            if(!$canProcess) return response()->json(new ResponseFail($validated,"Bad Request", "Discount melebihi harga produk"), 400);
 
             $discount = Discount::create($validated);
             DB::commit();
