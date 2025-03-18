@@ -27,7 +27,7 @@ const SliderFour = () => {
 
     return (
         <>
-            <div className="slider-block style-two bg-gray-600  xl:h-screen lg:h-[800px] md:h-[580px] sm:h-[500px] h-[350px] max-[420px]:h-[320px] w-full">
+            <div className="slider-block style-two xl:h-screen lg:h-[800px] md:h-[580px] sm:h-[500px] h-[350px] max-[420px]:h-[320px] w-full">
                 <div className="slider-main h-full w-full overflow-hidden">
                     <Swiper
                         spaceBetween={0}

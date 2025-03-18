@@ -23,7 +23,7 @@ interface UserData {
 const Login = () => {
 	const dispatch = useDispatch<AppDispatch>()
 
-	const { user, userLoggedIn, loading } = useSelector((state: RootState) => ({
+	const { user, userLoggedIn, loading, error } = useSelector((state: RootState) => ({
 		user: state.Auth.user,
 		loading: state.Auth.loading,
 		error: state.Auth.error,
@@ -59,9 +59,11 @@ const Login = () => {
 	return (
 		<>
 			{(userLoggedIn || user) && <Navigate to={redirectUrl} />}
-
 			<AuthContainer>
-				<AuthLayout authTitle="Login" helpText="Silahkan Masukan Username dan Password untuk login" >
+				<AuthLayout authTitle="Login" helpText="Silahkan Masukan Username dan Password untuk login"  >
+					{
+						error && <p className='text-center px-4 py-2 my-3 rounded-md bg-red-200 text-red-600 '>Email atau Password salah</p>
+					}
 					<VerticalForm<UserData> onSubmit={onSubmit} resolver={schemaResolver}>
 						<FormInput label="Username" type="email" name="email" className="form-input" placeholder="Masukan Username" containerClass="mb-6 space-y-2" labelClassName="font-semibold text-gray-500" required />
 

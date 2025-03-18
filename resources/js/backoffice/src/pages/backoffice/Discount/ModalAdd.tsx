@@ -8,9 +8,9 @@ import { GetProducts } from '../../../helpers/api/Products';
 import { HelperFunction } from '../../../helpers/HelpersFunction';
 import { GetVariants } from '../../../helpers/api/variants';
 import dayjs from 'dayjs'
-import { PostDiscountTypes } from '../../../dto/discounts';
 import { GetDiscount, PostDiscount } from '../../../helpers/api/discounts';
 import Swal from 'sweetalert2';
+import { PostDiscountTypes } from '../../../dto/discounts';
 
 interface ModalAddTypes {
   isOpen: boolean,
@@ -37,18 +37,18 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
 
 
   useEffect(() => {
-    if(!isCreate){
+    if (!isCreate) {
       GetDiscount(`/${detailData?.id}`).then((res) => {
-        setFormData({...formData, ...res?.data, is_by_product: res?.data?.product ? 1 : 2, discount_by:  res?.data?.discount_percentage > 0  ?  1 : 2, start_date: dayjs( res?.data?.start_date).format("YYYY-MM-DD"), end_date: dayjs( res?.data?.end_date).format("YYYY-MM-DD") })
-        
-        if(res?.data?.product){
+        setFormData({ ...formData, ...res?.data, is_by_product: res?.data?.product ? 1 : 2, discount_by: res?.data?.discount_percentage > 0 ? 1 : 2, start_date: dayjs(res?.data?.start_date).format("YYYY-MM-DD"), end_date: dayjs(res?.data?.end_date).format("YYYY-MM-DD") })
+
+        if (res?.data?.product) {
           setSelectedProduk({ value: res?.data?.product?.id, label: res?.data?.product?.name })
-        }else{
-          setSelectedProduk({ value: res?.data?.variant?.id, label: `${res?.data?.variant?.variant} - ${res?.data?.variant?.product?.name} -  ${res?.data?.variant?.size} `})
+        } else {
+          setSelectedProduk({ value: res?.data?.variant?.id, label: `${res?.data?.variant?.variant} - ${res?.data?.variant?.product?.name} -  ${res?.data?.variant?.size} ` })
         }
       })
     }
-  },[detailData])
+  }, [detailData])
 
 
   const updateProdukOptions = async (product = formData?.is_by_product, discount = formData?.discount_by) => {
@@ -56,13 +56,13 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
       if (product !== 0 && discount !== 0) {
         const endpoint = product === 1 ? GetProducts : GetVariants;
         const key = product === 1 ? 'name' : 'variant';
-        
+
         const res = await endpoint(`?is_active=1&data_per_page=999999`);
-        setProdukOptions(product === 1 ?  HelperFunction.FormatOptions(res.data, key, 'id', ) :  HelperFunction.FormatOptionsVariants(res.data, key, 'id'));
+        setProdukOptions(product === 1 ? HelperFunction.FormatOptions(res.data, key, 'id',) : HelperFunction.FormatOptionsVariants(res.data, key, 'id'));
         setSelectedProduk({ label: "", value: 0 });
       }
-      
-     setFormData({ ...formData, discount_percentage: 0, discount_amount: 0, is_by_product: product, discount_by: discount  });
+
+      setFormData({ ...formData, discount_percentage: 0, discount_amount: 0, is_by_product: product, discount_by: discount });
 
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -70,10 +70,28 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
   };
 
 
-
-
   const postData = async () => {
     setLoading(true)
+    if (formData?.is_by_product === 1 ) {
+      await GetProducts(`/${selectedProduk?.value}`).then((res) => {
+        if (res?.data?.discount?.id && res?.data?.discount?.id !== formData?.id) {
+          PostDiscount({ '_method': 'DELETE' }, res?.data?.discount?.id)
+        }
+      })
+      
+    } else {
+      await GetProducts(`/${selectedProduk?.value}`).then((res) => {
+        if (res?.data?.discount?.id) {
+          PostDiscount({ '_method': 'DELETE' }, res?.data?.discount?.id)
+        }
+      })
+      await GetVariants(`/${selectedProduk?.value}`).then((res) => {
+        if (res?.data?.discount?.id && res?.data?.discount?.id !== formData?.id) {
+          PostDiscount({ '_method': 'DELETE' }, res?.data?.discount?.id)
+        }
+      })
+    }
+
     let postDataCreate: PostDiscountTypes = {
       product_id: formData?.is_by_product == 1 ? selectedProduk?.value : 0,
       variant_id: formData?.is_by_product == 2 ? selectedProduk?.value : 0,
@@ -117,14 +135,14 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
             <h6 className="text-sm mb-2">Dipasang pada</h6>
             <div className="flex gap-5">
               <div className="flex items-center">
-                <input type="radio" className="form-radio text-primary" name="InlineRadio" id="InlineRadio01" onChange={() => {setFormData({ ...formData, is_by_product: 1 });updateProdukOptions(1,undefined)}} checked={formData.is_by_product == 1} />
-                <label className="ms-1.5" htmlFor="InlineRadio01">
+                <input type="radio" className="form-radio text-primary" name="InlineRadio" id="produk" onChange={() => { setFormData({ ...formData, is_by_product: 1 }); updateProdukOptions(1, undefined) }} checked={formData.is_by_product == 1} />
+                <label className="ms-1.5" htmlFor="produk">
                   produk
                 </label>
               </div>
               <div className="flex items-center">
-                <input type="radio" className="form-radio text-primary" name="InlineRadio" id="InlineRadio02" onChange={() => {setFormData({ ...formData, is_by_product: 2 });updateProdukOptions(2,undefined)}} checked={formData.is_by_product == 2} />
-                <label className="ms-1.5" htmlFor="InlineRadio02">
+                <input type="radio" className="form-radio text-primary" name="InlineRadio" id="variant" onChange={() => { setFormData({ ...formData, is_by_product: 2 }); updateProdukOptions(2, undefined) }} checked={formData.is_by_product == 2} />
+                <label className="ms-1.5" htmlFor="variant">
                   variant
                 </label>
               </div>
@@ -135,14 +153,14 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
             <h6 className="text-sm mb-2">diskon berdasarkan</h6>
             <div className="flex gap-5">
               <div className="flex items-center">
-                <input type="radio" className="form-radio text-primary" name="InlineRadio2" id="InlineRadio01" onChange={() => {setFormData({ ...formData, discount_by: 1 });updateProdukOptions(undefined,1)}} checked={formData?.discount_by == 1} />
-                <label className="ms-1.5" htmlFor="InlineRadio01">
+                <input type="radio" className="form-radio text-primary" name="InlineRadio2" id="persentase" onChange={() => { setFormData({ ...formData, discount_by: 1 }); updateProdukOptions(undefined, 1) }} checked={formData?.discount_by == 1} />
+                <label className="ms-1.5" htmlFor="persentase">
                   Presentase
                 </label>
               </div>
               <div className="flex items-center">
-                <input type="radio" className="form-radio text-primary" name="InlineRadio2" id="InlineRadio02" onChange={() => {setFormData({ ...formData, discount_by: 2 });updateProdukOptions(undefined,2)}} checked={formData?.discount_by == 2} />
-                <label className="ms-1.5" htmlFor="InlineRadio02">
+                <input type="radio" className="form-radio text-primary" name="InlineRadio2" id="harga" onChange={() => { setFormData({ ...formData, discount_by: 2 }); updateProdukOptions(undefined, 2) }} checked={formData?.discount_by == 2} />
+                <label className="ms-1.5" htmlFor="harga">
                   Harga
                 </label>
               </div>
@@ -156,16 +174,16 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
             <Select isDisabled={formData?.is_by_product == 0 || formData?.discount_by == 0} className="select2 z-5" options={produkOptions} value={selectedProduk} onChange={(e) => setSelectedProduk(e)} />
           </div>
 
-          {formData?.discount_by == 1 && <FormInput name='name' label='persentase' value={formData?.discount_percentage} onChange={(e) => setFormData({ ...formData, discount_percentage: e.target.value })} className={`form-input mb-3`} />}
+          {formData?.discount_by == 1 && <FormInput name='name' label='persentase' value={formData?.discount_percentage} onChange={(e) => setFormData({ ...formData, discount_percentage: parseInt(e.target.value) > 100 ? 100 : e.target.value })} className={`form-input mb-3`} />}
 
           {formData?.discount_by == 2 && <FormInput name='name' label='Harga' value={HelperFunction.FormatToRupiah2(parseInt(formData?.discount_amount) || 0)} onChange={(e) => setFormData({ ...formData, discount_amount: parseInt(HelperFunction.onlyNumber(e.target.value)) })} className={`form-input mb-3`} />}
 
           <div className="mb-3">
-            <FormInput label="Tanggal Mulai" type="date" name="Tanggal Mulai"  containerClass="mb-3" labelClassName="mb-2" className="form-input" key="Tanggal Mulai" value={formData?.start_date} onChange={(v) => setFormData({ ...formData, start_date: dayjs(v.target.value).format("YYYY-MM-DD") })} />
+            <FormInput label="Tanggal Mulai" type="date" name="Tanggal Mulai" containerClass="mb-3" labelClassName="mb-2" className="form-input" key="Tanggal Mulai" value={formData?.start_date} onChange={(v) => setFormData({ ...formData, start_date: dayjs(v.target.value).format("YYYY-MM-DD") })} />
           </div>
 
           <div className="mb-3">
-            <FormInput label="Tanggal Akhir" type="date" name="Tanggal Akhir" containerClass="mb-3" labelClassName="mb-2" className="form-input"  key="Tanggal Akhir" value={formData?.end_date} onChange={(v) => setFormData({ ...formData, end_date: dayjs(v.target.value).format("YYYY-MM-DD") })} />
+            <FormInput label="Tanggal Akhir" type="date" name="Tanggal Akhir" containerClass="mb-3" labelClassName="mb-2" className="form-input" key="Tanggal Akhir" value={formData?.end_date} onChange={(v) => setFormData({ ...formData, end_date: dayjs(v.target.value).format("YYYY-MM-DD") })} />
           </div>
 
 

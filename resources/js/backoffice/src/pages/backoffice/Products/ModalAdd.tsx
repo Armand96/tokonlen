@@ -80,15 +80,17 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
         }).then(() => {
           setFirstLoad(true)
         })
+      }else{
+        setFirstLoad(true)
       }
 
-      setLoading(false)
+      firstLoad && setLoading(false)
     }).catch((err) => {
-      setLoading(false);
+      firstLoad && setLoading(false);
       console.log(err)
       Swal.fire('Error', err.name[0], 'error');
     })
-  }, [])
+  }, [firstLoad])
 
 
 

@@ -28,7 +28,6 @@ interface Props {
 const Default: React.FC<Props> = ({  productId }) => {
     const swiperRef: any = useRef();
     const [openPopupImg, setOpenPopupImg] = useState(false)
-    const [openSizeGuide, setOpenSizeGuide] = useState<boolean>(false)
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
     const [activeVariant, setActiveVariant] = useState<any>('')
     const [activeSize, setActiveSize] = useState<string>('')
@@ -288,7 +287,7 @@ const Default: React.FC<Props> = ({  productId }) => {
                                                 <div
                                                     className={`size-item relative w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
                                                     key={index}
-                                                    onClick={() => {handleActiveSize(item?.size);setDiscount(item?.discount ? {...item?.discount, final_price: item?.final_price} : null)}}
+                                                    onClick={() => {handleActiveSize(item?.size);setDiscount(item?.discount ? {...item?.discount, final_price:  item?.final_price} : null)}}
                                                 >
                                                     <span className={`${item.discount !== null ? "flex" : "hidden"} absolute bg-red text-white rounded-t-full -top-3 left-8 rotate-45`}>%</span>
                                                     {item?.size}
@@ -300,7 +299,7 @@ const Default: React.FC<Props> = ({  productId }) => {
 
 
                                 <div className="button-block mt-5" >
-                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${produk?.stock < 0 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={produk?.stock < 0} > <WhatsappLogo className={produk?.stock < 0 ? 'hidden' : 'block'} weight='fill' size={27} />  {produk?.stock < 0 ? "Stok Habis" : "Beli sekarang"}</button>
+                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${activeVariant?.stock < 0 || produk?.stock < 0 ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={activeVariant?.stock < 0 || produk?.stock < 0} > <WhatsappLogo className={activeVariant?.stock < 0  || produk?.stock < 0 ? 'hidden' : 'block'} weight='fill' size={27} />  {activeVariant?.stock < 0 || produk?.stock < 0 ? "Stok Habis" : "Beli sekarang"}</button>
                                 </div>
                                 <div className={`list-payment mt-7 ${produk?.links.length > 0 ? "block" : "hidden"}`}>
                                     <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative  w-full">

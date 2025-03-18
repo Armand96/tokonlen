@@ -66,6 +66,7 @@ const Index = () => {
     ];
 
     const onFileUpload = (val: any) => {
+        console.log(val)
         setFormData({ ...formData, image_file: val[0] })
     }
 

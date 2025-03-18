@@ -135,7 +135,7 @@ class WebSettingController extends Controller
     {
         try {
             $validatedData = $request->validated();
-            $webSetting = WebSetting::create($validatedData);
+            $webSetting->update($validatedData);
             return response()->json(new ResponseSuccess($webSetting,"Success","Success Update Web Setting"));
         } catch (\Throwable $th) {
             //throw $th;

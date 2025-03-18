@@ -72,7 +72,7 @@ const FileUploader = ({
             <Dropzone
                 disabled={singleFile ? selectedFiles.length > 0 : false}
                 multiple={multipleUploads}
-                onDrop={(acceptedFiles) => validateFiles(acceptedFiles)}
+                onDropAccepted={(acceptedFiles) => validateFiles(acceptedFiles)}
             >
                 {({ getRootProps, getInputProps }) => (
                     <div

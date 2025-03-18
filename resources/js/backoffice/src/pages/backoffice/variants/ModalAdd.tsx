@@ -10,6 +10,7 @@ import cloneDeep from 'clone-deep';
 import { PostVariantsTypes, Variants } from '../../../dto/variants';
 import { GetVariants, PostDeleteVariantsImage, PostVariants, PostVariantsBulks, PostVariantsImage } from '../../../helpers/api/variants';
 import Swal from 'sweetalert2';
+import { PostDiscount } from '../../../helpers/api/discounts';
 
 
 interface ModalAddTypes {
@@ -127,6 +128,12 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
         _method: "PUT"
       }
 
+      await GetProducts(`/${formData?.product_id}`).then((res) => {
+        if (res?.data?.discount?.id) {
+          PostDiscount({ '_method': 'DELETE' }, res?.data?.discount?.id)
+        }
+      })
+
       await PostVariants(postDataEdit, formData?.id);
 
 
@@ -239,7 +246,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
             {
               sizeList?.map((item: any, key: any) => (
                 <div className="" key={key}>
-                  <input type='checkbox' disabled={!isCreate} checked={isCreate ? selectedSized.includes(item?.format_size || formData?.size) : item?.format_size == formData.size} onClick={() => selectedSized.includes(item?.format_size) ? setSelectedSized([...selectedSized.filter((x) => x !== item?.format_size || item?.size)]) : setSelectedSized([...selectedSized, item?.format_size])} />
+                  <input type='checkbox' disabled={!isCreate || selectedProducts?.detail?.variant?.flatMap((variant) => variant.size)?.includes(item?.format_size)} checked={isCreate ? selectedSized.includes(item?.format_size || formData?.size) : item?.format_size == formData.size} onClick={() => selectedSized.includes(item?.format_size) ? setSelectedSized([...selectedSized.filter((x) => x !== item?.format_size || item?.size)]) : setSelectedSized([...selectedSized, item?.format_size])} />
                   <label className='ml-2'  >{item?.format_size}</label>
                 </div>
               ))

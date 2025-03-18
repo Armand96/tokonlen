@@ -26,7 +26,7 @@ class ProductController extends Controller
         ->when($req->filled('has_variants'), fn ($q) =>
             strtolower($req->has_variants) == "y" ? $q->has('variant') : $q->doesntHave('variant')
         )
-        ->with(['category', 'images', 'discount'])
+        ->with(['category', 'images', 'discount', 'variant'])
         ->orderBy('id', 'desc')
         ->paginate($dataPerPage);
 

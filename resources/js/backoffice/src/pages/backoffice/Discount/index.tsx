@@ -69,6 +69,7 @@ const Index = () => {
 				<button className='btn bg-primary text-white' onClick={() => { setModal(true); setFormData(cell); setIsCreate(false); }}>
 					Edit
 				</button>
+				
 			)
 		}
 	];
