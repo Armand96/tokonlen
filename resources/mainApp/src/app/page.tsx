@@ -22,7 +22,7 @@ export default async function Home() {
       <Benefit props="md:py-20 py-10" />
       <Testimonial data={testimonialData} limit={6} />
       <ModalNewsletter />
-      <Brand />
+      {/* <Brand /> */}
       <Footer />
     </>
   )
