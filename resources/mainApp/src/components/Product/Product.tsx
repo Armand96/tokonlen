@@ -130,11 +130,19 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                             )} */}
                                 <div className="product-price-block flex items-center gap-2 flex-wrap mt-1 duration-300 relative z-[1]">
                                     <div className="product-price text-title">{Helpers.FormatPrice(data.final_price)}</div>
-                                    {data?.final_price !== data?.price && (
+                                    {(parseInt(data?.discount?.discount_percentage ) !== 0 && parseInt(data?.discount?.discount_amount) == 0) && (
                                         <>
                                             <div className="product-origin-price caption1 text-secondary2"><del>{Helpers.FormatPrice(data.price)}</del></div>
                                             <div className="product-sale caption1 font-medium bg-green px-3 py-0.5 inline-block rounded-full">
                                                 -{(data?.discount_price / data?.price) * 100}%
+                                            </div>
+                                        </>
+                                    )}
+                                      {(parseInt(data?.discount?.discount_amount ) !== 0 && parseInt(data?.discount?.discount_percentage) == 0) && (
+                                        <>
+                                            <div className="product-origin-price caption1 text-secondary2"><del>{Helpers.FormatPrice(data.price)}</del></div>
+                                            <div className="product-sale caption1 font-medium bg-green px-3 py-0.5 inline-block rounded-full">
+                                                - {Helpers.FormatPrice(data?.discount?.discount_amount)}
                                             </div>
                                         </>
                                     )}

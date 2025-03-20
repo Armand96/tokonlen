@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation'
 import { WhatsappLogo } from '@phosphor-icons/react/dist/ssr'
 import Swal from 'sweetalert2'
 import { v4 as uuidv4 } from 'uuid';
-import {useCookies} from 'react-cookie'
+import { useCookies } from 'react-cookie'
 
 SwiperCore.use([Navigation, Thumbs]);
 
@@ -25,7 +25,7 @@ interface Props {
     productId: string | number | null
 }
 
-const Default: React.FC<Props> = ({  productId }) => {
+const Default: React.FC<Props> = ({ productId }) => {
     const swiperRef: any = useRef();
     const [openPopupImg, setOpenPopupImg] = useState(false)
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
@@ -37,7 +37,7 @@ const Default: React.FC<Props> = ({  productId }) => {
     const [relatedProduk, setRelatedProduk] = useState<any>([])
     const router = useRouter()
     const [phoneNumber, setPhoneNumber] = useState<any>([])
-    const [discount,setDiscount] = useState<any>(null)
+    const [discount, setDiscount] = useState<any>(null)
     const [cookies, setCookie, removeCookie] = useCookies(['qwe3dsf4wrsd']);
 
 
@@ -73,13 +73,13 @@ const Default: React.FC<Props> = ({  productId }) => {
         setActiveVariant(item)
     }
 
-    const clickToOut = (item:any) => {
-        
+    const clickToOut = (item: any) => {
+
         let id: string = uuidv4()
 
-        if(cookies.qwe3dsf4wrsd){
-           id = cookies.qwe3dsf4wrsd
-        }else{
+        if (cookies.qwe3dsf4wrsd) {
+            id = cookies.qwe3dsf4wrsd
+        } else {
             setCookie('qwe3dsf4wrsd', id)
         }
 
@@ -87,8 +87,8 @@ const Default: React.FC<Props> = ({  productId }) => {
         FetchData.PostClickToOtherShop({
             "product_link_id": item?.id,
             "product_id": produk?.id,
-            "ip_address": id ,
-            "user_agent":  navigator.userAgent
+            "ip_address": id,
+            "user_agent": navigator.userAgent
         }).then((res) => {
             window.open(item.link, '_blank')
             setLoading(false)
@@ -117,7 +117,7 @@ const Default: React.FC<Props> = ({  productId }) => {
     }
 
 
-console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
+    console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
 
 
     return (
@@ -166,7 +166,7 @@ console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
                                             modules={[Navigation, Thumbs]}
                                             className="mySwiper swiper-float"
                                         >
-                                            {(activeVariant ? activeVariant?.sizes[0]?.images  : produk?.images)?.map((item: any, index: number) => (<SwiperSlide
+                                            {(activeVariant ? activeVariant?.sizes[0]?.images : produk?.images)?.map((item: any, index: number) => (<SwiperSlide
                                                 key={index}
                                             >
                                                 <Image
@@ -201,7 +201,7 @@ console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
                                                     swiperRef.current = swiper
                                                 }}
                                             >
-                                                {(activeVariant ? activeVariant?.sizes[0]?.images  : produk?.images)?.map((item: any, index: number) => (
+                                                {(activeVariant ? activeVariant?.sizes[0]?.images : produk?.images)?.map((item: any, index: number) => (
                                                     <SwiperSlide
                                                         key={index}
                                                     >
@@ -229,16 +229,22 @@ console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
                                     <div className="heading4 mt-1 ">{produk?.name}</div>
                                 </div>
                                 <div className="border-b pb-6 border-line "></div>
-                               
+
                             </div>
                             <div className="flex items-center gap-3  flex-wrap mt-5 ">
-                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant ? discount ?  discount?.final_price  : activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.final_price || produk?.final_price : produk?.final_price)}</div>
+                                <div className={`product-price heading5 `}>{Helpers.FormatPrice(activeVariant ? discount ? discount?.final_price : activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.final_price || produk?.final_price : produk?.final_price)}</div>
                                 <div className={`w-px h-4 bg-line ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}></div>
-                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(activeVariant ?  parseInt(activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.additional_price || 0) + parseInt( produk?.price ): produk?.price)}</del></div>
+                                <div className={`product-origin-price font-normal text-secondary2 ${produk?.final_price !== produk?.price || discount ? "" : "hidden"}`}><del>{Helpers.FormatPrice(activeVariant ? parseInt(activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.additional_price || 0) + parseInt(produk?.price) : produk?.price)}</del></div>
 
-                                {((produk?.discount?.discount_percentage && produk?.discount?.discount_amount == 0)  || (discount && discount?.discount_percentage && discount?.discount_amount == 0) ) && (
+                                {((produk?.discount?.discount_percentage && produk?.discount?.discount_amount == 0) || (discount && discount?.discount_percentage && discount?.discount_amount == 0)) && (
                                     <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
-                                        -{ produk?.discount?.discount_percentage || discount?.discount_percentage}%
+                                        -{produk?.discount?.discount_percentage || discount?.discount_percentage}%
+                                    </div>
+                                )}
+
+                                {((produk?.discount?.discount_amount && produk?.discount?.discount_percentage == 0) || (discount && discount?.discount_amount && discount?.discount_percentage == 0)) && (
+                                    <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
+                                        - {Helpers.FormatPrice(produk?.discount?.discount_amount || discount?.discount_amount)}
                                     </div>
                                 )}
 
@@ -257,7 +263,7 @@ console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
                                                         handleActiveColor(item)
                                                     }}
                                                 >
-                                                    { item?.sizes?.filter((x: any) => x.discount !== null).length > 0 ? <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div> : <div className={` py-2 text-xs rounded-t-xl inset-0 text-center`}></div>}
+                                                    {item?.sizes?.filter((x: any) => x.discount !== null).length > 0 ? <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div> : <div className={` py-2 text-xs rounded-t-xl inset-0 text-center`}></div>}
                                                     <Image
                                                         src={Helpers.GetImage(item?.sizes[0]?.images[0]?.image)}
                                                         width={100}
@@ -273,7 +279,7 @@ console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
                                         </div>
                                     </div>
                                     <div className="choose-size mt-5">
-                                        <div className={`heading  items-center justify-between ${activeVariant.sizes ? "flex" :  "hidden" }`}>
+                                        <div className={`heading  items-center justify-between ${activeVariant.sizes ? "flex" : "hidden"}`}>
                                             <div className="text-title">Ukuran: <span className='text-title size'>{activeSize}</span></div>
                                             {/* <div
                                             className="caption1 size-guide text-red  flex gap-x-2 items-center cursor-pointer"
@@ -288,7 +294,7 @@ console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
                                                 <div
                                                     className={`size-item relative w-12 h-12 flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item?.size ? 'active' : ''}`}
                                                     key={index}
-                                                    onClick={() => {handleActiveSize(item?.size);setDiscount(item?.discount ? {...item?.discount, final_price:  item?.final_price} : null)}}
+                                                    onClick={() => { handleActiveSize(item?.size); setDiscount(item?.discount ? { ...item?.discount, final_price: item?.final_price } : null) }}
                                                 >
                                                     <span className={`${item.discount !== null ? "flex" : "hidden"} absolute bg-red text-white rounded-t-full -top-3 left-8 rotate-45`}>%</span>
                                                     {item?.size}
@@ -300,25 +306,25 @@ console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
 
 
                                 <div className="button-block mt-5" >
-                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${(activeSize ? activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.stock === 0 : produk?.stock === 0) ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={activeSize ? activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.stock === 0 : produk?.stock === 0} > <WhatsappLogo className={(activeSize ? activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.stock === 0 : produk?.stock === 0) ? 'hidden' : 'block'} weight='fill' size={27} />  {(activeSize ? activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.stock === 0 : produk?.stock === 0 )? "Stok Habis" : "Beli sekarang"}</button>
+                                    <button onClick={handleToShop} className={`button-main flex justify-center items-center gap-x-2 ${(activeSize ? activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.stock === 0 : produk?.stock === 0) ? ` bg-surface text-secondary2 hover:bg-surface hover:text-secondary2` : ""}  w-full text-center`} disabled={activeSize ? activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.stock === 0 : produk?.stock === 0} > <WhatsappLogo className={(activeSize ? activeVariant?.sizes?.filter((x: any) => x.size === activeSize)[0]?.stock === 0 : produk?.stock === 0) ? 'hidden' : 'block'} weight='fill' size={27} />  {(activeSize ? activeVariant?.sizes?.filter((x: any) => x.size == activeSize)[0]?.stock === 0 : produk?.stock === 0) ? "Stok Habis" : "Beli sekarang"}</button>
                                 </div>
                                 <div className={`list-payment mt-7 ${produk?.links.length > 0 ? "block" : "hidden"}`}>
                                     <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative  w-full">
                                         <div className="heading6 px-5 bg-white absolute  -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">Atau lanjutkan via</div>
-                                        <div className="list grid grid-cols-6">
-                                                {
-                                                    produk?.links?.map((link: any, key: any) => (
-                                                        <Image
-                                                            key={key}
-                                                            src={Helpers.GetImage(link?.link_type?.image)}
-                                                            width={500}
-                                                            height={450}
-                                                            alt='alternate'
-                                                            className='w-full cursor-pointer bg-gray-200'
-                                                            onClick={() =>  clickToOut(link)}
-                                                        />
-                                                    ))
-                                                }
+                                        <div className="list grid justify-items-center grid-flow-col md:grid-cols-6 ">
+                                            {
+                                                produk?.links?.map((link: any, key: any) => (
+                                                    <Image
+                                                        key={key}
+                                                        src={Helpers.GetImage(link?.link_type?.image)}
+                                                        width={60}
+                                                        height={60}
+                                                        alt='alternate'
+                                                        className='w-[100px] cursor-pointer bg-gray-200'
+                                                        onClick={() => clickToOut(link)}
+                                                    />
+                                                ))
+                                            }
                                         </div>
                                     </div>
                                 </div>

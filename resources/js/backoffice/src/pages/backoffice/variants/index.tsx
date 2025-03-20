@@ -53,7 +53,7 @@ const Index = () => {
 		await PostVariants(data, formData?.id);
 		await fetchData();
 		setModal(false);
-		Swal.fire('Success', formData.id ? 'Edit Diskon berhasil' : 'Input Diskon berhasil', 'success');
+		Swal.fire('Success', formData.id ? 'Edit Variants berhasil' : 'Input Variants berhasil', 'success');
 	};
 
 	const columns = [

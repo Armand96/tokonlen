@@ -76,6 +76,14 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
 
     try {
       setLoading(true);
+
+      await GetProducts(`/${selectedProducts?.value}`).then((res) => {
+        if (res?.data?.discount?.id) {
+          PostDiscount({ '_method': 'DELETE' }, res?.data?.discount?.id)
+        }
+      })
+
+
       let response;
       response = await PostVariantsBulks({
         variants: postDataCreate,

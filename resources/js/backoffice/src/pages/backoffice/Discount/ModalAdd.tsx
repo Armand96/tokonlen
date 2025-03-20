@@ -72,7 +72,6 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
 
   const postData = async () => {
     setLoading(true)
-    console.log("SELECTED PRODUK", selectedProduk?.value);
     if (formData?.is_by_product === 1 ) {
       await GetProducts(`/${selectedProduk?.value}`).then((res) => {
         if (res?.data?.discount?.id && res?.data?.discount?.id !== formData?.id) {
@@ -81,7 +80,6 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
       })
 
     } else {
-        console.log("DI MARI");
       await GetVariants(`/${selectedProduk?.value}`).then((res) => {
         if (res?.data?.discount?.id && res?.data?.discount?.id !== formData?.id) {
           PostDiscount({ '_method': 'DELETE' }, res?.data?.discount?.id)
@@ -101,11 +99,12 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, setLoading
 
     await PostDiscount(postDataCreate, formData?.id).then((res) => {
       toggleModal();
-      Swal.fire('Success', isCreate ? 'Input Variant berhasil' : 'Edit Variant berhasil', 'success');
+      Swal.fire('Success', isCreate ? 'Input Discount berhasil' : 'Edit Discount berhasil', 'success');
       reloadData();
       setLoading(false)
     }).catch((error) => {
-      Swal.fire('Error', error.message || 'Terjadi kesalahan', 'error');
+      console.log(error)
+      Swal.fire('Error', error || 'Terjadi kesalahan', 'error');
       setLoading(false)
 
     })

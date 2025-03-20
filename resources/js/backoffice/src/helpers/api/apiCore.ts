@@ -23,7 +23,7 @@ axios.interceptors.response.use(
 		} else if (error && error.response && error.response.status === 403) {
 			window.location.href = '/access-denied'
 		} else {
-			console.log(error.response.status)
+			console.log( error.response.data.message)
 			switch (error.response.status) {
 				case 401:
 					message = 'Invalid credentials'
@@ -37,7 +37,7 @@ axios.interceptors.response.use(
 					message = 'Sorry! the data you are looking for could not be found'
 					break
 				default: {
-					message = error.response && error.response.data ?  error.response.data.errors : error
+				message =  error.response.data.message ? error.response.data.message : error
 				}
 			}
 			return Promise.reject(message)
@@ -68,8 +68,8 @@ class APICore {
 		if (params) {
 			const queryString = params
 				? Object.keys(params)
-						.map((key) => key + '=' + params[key])
-						.join('&')
+					.map((key) => key + '=' + params[key])
+					.join('&')
 				: ''
 			response = axios.get(`${url}?${queryString}`, params)
 		} else {
@@ -83,8 +83,8 @@ class APICore {
 		if (params) {
 			const queryString = params
 				? Object.keys(params)
-						.map((key) => key + '=' + params[key])
-						.join('&')
+					.map((key) => key + '=' + params[key])
+					.join('&')
 				: ''
 			response = axios.get(`${url}?${queryString}`, { responseType: 'blob' })
 		} else {
@@ -99,8 +99,8 @@ class APICore {
 		if (params) {
 			queryString = params
 				? Object.keys(params)
-						.map((key) => key + '=' + params[key])
-						.join('&')
+					.map((key) => key + '=' + params[key])
+					.join('&')
 				: ''
 		}
 
@@ -177,9 +177,9 @@ class APICore {
 	isUserAuthenticated = () => {
 		const user = this.getLoggedInUser()
 
-		if(user?.token){
+		if (user?.token) {
 			return true
-		}else{
+		} else {
 			return false
 		}
 
