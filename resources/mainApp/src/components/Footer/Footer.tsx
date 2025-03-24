@@ -40,7 +40,7 @@ const Footer = () => {
                                 </div>
                             </div>
                             <div className="right-content flex flex-wrap gap-y-8 basis-2/4 max-lg:basis-full">
-                                <div className="list-nav flex justify-between basis-2/3 max-md:basis-full grid-cols-2">
+                                <div className="list-nav flex gap-x-6 md:justify-between max-md:basis-full ">
                                     <div className="item flex flex-col  ">
                                         <div className="text-button-uppercase pb-3">Informasi</div>
                                         <Link className='caption1 has-line-before duration-300 w-fit mt-2' href={'/contact'}>Kontak kami</Link>
