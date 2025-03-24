@@ -17,4 +17,14 @@ class ProductLink extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    public function linkType()
+    {
+        return $this->belongsTo(LinkType::class, 'link_type_id', 'id');
+    }
 }

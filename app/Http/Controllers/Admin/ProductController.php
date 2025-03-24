@@ -18,22 +18,19 @@ class ProductController extends Controller
      */
     public function index(Request $req)
     {
-        $dataPerPage = $req->data_per_page ? $req->data_per_page : 10;
-        $query = Product::query();
+        $dataPerPage = $req->input('data_per_page', 10);
 
-        // filter by name
-        if ($req->has('name')) {
-            $query->where('name', 'like', '%' . $req->name . '%');
-        }
-        // filter by category
-        if ($req->has('category_id')) {
-            $query->where('category_id', '=', $req->category_id);
-        }
+        $products = Product::query()
+        ->when($req->filled('name'), fn ($q) => $q->where('name', 'like', "%{$req->name}%"))
+        ->when($req->filled('category_id'), fn ($q) => $q->where('category_id', $req->category_id))
+        ->when($req->filled('has_variants'), fn ($q) =>
+            strtolower($req->has_variants) == "y" ? $q->has('variant') : $q->doesntHave('variant')
+        )
+        ->with(['category', 'images', 'discount', 'variant'])
+        ->orderBy('id', 'desc')
+        ->paginate($dataPerPage);
 
-        // paginate result
-        $categories = $query->paginate($dataPerPage);
-
-        return $categories;
+        return $products;
     }
 
     /**
@@ -50,8 +47,9 @@ class ProductController extends Controller
     public function store(ProductCreateReq $request)
     {
         try {
-            $product = Product::create($request);
-            return response()->json(new ResponseSuccess($product,"Success", "Success Create Product"));
+            $validated = $request->validated();
+            $product = Product::create($validated);
+            return response()->json(new ResponseSuccess($product,"Success","Success Create Product"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
@@ -64,7 +62,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()->json(new ResponseSuccess($product, "Success", "Success Get Product"));;
+        return response()->json(new ResponseSuccess($product->with(['variant.images', 'links.linkType', 'images', 'discount', 'category.subCat', 'category.parentCat'])->where('id', $product->id)->first(), "Success", "Success Get Product"));
     }
 
     /**
@@ -81,7 +79,8 @@ class ProductController extends Controller
     public function update(ProductUpdateReq $request, Product $product)
     {
         try {
-            $product->update($request);
+            $validated = $request->validated();
+            $product->update($validated);
             return response()->json(new ResponseSuccess($product,"Success", "Success Update Product"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());

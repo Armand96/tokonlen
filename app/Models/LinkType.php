@@ -10,6 +10,7 @@ class LinkType extends Model
         'name',
         'image',
         'image_thumb',
+        'is_active'
     ];
 
     protected $hidden = [

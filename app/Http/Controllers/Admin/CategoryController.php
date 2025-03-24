@@ -26,6 +26,14 @@ class CategoryController extends Controller
         if ($req->has('name')) {
             $query->where('name', 'like', '%' . $req->name . '%');
         }
+        // filter by is_active
+        if ($req->has('is_active')) {
+            $query->where('is_active', '=', $req->is_active);
+        }
+        // filter by is_show_header
+        if ($req->has('is_show_header')) {
+            $query->where('is_show_header', '=', $req->is_show_header);
+        }
 
         $query->where('parent_id', null)->with('subCat');
 
@@ -48,14 +56,14 @@ class CategoryController extends Controller
      */
     public function store(CategoryCreateReq $createCategory)
     {
-        $imageName = "";
+        $path = "";
         try {
             $validatedData = $createCategory->validated();
 
             if ($createCategory->hasFile('image_file')) {
                 $imageName = time() . '.' . $createCategory->file('image_file')->extension();
-                $createCategory->file('image_file')->storeAs('public/categories/', $imageName);
-                $validatedData['image'] = $imageName;
+                $path = $createCategory->file('image_file')->storeAs('categories', $imageName, 'public');
+                $validatedData['image'] = $path;
             } else {
                 $validatedData['image'] = '';
             }
@@ -64,8 +72,8 @@ class CategoryController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            $isExist = Storage::disk('public')->exists("category/$imageName") ?? false;
-            if ($isExist) Storage::delete("public/category/$imageName");
+            $isExist = Storage::disk('public')->exists($path) ?? false;
+            if ($isExist) Storage::disk('public')->delete($path);
             return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
         }
     }
@@ -75,7 +83,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json(new ResponseSuccess($category, "Success", "Success Get Category"));
+        return response()->json(new ResponseSuccess($category->where('id', $category->id)->with('subCat')->first(), "Success", "Success Get Category"));
     }
 
     /**
@@ -91,26 +99,24 @@ class CategoryController extends Controller
      */
     public function update(CategoryUpdateReq $updateCategory, Category $category)
     {
-        $imageName = "";
+        $path = "";
         try {
             $validatedData = $updateCategory->validated();
 
             if ($updateCategory->hasFile('image_file')) {
 
-                $isExist = Storage::disk('public')->exists("category/$category->image") ?? false;
-                if ($isExist) Storage::delete("public/category/$category->image");
+                $isExist = Storage::disk('public')->exists($category->image) ?? false;
+                if ($isExist) Storage::disk('public')->delete($category->image);
 
                 $imageName = time() . '.' . $updateCategory->file('image_file')->extension();
-                $updateCategory->file('image_file')->storeAs('public/categories/', $imageName);
-                $validatedData['image'] = $imageName;
+                $path = $updateCategory->file('image_file')->storeAs('categories', $imageName, 'public');
+                $validatedData['image'] = $path;
             }
             $category->update($validatedData);
             return response()->json(new ResponseSuccess($category,"Success", "Success Update Category"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            $isExist = Storage::disk('public')->exists("category/$imageName") ?? false;
-            if ($isExist) Storage::delete("public/category/$imageName");
             return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()), 500);
         }
     }

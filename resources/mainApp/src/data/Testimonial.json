@@ -1,0 +1,73 @@
+[
+    {
+        "id": "1",
+        "category": "fashion",
+        "title": "Pelayanan Terbaik",
+        "name": "Aulia Putri",
+        "avatar": "/images/avatar/1.png",
+        "date": "Januari 15, 2024",
+        "address": "Jakarta, Indonesia",
+        "description": "Saya sangat puas dengan pelayanan Zhindaya. Produk dikemas dengan rapi dan pengiriman sangat cepat!",
+        "images": [
+            "/images/product/1000x1000.png"
+        ],
+        "star": 5
+    },
+    {
+        "id": "2",
+        "category": "fashion",
+        "title": "Kualitas Baju",
+        "name": "Faldi Ramadhan",
+        "avatar": "/images/avatar/2.png",
+        "date": "November 11, 2023",
+        "address": "Madrid, Spain",
+        "description": "Wow, produk yang dihasilkan sangat bagus dan menarik!",
+        "images": [
+            "/images/product/1000x1000.png",
+            "/images/product/1000x1000.png"
+        ],
+        "star": 5
+    },
+    {
+        "id": "3",
+        "category": "fashion",
+        "title": "Nyaman Dipakai",
+        "name": "Rizky Pratama",
+        "avatar": "/images/avatar/3.png",
+        "date": "Februari 2, 2024",
+        "address": "Bandung, Indonesia",
+        "description": "Bahannya adem dan nyaman banget dipakai. Cocok untuk aktivitas sehari-hari!",
+        "images": [
+            "/images/product/1000x1000.png"
+        ],
+        "star": 4
+    },
+    {
+        "id": "4",
+        "category": "fashion",
+        "title": "Model Trendy",
+        "name": "Siti Rahma",
+        "avatar": "/images/avatar/4.png",
+        "date": "Maret 10, 2024",
+        "address": "Surabaya, Indonesia",
+        "description": "Desainnya kekinian dan sesuai dengan tren fashion saat ini. Sangat direkomendasikan!",
+        "images": [
+            "/images/product/1000x1000.png"
+        ],
+        "star": 5
+    },
+    {
+        "id": "5",
+        "category": "fashion",
+        "title": "Harga Terjangkau",
+        "name": "Dimas Saputra",
+        "avatar": "/images/avatar/5.png",
+        "date": "April 5, 2024",
+        "address": "Yogyakarta, Indonesia",
+        "description": "Dengan harga yang cukup terjangkau, kualitas yang didapat sangat memuaskan. Worth it!",
+        "images": [
+            "/images/product/1000x1000.png"
+        ],
+        "star": 4
+    }
+]

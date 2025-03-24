@@ -16,8 +16,8 @@ class ProductImageCreateReq extends ApiRequest
     {
         return [
             'product_id' => 'required|numeric',
-            'image_file' => 'required',
-            'image_file.*' => 'image',
+            'image_files' => 'required',
+            'image_files.*' => 'image',
         ];
     }
 }
