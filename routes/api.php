@@ -24,7 +24,7 @@ use App\Http\Controllers\Client\WebSettingCController;
 use App\Http\Requests\ResponseFail;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-Route::post('/login', [UserController::class, 'login']);
+Route::post('/login', [UserController::class, 'login'])->middleware('throttle:global');
 Route::get('/unauthorized', function(){
     return response()->json(new ResponseFail(null, "Error", "Unauthorized"), 401);
 })->name('login');
@@ -70,7 +70,7 @@ Route::prefix('admin')
     Route::post('variant_bulk_insert', [VariantController::class, 'bulkInsert']);
 });
 
-// Route::group(function() {
+Route::middleware(['throttle:global'])->group(function() {
     // CATEGORY
     Route::get('category', [CategoryCController::class, 'getListActiveCategory'])->name('category.list');
     Route::get('category/{category}', [CategoryCController::class, 'getOneActiveCategoryWithProducts'])->name('category.one');
@@ -93,4 +93,4 @@ Route::prefix('admin')
     Route::get('web_setting/{web_setting}', [WebSettingCController::class, 'show']);
 
     Route::get('search', [SearchController::class, 'search']);
-// });
+});
