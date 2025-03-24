@@ -130,7 +130,7 @@ const Index = () => {
 
               <div className='mb-3'>
                 <label className="mb-2" htmlFor="choices-text-remove-button">
-                  Product
+                  Parent Categories
                 </label>
                 <Select isDisabled={isCreate ? false : true} className="select2 z-5" value={selectedCategories} options={categoriesOptions} onChange={(v) => { setSelectedCategories(v); setFormData({ ...formData, parent_id: v.value }) }} />
               </div>

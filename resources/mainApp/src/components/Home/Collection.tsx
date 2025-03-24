@@ -34,13 +34,12 @@ const Collection = () => {
                 <div className="list-collection section-swiper-navigation md:mt-10 mt-6 sm:px-5 px-4">
                     <Swiper
                         spaceBetween={12}
-                        slidesPerView={2}
                         navigation
                         loop={true}
                         modules={[Navigation, Autoplay]}
                         breakpoints={{
                             576: {
-                                slidesPerView: 2,
+                                slidesPerView: 1,
                                 spaceBetween: 12,
                             },
                             768: {
@@ -57,7 +56,7 @@ const Collection = () => {
                      {
                         listCategories.map((item: any, index: number) => (
                             <SwiperSlide key={index}>
-                            <div className="collection-item w-[300px] h-[250px] block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick(item?.slug)}>
+                            <div className="collection-item mx-auto w-[300px] h-[250px] block relative rounded-2xl overflow-hidden cursor-pointer" onClick={() => handleTypeClick(item?.slug)}>
                                 <div className="bg-img">
                                     <Image
                                         src={Helpers.GetImage(item?.image)}
