@@ -26,7 +26,7 @@ export const WhatsApp = () => {
 
 
   return (
-    <div onClick={handleToShop} className='fixed z-[100] bottom-6 rounded-full cursor-pointer right-6 bg-[#25d366] w-[45px] h-[45px] md:w-[60px] md:h-[60px] flex justify-center items-center'>
+    <div onClick={handleToShop} className='fixed z-[100] bottom-6 rounded-full cursor-pointer right-6 bg-[#25d366]  w-[60px] h-[60px] flex justify-center items-center'>
         <WhatsappLogo className='text-white text-[27px] md:text-[40px]' />
     </div>
   )
