@@ -321,9 +321,9 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
                             </div>
 
                             <div className="list-product hide-product-sold grid lg:grid-cols-3 grid-cols-2 sm:gap-[30px] gap-[20px] mt-7">
-                                {produk ? produk?.data?.map((item: any, index: string) => (
+                                {produk?.data?.length > 0 ? produk?.data?.map((item: any, index: string) => (
                                     <Product key={index} data={item} type='grid' style={''} />
-                                )) : <div className="no-data-product">Produk tidak ditemukan</div>}
+                                )) : <div className="col-span-2 text-xl">Produk tidak ditemukan</div>}
 
                             </div>
 

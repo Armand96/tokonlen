@@ -74,43 +74,52 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                 <div className="heading4">Zhindaya</div>
                             </Link>
                             <div className="menu-main-page h-full max-lg:hidden">
-                                <ul className='flex items-center gap-8 h-full'>
+                            <ul className='flex items-center gap-8 h-full'>
                                     {
                                         categories?.slice(0, 4).map((category, index) => (
-                                            <li className='h-full' key={index}>
-                                                <Link
-                                                    href={`/shop/?category=${category?.slug}`}
-                                                    className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === category?.name ? 'active' : ''}`}
-                                                >
-                                                    {category?.name}
-                                                </Link>
-                                                <div className={`sub-menu absolute top-[74px] ${category?.sub_cat?.length === 0 && "hidden"}  bg-white`}>
-                                                    <div className="container">
-                                                        <div className="flex justify-between py-8">
-                                                            <div className="nav-link grid gap-y-8">
-                                                                {
-                                                                    category?.sub_cat?.map((child: any, index: string) => (
-                                                                        <div className="nav-item" key={index}>
-                                                                            <div
-                                                                                onClick={() => handleTypeClick(child?.slug, category?.slug)}
-                                                                                className={`link text-secondary duration-300 cursor-pointer`}
-                                                                            >
-                                                                                {child?.name}
-                                                                            </div>
-                                                                        </div>
-                                                                    ))
-                                                                }
+                                            <>
+                                                {
+                                                    category?.sub_cat?.length > 0 ? <li className='h-full' key={index}>
+                                                        <Link
+                                                            // href={`/shop/?category=${category?.slug}`}
+                                                            href={"#"}
+                                                            className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === category?.name ? 'active' : ''}`}
+                                                        >
+                                                            {category?.name}
+                                                        </Link>
+                                                        <div className={`sub-menu absolute top-[74px] ${category?.sub_cat?.length === 0 && "hidden"}  bg-white`}>
+                                                            <div className="container">
+                                                                <div className="flex justify-between py-8">
+                                                                    <div className="nav-link grid gap-y-8">
+                                                                        {
+                                                                            category?.sub_cat?.map((child: any, index: string) => (
+                                                                                <div className="nav-item" key={index}>
+                                                                                    <div
+                                                                                        onClick={() => handleTypeClick(child?.slug, category?.slug)}
+                                                                                        className={`link text-secondary duration-300 cursor-pointer`}
+                                                                                    >
+                                                                                        {child?.name}
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))
+                                                                        }
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                                    </li> : <li className='h-full'>
+                                                        <Link href={`/shop/?category=${category?.slug}`} className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
+                                                            {category?.name}
+                                                        </Link>
+                                                    </li>
+                                                }
+                                            </>
                                         ))
                                     }
 
                                     <li className='h-full relative '>
                                         <Link
-                                            href={`/shop/`}
+                                            href={`#`}
                                             className={`text-button-uppercase duration-300 h-full flex items-center justify-center gap-1 ${pathname === '/prempuan' ? 'active' : ''}`}
                                         >
                                             Kategori
@@ -135,7 +144,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                         </Link>
                                     </li>
                                     <li className='h-full'>
-                                        <Link href="/tentang-kami" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
+                                        <Link href="/about-us" className='text-button-uppercase duration-300 h-full flex items-center justify-center'>
                                             Tentang Kami
                                         </Link>
                                     </li>
@@ -169,50 +178,57 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                 </div>
                                 <Link href={'/'} className='logo text-3xl font-semibold text-center'>Zhindaya</Link>
                             </div>
-                            <div className="form-search relative mt-2">
-                                <Icon.MagnifyingGlass size={20} className='absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer' />
-                                <input type="text" placeholder='What are you looking for?' className=' h-12 rounded-lg border border-line text-sm w-full pl-10 pr-4' />
-                            </div>
+                          
                             {
                                 <div className="list-nav mt-6" >
                                     <ul className='flex flex-col gap-y-6'>
                                         {
                                             categories?.slice(0, 5).map((category, index) => (
-                                                <li
-                                                    className={`${openSubNavMobile === index ? 'open  bg-white ' : ''}`}
-                                                    key={index}
-                                                    onClick={() => handleOpenSubNavMobile(index)}
-                                                >
-                                                    <a href={`/shop/`} className={`text-xl font-semibold flex items-center justify-between`}> {category?.name}
-                                                        <span className='text-right'>
-                                                            <Icon.CaretRight size={20} />
-                                                        </span>
-                                                    </a>
-                                                    <div className="sub-nav-mobile">
-                                                        <div
-                                                            className="back-btn flex items-center gap-3"
+                                                <>
+                                                    {
+                                                        category?.sub_cat?.length > 0 ? <li
+                                                            className={`${openSubNavMobile === index ? 'open  bg-white ' : ''}`}
+                                                            key={index}
                                                             onClick={() => handleOpenSubNavMobile(index)}
                                                         >
-                                                            <Icon.CaretLeft />
-                                                            Back
-                                                        </div>
-                                                        <div className="list-nav-item w-full  grid grid-cols-2 pt-2 pb-6">
-                                                            <ul>
-                                                                {
-                                                                    category?.sub_cat?.map((item: any, index: string) => (
-                                                                        <li key={index}>
-                                                                            <Link href={`/shop/?type=${item?.slug}&category=${category?.slug}`} className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
-                                                                                {item?.name}
-                                                                            </Link>
-                                                                        </li>
-                                                                    ))
-                                                                }
+                                                            <a href={`#`} className={`text-xl font-semibold flex items-center justify-between`}> {category?.name}
+                                                                <span className='text-right'>
+                                                                    <Icon.CaretRight size={20} />
+                                                                </span>
+                                                            </a>
+                                                            <div className="sub-nav-mobile">
+                                                                <div
+                                                                    className="back-btn flex items-center gap-3"
+                                                                    onClick={() => handleOpenSubNavMobile(index)}
+                                                                >
+                                                                    <Icon.CaretLeft />
+                                                                    Back
+                                                                </div>
+                                                                <div className="list-nav-item w-full  grid grid-cols-2 pt-2 pb-6">
+                                                                    <ul>
+                                                                        {
+                                                                            category?.sub_cat?.map((item: any, index: string) => (
+                                                                                <li key={index}>
+                                                                                    <Link href={`/shop/?type=${item?.slug}&category=${category?.slug}`} className={`nav-item-mobile link text-secondary duration-300 ${pathname === '/' ? 'active' : ''}`}>
+                                                                                        {item?.name}
+                                                                                    </Link>
+                                                                                </li>
+                                                                            ))
+                                                                        }
 
-                                                            </ul>
+                                                                    </ul>
 
-                                                        </div>
-                                                    </div>
-                                                </li>
+                                                                </div>
+                                                            </div>
+                                                        </li> : <li
+                                                            className={`${openSubNavMobile === index ? 'open  bg-white ' : ''}`}
+                                                        >
+                                                            <a href={`/shop/?category=${category?.slug}`} className={`text-xl font-semibold flex items-center justify-between`}>
+                                                                {category?.name}
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </>
                                             ))
                                         }
                                         {/* kategori */}
