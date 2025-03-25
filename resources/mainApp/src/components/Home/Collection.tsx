@@ -47,7 +47,7 @@ const Collection = () => {
                                 spaceBetween: 20,
                             },
                             1200: {
-                                slidesPerView: 4,
+                                slidesPerView: listCategories?.length > 3 ? 4 : 3,
                                 spaceBetween: 20,
                             },
                         }}
