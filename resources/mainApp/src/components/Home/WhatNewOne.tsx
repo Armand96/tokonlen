@@ -34,7 +34,7 @@ const WhatNewOne: React.FC<Props> = ({ start, limit }) => {
 
     const changeList = (categories: any,index: string) => {
         setLoading(true)
-        FetchData.GetProduk(`${categories?.id ?  `?category_parent_id=${categories?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc" } `).then((res) => {
+        FetchData.GetProduk(`${categories?.id ?  `?parent_category_id=${categories?.id}&order_by=release_date&order_method=desc` : "?order_by=release_date&order_method=desc" } `).then((res) => {
             handleTabClick(index)
             setProduk(res.data);
             setLoading(false)
@@ -66,7 +66,7 @@ const WhatNewOne: React.FC<Props> = ({ start, limit }) => {
                         </div>
                     </div>
 
-                    <div className="list-product hide-product-sold grid lg:grid-cols-4 grid-cols-1 sm:gap-[70px] gap-[20px] md:mt-10 mt-6">
+                    <div className="list-product hide-product-sold grid lg:grid-cols-4 grid-cols-2 sm:gap-[70px] gap-[20px] md:mt-10 mt-6">
                         {produk.slice(0,8).map((prd: any, index: string) => (
                             <Product data={prd} type='grid' key={index} style='style-1' />
                         ))}
