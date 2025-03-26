@@ -38,7 +38,7 @@ class ProductCController extends Controller
         if ($req->has('parent_category_id')) {
             $query->whereHas('category', function ($qry) use ($req) {
                 $qry->where('parent_id', $req->parent_category_id);
-            });
+            })->orWhere('category_id', $req->parent_category_id);
         }
         // filter by size
         if ($req->has('size')) {
