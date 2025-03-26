@@ -19,7 +19,6 @@ interface Props {
 }
 
 const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
-    const [showOnlySale, setShowOnlySale] = useState(false)
     const [selectedSort, setSelectedSort] = useState({ order_by: 'release_date', order_method: 'desc' });
     const [isAvailable, setIsAvailable] = useState<boolean>(false)
     const [size, setSize] = useState<any[]>()
@@ -29,7 +28,6 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
     const [listCategories, setListCategories] = useState<any>([])
     const [loading, setLoading] = useState(true)
     const [produk, setProduk] = useState<any>([])
-    const [params, setParams] = useState<string>()
     const router = useRouter()
 
     const generateParams = ({
@@ -41,14 +39,17 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
         category,
         categories
       }: any) => {
+
+        console.log(dataType)
+
         const queryObject = {
-          category_id: dataType ? categories?.id : undefined,
+          category_id: dataType ?  dataType : undefined,
           brand: selectedBrand || undefined,
           has_stock: isAvailable || undefined,
           order_by: selectedSort?.order_by || undefined,
           order_method: selectedSort?.order_method || undefined,
           size: selectedSize || undefined,
-          parent_category_id: !dataType ? categories?.find((x: any) => x.slug === category)?.id : undefined
+          parent_category_id: dataType ? undefined :  categories?.find((x: any) => x.slug === category)?.id 
         };
       
         return `?${qs.stringify(queryObject, { skipNulls: true, encode: false })}`;
@@ -58,23 +59,23 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
         setLoading(true);
       
         Promise.all([
-          FetchData.GetCategories(dataType ? `/${dataType}` : ''),
+          FetchData.GetCategories(),
           FetchData.GetSize(),
-          FetchData.GetBrand()
-        ]).then(([categoriesRes, sizeRes, brandRes]) => {
+          FetchData.GetBrand(),
+          FetchData.GetCategories(`/${dataType}`),
+        ]).then(([categoriesRes, sizeRes, brandRes, detailRes]) => {
           const categories = categoriesRes?.data;
           const size = sizeRes?.data;
           const brand = brandRes?.data;
-      
+          const detailCat = detailRes?.data?.id      
           setSize(size);
 
-          if (!dataType) {
-            setBrand(brand);
-            setListCategories(categories);
-          }
+          setListCategories(categories);
+          
+          setBrand(brand);
 
           const queryParams = generateParams({
-            dataType,
+            dataType: detailCat,
             selectedBrand,
             isAvailable,
             selectedSort,
@@ -83,26 +84,17 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
             categories
           });
 
-          setParams(queryParams)
+
+          FetchData.GetProduk(queryParams)
+          .then((produkRes) => {
+            setProduk(produkRes);
+            setLoading(false);
+          });
+
         });
       }, [category, dataType, selectedSize, selectedBrand, isAvailable, selectedSort]);
 
 
-      useEffect(() => {
-        
-        if(params){
-            FetchData.GetProduk(params)
-            .then((produkRes) => {
-              setProduk(produkRes);
-              setLoading(false);
-            });
-        }
-      },[params])
-
-
-    const handleShowOnlySale = () => {
-        setShowOnlySale(toggleSelect => !toggleSelect)
-    }
 
     const handleSortChange = (option: string) => {
         let listSort = [
@@ -268,9 +260,9 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
                                             name="filterSale"
                                             id="filter-sale"
                                             className='border-line'
-                                            onChange={handleShowOnlySale}
+                                            onClick={() => setIsAvailable(!isAvailable)}
                                         />
-                                        <label htmlFor="filter-sale" className='cation1 cursor-pointer' onClick={() => setIsAvailable(!isAvailable)}>Tersedia</label>
+                                        <label htmlFor="filter-sale" className='cation1 cursor-pointer' >Tersedia</label>
                                     </div>
                                 </div>
                                 <div className="right flex items-center gap-3">

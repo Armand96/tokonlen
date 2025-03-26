@@ -8,14 +8,9 @@ import Footer from '@/components/Footer/Footer'
 
 export default function Breadcrumb() {
     const searchParams = useSearchParams()
-    let [type, setType] = useState<string | null | undefined>()
-    let datatype = searchParams.get('type')
+    let type = searchParams.get('type')
     let gender = searchParams.get('gender')
     let category = searchParams.get('category')
-
-    useEffect(() => {
-        setType(datatype);
-    }, [datatype]);
 
 
     return (
