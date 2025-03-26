@@ -173,7 +173,7 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
                 <div className="container">
                     <div className="flex max-md:flex-wrap max-md:flex-col-reverse gap-y-8">
                         <div className="sidebar order-2 lg:order-1 lg:w-1/4 md:w-1/3 w-full md:pr-12">
-                            <div className={`filter-type pb-8 border-b border-line ${listCategories.filter((y: any) => y.slug == category)[0]?.sub_cat == null && "hidden"}`}>
+                            <div className={`filter-type pb-8 border-b border-line ${listCategories.filter((y: any) => y.slug == category)[0]?.sub_cat.length === 0 && "hidden"}`}>
                                 <div className="heading6">Sub Kategori</div>
                                 <div className="list-type mt-4">
                                     {listCategories.filter((y: any) => y.slug == category).map((item: any, index: string) => {
@@ -183,10 +183,7 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
                                                 className={`item flex items-center justify-between cursor-pointer ${x === item ? 'active' : ''}`}
                                                 onClick={() => handleType(category!, x?.slug)}
                                             >
-                                                <div className='text-secondary has-line-before hover:text-black capitalize'>{item?.name}</div>
-                                                <div className='text-secondary2'>
-                                                    {x?.name}
-                                                </div>
+                                                <div className='text-secondary has-line-before hover:text-black capitalize'>{x?.name}</div>
                                             </div>
                                         ))
                                     })}

@@ -117,7 +117,6 @@ const Default: React.FC<Props> = ({ productId }) => {
     }
 
 
-    console.log(activeVariant?.sizes?.filter((x: any) => x.size === activeSize))
 
 
     return (
