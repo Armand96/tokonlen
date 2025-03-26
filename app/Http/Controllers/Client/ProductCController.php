@@ -34,10 +34,10 @@ class ProductCController extends Controller
             //     $q->where('parent_id', $req->category_id);
             // });
         }
-        // filter by category_parent_id
-        if ($req->has('category_parent_id')) {
+        // filter by parent_category_id
+        if ($req->has('parent_category_id')) {
             $query->whereHas('category', function ($qry) use ($req) {
-                $qry->where('parent_id', $req->category_parent_id);
+                $qry->where('parent_id', $req->parent_category_id);
             });
         }
         // filter by size
