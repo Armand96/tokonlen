@@ -29,10 +29,8 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
     const [listCategories, setListCategories] = useState<any>([])
     const [loading, setLoading] = useState(true)
     const [produk, setProduk] = useState<any>([])
+    const [params, setParams] = useState<string>()
     const router = useRouter()
-
-
-
 
     const generateParams = ({
         dataType,
@@ -69,7 +67,12 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
           const brand = brandRes?.data;
       
           setSize(size);
-      
+
+          if (!dataType) {
+            setBrand(brand);
+            setListCategories(categories);
+          }
+
           const queryParams = generateParams({
             dataType,
             selectedBrand,
@@ -79,19 +82,23 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
             category,
             categories
           });
-      
-          FetchData.GetProduk(queryParams)
+
+          setParams(queryParams)
+        });
+      }, [category, dataType, selectedSize, selectedBrand, isAvailable, selectedSort]);
+
+
+      useEffect(() => {
+        
+        if(params){
+            FetchData.GetProduk(params)
             .then((produkRes) => {
               setProduk(produkRes);
               setLoading(false);
             });
+        }
       
-          if (!dataType) {
-            setBrand(brand);
-            setListCategories(categories);
-          }
-        });
-      }, [category, dataType, selectedSize, selectedBrand, isAvailable, selectedSort]);
+      },[params])
 
 
     const handleShowOnlySale = () => {

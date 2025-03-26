@@ -8,6 +8,7 @@ const nextConfig = (phase) => {
 
   return ({
     output: 'export',
+    reactStrictMode: false,
     distDir: 'dist',
     assetPrefix: dev == phase ?  '/'  :'/mainApp',
     eslint: {
