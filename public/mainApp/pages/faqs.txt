@@ -1,5 +1,5 @@
 1:HL["/mainApp/_next/static/css/7c92d8e72b39d979.css","style",{"crossOrigin":""}]
-0:["zRprR_nG5BsG69fxjL-iq",[[["",{"children":["pages",{"children":["faqs",{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],"$L2",[[["$","link","0",{"rel":"stylesheet","href":"/mainApp/_next/static/css/7c92d8e72b39d979.css","precedence":"next","crossOrigin":""}]],"$L3"]]]]
+0:["zkDPmPSVoHriTJxmBQnKF",[[["",{"children":["pages",{"children":["faqs",{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],"$L2",[[["$","link","0",{"rel":"stylesheet","href":"/mainApp/_next/static/css/7c92d8e72b39d979.css","precedence":"next","crossOrigin":""}]],"$L3"]]]]
 4:I[5811,["111","static/chunks/111-96ecb27f5c243763.js","185","static/chunks/app/layout-ac4459a74f11e9ad.js"],"WishlistProvider"]
 5:I[8363,["111","static/chunks/111-96ecb27f5c243763.js","185","static/chunks/app/layout-ac4459a74f11e9ad.js"],"ModalWishlistProvider"]
 6:I[1629,["111","static/chunks/111-96ecb27f5c243763.js","185","static/chunks/app/layout-ac4459a74f11e9ad.js"],"ModalSearchProvider"]
