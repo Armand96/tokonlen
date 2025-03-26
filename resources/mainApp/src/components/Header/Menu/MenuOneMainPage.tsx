@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { usePathname } from 'next/navigation';
@@ -21,10 +21,11 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
     let [selectedType, setSelectedType] = useState<string | null>()
     const { openMenuMobile, handleMenuMobile } = useMenuMobile()
     const [openSubNavMobile, setOpenSubNavMobile] = useState<number | null>(null)
-    const { openModalWishlist } = useModalWishlistContext()
     const { openModalSearch } = useModalSearchContext()
     const [categories, setCategories] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
+    const [search, setSearch] = useState('')
+    const mobileSearch = useRef<any>(null)
 
     const handleOpenSubNavMobile = (index: number) => {
         setOpenSubNavMobile(openSubNavMobile === index ? null : index)
@@ -58,7 +59,31 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
     const handleTypeClick = (type: string, category: string) => {
         setSelectedType(type)
         router.push(`/shop/?type=${type}&category=${category}`);
-    };
+    }; 
+
+      useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === "Enter") {
+              if (search.trim()) {
+                router.push(`/search-result?query=${encodeURIComponent(search)}`);
+              }
+            }
+          };
+      
+          const searchInput = mobileSearch.current;
+          if (searchInput) {
+            searchInput.addEventListener("keypress", handleKeyPress);
+          }
+      
+          return () => {
+            if (searchInput) {
+              searchInput.removeEventListener("keypress", handleKeyPress);
+            }
+          };
+
+      }, [search])
+      
+
 
     return (
         <>
@@ -74,7 +99,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                 <div className="heading4">Zhindaya</div>
                             </Link>
                             <div className="menu-main-page h-full max-lg:hidden">
-                            <ul className='flex items-center gap-8 h-full'>
+                                <ul className='flex items-center gap-8 h-full'>
                                     {
                                         categories?.slice(0, 4).map((category, index) => (
                                             <>
@@ -178,10 +203,15 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                 </div>
                                 <Link href={'/'} className='logo text-3xl font-semibold text-center'>Zhindaya</Link>
                             </div>
-                          
+                            <div className="form-search relative mt-2">
+                                <Icon.MagnifyingGlass size={20} className='absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer' />
+                                <input type="text" onChange={(v) => setSearch(v.target.value)} ref={mobileSearch} placeholder='cari baju atau yang lain' className=' h-12 rounded-lg border border-line text-sm w-full pl-10 pr-4' />
+                            </div>
+
                             {
                                 <div className="list-nav mt-6" >
                                     <ul className='flex flex-col gap-y-6'>
+
                                         {
                                             categories?.slice(0, 5).map((category, index) => (
                                                 <>
@@ -225,7 +255,11 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
                                                         >
                                                             <a href={`/shop/?category=${category?.slug}`} className={`text-xl font-semibold flex items-center justify-between`}>
                                                                 {category?.name}
+                                                                <span className='text-right'>
+                                                                    <Icon.CaretRight size={20} />
+                                                                </span>
                                                             </a>
+
                                                         </li>
                                                     }
                                                 </>
