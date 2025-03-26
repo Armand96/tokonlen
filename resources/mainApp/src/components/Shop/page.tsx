@@ -62,7 +62,7 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
           FetchData.GetCategories(),
           FetchData.GetSize(),
           FetchData.GetBrand(),
-          FetchData.GetCategories(`/${dataType}`),
+          FetchData.GetCategories(`${dataType ? `/${dataType}` : ""}`),
         ]).then(([categoriesRes, sizeRes, brandRes, detailRes]) => {
           const categories = categoriesRes?.data;
           const size = sizeRes?.data;
