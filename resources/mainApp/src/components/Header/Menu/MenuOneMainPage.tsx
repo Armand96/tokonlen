@@ -63,11 +63,9 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
 
       useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
-            if (event.key === "Enter") {
-              if (search.trim()) {
-                router.push(`/search-result?query=${encodeURIComponent(search)}`);
+            if (["Enter",13].includes(event.key)) {
+                  router.push(`/search-result?query=${search}`); 
               }
-            }
           };
       
           const searchInput = mobileSearch.current;

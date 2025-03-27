@@ -9,9 +9,10 @@ import { useModalWishlistContext } from '@/context/ModalWishlistContext';
 import { useModalSearchContext } from '@/context/ModalSearchContext';
 import { useRouter } from 'next/navigation';
 import FetchData from '@/services/FetchData';
+import Loading from '@/components/Other/Loading';
 
 interface Props {
-    props: string;
+    props: string
 }
 
 const MenuOne: React.FC<Props> = ({ props, }) => {
@@ -25,6 +26,8 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
     const [fixedHeader, setFixedHeader] = useState(false)
     const [search, setSearch] = useState('')
     const mobileSearch = useRef<any>(null)
+    const [loading, setLoading] = useState(false)
+    
 
 
     const handleOpenSubNavMobile = (index: number) => {
@@ -59,10 +62,10 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
 
          useEffect(() => {
            const handleKeyPress = (event: KeyboardEvent) => {
-               if (event.key === "Enter") {
-                 if (search.trim()) {
-                   router.push(`/search-result?query=${encodeURIComponent(search)}`);
-                 }
+               if (["Enter",13].includes(event.key)) {
+                   router.push(`/search-result?query=${search}`);
+                   setLoading(true)
+                 
                }
              };
          
@@ -81,6 +84,8 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
 
     return (
         <>
+                    {loading && <Loading />}
+    
             <div className={`header-menu style-two ${fixedHeader ? 'fixed  ' : 'absolute'}  top-0 left-0 right-0 w-full md:h-[74px] h-[56px] ${props}`}>
                 <div className="container mx-auto h-full">
                     <div className="header-main flex justify-between h-full">
