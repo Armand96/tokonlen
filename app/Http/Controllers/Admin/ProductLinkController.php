@@ -30,9 +30,13 @@ class ProductLinkController extends Controller
         if ($req->has('link')) {
             $query->where('link', 'like', '%' . $req->link . '%');
         }
-        // filter by category
+        // filter by product
         if ($req->has('product_id')) {
             $query->where('product_id', '=', $req->product_id);
+        }
+        // filter by variant
+        if ($req->has('variant_id')) {
+            $query->where('variant_id', '=', $req->variant_id);
         }
         if ($req->has('link_type_id')) {
             $query->where('link_type_id', '=', $req->link_type_id);
