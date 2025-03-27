@@ -3,23 +3,63 @@ import StatisticsWidget from './StatisticsWidget'
 
 const Statistics = () => {
 	return (
-		<div className="grid 2xl:grid-cols-5 md:grid-cols-3 gap-6 mb-6">
-			<div className="2xl:col-span-1 col-span-3">
-			<StatisticsWidget icon='ri-line-chart-fill' variant={'bg-success'} cardTitle={'Pengunjung hari ini'} title={'Pengunjung hari ini'} change={''} stats={'54,214'} dataSince={''} classname={'apex-charts'} chartSeries={[58, 42]} colors={['#47ad77', '#e3e9ee']} />
+		<div className="grid 2xl:grid-cols-6 md:grid-cols-3 grid-cols-1 gap-6 mb-6">
+
+			<div className="2xl:col-span-2  md:col-span-0">
+				<StatisticsWidget icon='ri-box-1-line' variant={'text-green-500'} cardTitle={'Total produk'} stats={'54,214'}  />
 			</div>
 
-			<div className="2xl:col-span-1 md:col-span-0 ">
-				<StatisticsWidget icon='ri-line-chart-fill' variant={'bg-success'} cardTitle={'Kemarin'} title={'Pengunjung hari ini'} change={''} stats={'54,214'} dataSince={''} classname={'apex-charts'} chartSeries={[58, 42]} colors={['#47ad77', '#e3e9ee']} />
+			<div className="2xl:col-span-2 md:col-span-0">
+				<StatisticsWidget icon='ri-dashboard-line' variant={'text-blue-500'} cardTitle={'Total Kategori'}  stats={'54,214'}  />
 			</div>
 
-			<div className="2xl:col-span-1 lg:col-span-0 ">
-				<StatisticsWidget icon='ri-line-chart-fill' variant={'bg-success'} cardTitle={'minggu lalu'} title={'Pengunjung hari ini'} change={''} stats={'54,214'} dataSince={''} classname={'apex-charts'} chartSeries={[58, 42]} colors={['#47ad77', '#e3e9ee']} />
+			<div className="2xl:col-span-2  md:col-span-0  ">
+				<StatisticsWidget icon=' ri-sparkling-line' variant={'text-yellow-500'} cardTitle={'Total variant'}  stats={'54,214'}  />
 			</div>
 
-			<div className="2xl:col-span-1 lg:col-span-0 ">
-				<StatisticsWidget icon='ri-line-chart-fill' variant={'bg-success'} cardTitle={'Bulan ini'} title={'Pengunjung hari ini'} change={''} stats={'54,214'} dataSince={''} classname={'apex-charts'} chartSeries={[58, 42]} colors={['#47ad77', '#e3e9ee']} />
+			<div className="2xl:col-span-6 lg:col-span-3  md:col-span-0 ">
+				<StatisticsWidget icon='ri-percent-line' variant={'text-blue-500'} cardTitle={'Total produk dan variant yang diskon'}  stats={'54,214'}  />
 			</div>
+
 			
+			<div className="2xl:col-span-2 md:col-span-0 ">
+				<StatisticsWidget icon=' ri-price-tag-3-line' variant={'text-green-500'} cardTitle={' Diskon Produk Aktif'}  stats={'54,214'}  />
+			</div>
+
+			{/* <div className="2xl:col-span-3 lg:col-span-1 md:col-span-0">
+				<StatisticsWidget icon='ri-percent-line' variant={'text-red-500'} cardTitle={'  Diskon Produk non aktif'}  stats={'54,214'}  />
+			</div> */}
+
+			<div className="2xl:col-span-2 md:col-span-0">
+				<StatisticsWidget icon='ri-price-tag-3-line' variant={'text-yellow-500'} cardTitle={' Diskon Variant Aktif'}  stats={'54,214'}  />
+			</div>
+
+			<div className="2xl:col-span-2 md:col-span-0">
+				<StatisticsWidget icon='ri-price-tag-3-line' variant={'text-red-500'} cardTitle={' Diskon non aktif'}  stats={'54,214'}  />
+			</div>
+
+			{/* <div className="2xl:col-span-3 lg:col-span-1 md:col-span-0">
+				<StatisticsWidget icon='ri-percent-line' variant={'text-red-500'} cardTitle={' Diskon Variant non aktif'}  stats={'54,214'}  />
+			</div> */}
+
+			<div className="2xl:col-span-6 lg:col-span-3 col-span-0">
+				<StatisticsWidget icon='ri-external-link-line' variant={'text-green-400'} cardTitle={'Jumlah tipe Link'}  stats={'54,214'}  />
+			</div>
+
+			<div className="2xl:col-span-2 md:col-span-0 ">
+				<StatisticsWidget icon='ri-links-line' variant={'text-cyan-400'} cardTitle={'Total Klik tokopedia'}  stats={'54,214'}  />
+			</div>
+
+			<div className="2xl:col-span-2 md:col-span-0 ">
+				<StatisticsWidget icon='ri-links-line' variant={'text-green-400'} cardTitle={'Total Klik tokopedia'}  stats={'54,214'}  />
+			</div>
+
+
+			<div className="2xl:col-span-2 md:col-span-0 ">
+				<StatisticsWidget icon='ri-links-line' variant={'text-sky-400'} cardTitle={'Total Klik tokopedia'}  stats={'54,214'}  />
+			</div>
+
+
 
 			{/* <div className="2xl:col-span-1 lg:col-span-2">
 				<StatisticsWidget variant={'bg-danger'} cardTitle={'Orders'} title={'Number of Orders'} change={'1.08%'} stats={'7,543'} dataSince={'Since last month'} classname={'apex-charts'} chartSeries={[34, 66]} colors={['#3e60d5', '#e3e9ee']} />
@@ -33,7 +73,7 @@ const Statistics = () => {
 				<StatisticsWidget variant={'bg-success'} cardTitle={'Growth'} title={'Growth'} change={'4.87%'} stats={'+ 20.6%'} dataSince={'Since last month'} classname={'apex-charts'} chartSeries={[45, 55]} colors={['#ffc35a', '#e3e9ee']} />
 			</div> */}
 
-		
+
 		</div>
 	)
 }

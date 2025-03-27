@@ -15,18 +15,15 @@ const TopSellingProducts = ({ products }: TopSellingProductsProps) => {
 	return (
 		<div className="card">
 			<div className="card-header flex justify-between items-center">
-				<h4 className="card-title">Produk Paling Banyak dikunjungi</h4>
-				<Link to="#" className="btn btn-sm !text-sm bg-info text-white">
-					Export <i className="ri-download-line ms-1"></i>
-				</Link>
+				<h4 className="card-title">Produk Paling banyak dikunjungi</h4>
 			</div>
 			<div className="relative overflow-x-auto">
 				<table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 					<thead className="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 						<tr>
 							<th className="py-1.5 px-4">Produk</th>
-							<th className="py-1.5 px-4">Kategori</th>
-							<th className="py-1.5 px-4">Pengunjung</th>
+							<th className="py-1.5 px-4">Tipe Link</th>
+							<th className="py-1.5 px-4">jumlah klik</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -41,11 +38,6 @@ const TopSellingProducts = ({ products }: TopSellingProductsProps) => {
 				</table>
 			</div>
 
-			<div className="text-center">
-				<Link to="/backoffice/products" className="btn text-primary underline font-bold mb-2">
-					Lihat Semua
-				</Link>
-			</div>
 		</div>
 	)
 }
