@@ -114,7 +114,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
       };
 
       let response;
-      response = await PostProducts(postData, formData.id);
+      response = await PostProducts(postData, formData.id)
 
       if (response?.data?.data?.id) {
         const productId = response.data.data.id;
@@ -258,8 +258,6 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
   }
 
 
-  console.log(formData)
-
 
   return (
     <ModalLayout showModal={isOpen} toggleModal={() => toggleModal()} placement='justify-center items-start'>
@@ -272,12 +270,12 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
         </div>
         <div className='p-4 overflow-y-auto w-[70vw]'>
 
-          <FormInput autoComplete="false" name='name' label='Name' value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className='form-input mb-3' />
+          <FormInput autoComplete="false"   name='name' label='Name *' value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className='form-input mb-3' />
 
-          <FormInput autoComplete="false" name='price' labelClassName='mb-2' label='Harga' value={HelperFunction.FormatToRupiah2(formData?.price || 0)} onChange={(e) => setFormData({ ...formData, price: parseInt(HelperFunction.onlyNumber(e.target.value)) })} className='form-input mb-3' />
+          <FormInput autoComplete="false" name='price' labelClassName='mb-2' label='Harga *' value={HelperFunction.FormatToRupiah2(formData?.price || 0)} onChange={(e) => setFormData({ ...formData, price: parseInt(HelperFunction.onlyNumber(e.target.value)) })} className='form-input mb-3' />
           <div className="mb-20">
             <div className="flex justify-between items-center">
-              <h4 className="card-title">Deskripsi</h4>
+              <h4 className="card-title">Deskripsi *</h4>
             </div>
 
             <div className="pt-3">
@@ -287,7 +285,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
 
           <div className='mb-4' >
             <label className="mb-2" htmlFor="choices-text-remove-button">
-              Tanggal rilis
+              Tanggal rilis *
             </label>
             <CustomFlatpickr className="form-input" placeholder="masukan tanggal" value={formData?.release_date} options={{
               time_24hr: true,
@@ -300,14 +298,14 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
 
           <div className='mb-4'>
             <label className="mb-2" htmlFor="choices-text-remove-button">
-              Kategori
+              Kategori *
             </label>
             <Select className="select2 z-5" options={categoriesOptions} value={selectedCategories} onChange={(v) => handleOnSelect(v, 'categories')} />
           </div>
 
           <div className='mb-4' >
             <label className="mb-2" htmlFor="choices-text-remove-button">
-              Sub Kategori
+              Sub Kategori {subCategoriesOptions?.length !== 0 ? "*" : ""}
             </label>
             <Select isDisabled={subCategoriesOptions?.length == 0} className="select2 z-5" options={subCategoriesOptions} value={selectedSubCategories} onChange={(v) => handleOnSelect(v, 'sub_categories')} />
           </div>
@@ -356,7 +354,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
           </div>
 
           <div className="mb-3">
-            <h6 className="text-sm mb-2">Product Tersedia ?</h6>
+            <h6 className="text-sm mb-2">Product Tersedia *</h6>
             <div className="flex gap-5">
               <div className="flex items-center" >
                 <input type="radio" className="form-radio text-primary" name="product-available" onChange={() => setFormData({ ...formData, stock: 1 })} checked={formData?.stock === 1} />
@@ -374,11 +372,11 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
           </div>
 
 
-          <FormInput autoComplete="false" type='suggest' dataSuggest={suggestBrand} labelClassName='mb-2' name='brand' label='Brand' value={formData.brand} onChange={(e) => setFormData({ ...formData, brand: e })} className='form-input mb-3' />
+          <FormInput autoComplete="false" type='suggest' dataSuggest={suggestBrand} labelClassName='mb-2' name='brand' label='Brand *' value={formData.brand} onChange={(e) => setFormData({ ...formData, brand: e })} className='form-input mb-3' />
 
           {!isCreate && (
             <div className='mb-2'>
-              <h6 className='text-sm mb-2'>Status</h6>
+              <h6 className='text-sm mb-2'>Status *</h6>
               <input type='checkbox' checked={formData.is_active === 1 ? true : false} onChange={(e) => setFormData({ ...formData, is_active: e.target.checked ? 1 : 0 })} />
               <label className='ml-2'>Aktif</label>
             </div>
@@ -395,7 +393,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
         </div>
         <div className='flex justify-end p-4 border-t gap-x-4'>
           <button className='btn bg-light text-gray-800' onClick={() => toggleModal()}>Close</button>
-          <button className='btn bg-primary text-white' onClick={postData}>Submit</button>
+          <button className='btn bg-primary text-white' disabled={ !formData?.stock || !formData?.price || !formData?.name || !formData?.description || !formData?.brand || !formData?.release_date || (selectedCategories?.value && subCategoriesOptions?.length !== 0 ? !selectedSubCategories.value  : !selectedCategories?.value  ) } onClick={postData}>Submit</button>
         </div>
       </div>
     </ModalLayout>

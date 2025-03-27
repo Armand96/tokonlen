@@ -14,7 +14,7 @@ import ModalPreview from '../../../components/ModalPreviewImage/ModalPreview';
 const Index = () => {
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<any | PostCategoriesTypes>({ name: '', image_file: '', parent_id: 0, is_active: 1 });
+  const [formData, setFormData] = useState<any | PostCategoriesTypes>({ name: '', image_file: '', parent_id: 0, is_active: 1, is_show_header: false });
   const [isCreate, setIsCreate] = useState<boolean>(false);
   const [dataPaginate, setDataPaginate] = useState<any>(null);
   const [categoriesOptions, setCategoriesOptions] = useState<any[]>()
@@ -134,6 +134,13 @@ const Index = () => {
                 </label>
                 <Select isDisabled={isCreate ? false : true} className="select2 z-5" value={selectedCategories} options={categoriesOptions} onChange={(v) => { setSelectedCategories(v); setFormData({ ...formData, parent_id: v.value }) }} />
               </div>
+
+              <div className='mb-3'>
+              <h6 className='text-sm mb-2'>Tampilkan di header</h6>
+                <input type='checkbox' checked={formData.is_show_header === 1 ? true : false} onChange={(e) => setFormData({ ...formData, is_show_header: e.target.checked ? 1 : 0 })} />
+                <label className='ml-2'>Ya</label>
+              </div>
+
 
               {/* <div className='mb-2'>
                 <h6 className='text-sm mb-2'>Tampilkan di header</h6>

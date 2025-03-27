@@ -21,9 +21,9 @@ const TablePaginate: React.FC<TablePaginateProps> = ({ data, columns, totalPage,
     return (
       <div className="card">
         <div className="p-6">
-          <div className="overflow-auto">
-            <div className="min-w-full inline-block align-middle">
-              <div className="overflow-hidden">
+          <div className="overflow-auto w-full">
+            <div className="w-full inline-block align-middle">
+              <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border">
                   <thead>
                     <tr>

@@ -35,7 +35,7 @@ const MenuOne: React.FC<Props> = ({ props, }) => {
     }
 
     useEffect(() => {
-        FetchData.GetCategories().then((res) => {
+        FetchData.GetCategories(`?is_show_header=1`).then((res) => {
             setCategories(res.data)
         })
     }, [])
