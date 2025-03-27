@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BannerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LinkTypeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
@@ -42,7 +43,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::prefix('admin')
-    ->middleware('auth:sanctum')
+    // ->middleware('auth:sanctum')
     ->group(function () {
     /* CRUD ADMIN */
     Route::resource('user', UserController::class);
@@ -68,6 +69,7 @@ Route::prefix('admin')
 
     //additional
     Route::post('variant_bulk_insert', [VariantController::class, 'bulkInsert']);
+    Route::get('data_dashboard', [DashboardController::class, 'getDataDashboard']);
 });
 
 Route::middleware(['throttle:global'])->group(function() {

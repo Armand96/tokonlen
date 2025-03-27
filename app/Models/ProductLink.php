@@ -8,6 +8,7 @@ class ProductLink extends Model
 {
     protected $fillable = [
         'product_id',
+        'variant_id',
         'name',
         'link',
         'link_type_id',
@@ -26,5 +27,10 @@ class ProductLink extends Model
     public function linkType()
     {
         return $this->belongsTo(LinkType::class, 'link_type_id', 'id');
+    }
+
+    public function visitors()
+    {
+        return $this->hasMany(ProductLinkVisit::class, 'product_link_id', 'id');
     }
 }

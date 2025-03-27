@@ -52,6 +52,11 @@ class Variant extends Model
             ->where('start_date', '<=', date('Y-m-d'))->where('end_date', '>=', date('Y-m-d'));
     }
 
+    public function links()
+    {
+        return $this->hasMany(ProductLink::class, 'variant_id', 'id');
+    }
+
     public function getFinalPriceAttribute()
     {
         if ($this->discount) {
