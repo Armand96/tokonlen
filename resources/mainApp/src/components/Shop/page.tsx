@@ -18,7 +18,7 @@ interface Props {
     category: string | null
 }
 
-const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
+const Shopbreadcrumb: React.FC<Props> = ({ dataType, gender, category }) => {
     const [selectedSort, setSelectedSort] = useState({ order_by: 'release_date', order_method: 'desc' });
     const [isAvailable, setIsAvailable] = useState<boolean>(false)
     const [size, setSize] = useState<any[]>()
@@ -27,6 +27,7 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
     const [selectedSize, setSelectedSize] = useState<any>('')
     const [listCategories, setListCategories] = useState<any>([])
     const [loading, setLoading] = useState(true)
+    const [openSidebar, setOpenSidebar] = useState(false)
     const [produk, setProduk] = useState<any>([])
     const router = useRouter()
 
@@ -38,62 +39,93 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
         selectedSize,
         category,
         categories
-      }: any) => {
+    }: any) => {
 
         console.log(dataType)
 
         const queryObject = {
-          category_id: dataType ?  dataType : undefined,
-          brand: selectedBrand || undefined,
-          has_stock: isAvailable || undefined,
-          order_by: selectedSort?.order_by || undefined,
-          order_method: selectedSort?.order_method || undefined,
-          size: selectedSize || undefined,
-          parent_category_id: dataType ? undefined :  categories?.find((x: any) => x.slug === category)?.id 
+            category_id: dataType ? dataType : undefined,
+            brand: selectedBrand || undefined,
+            has_stock: isAvailable || undefined,
+            order_by: selectedSort?.order_by || undefined,
+            order_method: selectedSort?.order_method || undefined,
+            size: selectedSize || undefined,
+            parent_category_id: dataType ? undefined : categories?.find((x: any) => x.slug === category)?.id
         };
-      
+
         return `?${qs.stringify(queryObject, { skipNulls: true, encode: false })}`;
-      };
-      
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         setLoading(true);
-      
+
         Promise.all([
-          FetchData.GetCategories(),
-          FetchData.GetSize(),
-          FetchData.GetBrand(),
-          FetchData.GetCategories(`${dataType ? `/${dataType}` : ""}`),
+            FetchData.GetCategories(),
+            FetchData.GetSize(),
+            FetchData.GetBrand(),
+            FetchData.GetCategories(`${dataType ? `/${dataType}` : ""}`),
         ]).then(([categoriesRes, sizeRes, brandRes, detailRes]) => {
-          const categories = categoriesRes?.data;
-          const size = sizeRes?.data;
-          const brand = brandRes?.data;
-          const detailCat = detailRes?.data?.id      
-          setSize(size);
+            const categories = categoriesRes?.data;
+            const size = sizeRes?.data;
+            const brand = brandRes?.data;
+            const detailCat = detailRes?.data?.id
+            setSize(size);
 
-          setListCategories(categories);
-          
-          setBrand(brand);
+            setListCategories(categories);
 
-          const queryParams = generateParams({
-            dataType: detailCat,
-            selectedBrand,
-            isAvailable,
-            selectedSort,
-            selectedSize,
-            category,
-            categories
-          });
+            setBrand(brand);
+
+            const queryParams = generateParams({
+                dataType: detailCat,
+                selectedBrand,
+                isAvailable,
+                selectedSort,
+                selectedSize,
+                category,
+                categories
+            });
 
 
-          FetchData.GetProduk(queryParams)
-          .then((produkRes) => {
-            setProduk(produkRes);
-            setLoading(false);
-          });
+            FetchData.GetProduk(queryParams)
+                .then((produkRes) => {
+                    setProduk(produkRes);
+                    setLoading(false);
+                });
 
         });
-      }, [category, dataType, selectedSize, selectedBrand, isAvailable, selectedSort]);
+        setOpenSidebar(false)
+    }, [category, dataType, selectedSize, selectedBrand, isAvailable, selectedSort]);
 
+
+ 
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+           const resize = () => {
+            if(window.innerWidth >= 1024){
+                document.documentElement.style.overflowY = "auto"
+            }else if(window.innerWidth <= 1024 && openSidebar){
+                document.documentElement.style.overflowY = "hidden"
+            }
+           }
+
+            window.addEventListener("resize", resize);
+
+            return () => window.removeEventListener("resize", resize);
+        }
+    }, []);
+
+
+
+    const handleSidebarOpen = (isOpen: boolean) => {
+        if (isOpen) {
+            document.documentElement.style.overflowY = "hidden"
+        } else {
+            document.documentElement.style.overflowY = "auto"
+        }
+
+        setOpenSidebar(isOpen)
+    }
 
 
     const handleSortChange = (option: string) => {
@@ -169,9 +201,96 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
 
             <div className="shop-product breadcrumb lg:py-20 md:py-14 py-10">
                 <div className="container">
-                    <div className="flex max-md:flex-wrap max-md:flex-col-reverse gap-y-8">
-                        <div className="sidebar order-2 lg:order-1 lg:w-1/4 md:w-1/3 w-full md:pr-12">
-                            <div className={`filter-type pb-8 border-b border-line ${(listCategories.filter((y: any) => y.slug == category)[0]?.sub_cat.length === 0 || !listCategories) && "hidden"}`}>
+                    <div className="flex max-md:flex-wrap max-md:flex-col-reverse gap-y-8 relative">
+
+                        {/* sidebar mobile */}
+                        <div
+                            className={`sidebar style-dropdown rounded-b-md shadow-2xl bg-white  px-11 grid grid-cols-1 lg:hidden  md:gap-[30px] gap-6 ${openSidebar ? 'open' : ''}`}
+                        >
+                            <div className={`filter-type  px-4   ${(listCategories.filter((y: any) => y.slug == category)[0]?.sub_cat.length === 0 || (!dataType && !category)) && "hidden"}`}>
+                                <div className="heading6">Sub Kategori</div>
+                                <div className="list-type mt-4">
+                                    {listCategories.filter((y: any) => y.slug == category).map((item: any, index: string) => {
+                                        return item?.sub_cat?.map((x: any) => (
+                                            <div
+                                                key={index}
+                                                className={`item flex items-center justify-between cursor-pointer ${x === item ? 'active' : ''}`}
+                                                onClick={() => handleType(category!, x?.slug)}
+                                            >
+                                                <div className='text-secondary has-line-before hover:text-black capitalize'>{x?.name}</div>
+                                            </div>
+                                        ))
+                                    })}
+                                </div>
+                            </div>
+
+                            <div className="filter-size  px-4 ">
+                                <div className="heading6">Ukuran</div>
+                                <div className="list-size flex items-center flex-wrap gap-3 gap-y-4 mt-4">
+                                    {
+                                        size?.map((item: any, index: number) => (
+                                            <div
+                                                key={index}
+                                                className={`size-item text-button w-[44px] h-[44px] flex items-center justify-center rounded-full border border-line ${selectedSize == item?.format_size ? 'active' : ''}`}
+                                                onClick={() => handleSize(item?.format_size)}
+                                            >
+                                                {item?.format_size}
+                                            </div>
+                                        ))
+                                    }
+                                    <div
+                                        className={`size-item text-button px-4 py-2 flex items-center justify-center rounded-full border border-line ${!selectedSize ? 'active' : ''}`}
+                                        onClick={() => handleSize(null)}
+                                    >
+                                        semua ukuran
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="filter-brand  px-4 ">
+                                <div className="heading6">Brands</div>
+                                <div className="list-brand mt-4">
+                                    {brand?.map((item, index) => (
+                                        <div key={index} className="brand-item flex items-center justify-between">
+                                            <div className="left flex items-center cursor-pointer">
+                                                <div className="block-input">
+                                                    <input
+                                                        type="checkbox"
+                                                        name={item}
+                                                        id={item}
+                                                        checked={item === selectedBrand}
+                                                        onChange={() => handleBrand(item)} />
+                                                    <Icon.CheckSquare size={20} weight='fill' className='icon-checkbox' />
+                                                </div>
+                                                <label htmlFor={item} className="brand-name capitalize pl-2 cursor-pointer">{item}</label>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="select-block w-full  px-4 ">
+                                <select
+                                    id="select-filter"
+                                    name="select-filter"
+                                    className='caption1 w-full py-2 pl-3  rounded-lg border border-line'
+                                    onChange={(e) => { handleSortChange(e.target.value) }}
+                                    defaultValue={'Sorting'}
+                                >
+                                    <option value="Sorting" disabled>Sorting</option>
+                                    <option value="0">Diskon</option>
+                                    <option value="3">Harga tertinggi</option>
+                                    <option value="4">Harga terendah</option>
+                                    <option value="1">Terbaru</option>
+                                    <option value="2">Terlama</option>
+                                </select>
+                                <Icon.CaretDown size={12} className='absolute top-1/2 -translate-y-1 right-6' />
+                            </div>
+                        </div>
+
+                        {/* sidebar dekstop */}
+                        <div className="sidebar order-2 lg:order-1 lg:w-1/4 md:w-1/3 w-full md:pr-12 hidden lg:block">
+                            <div className={`filter-type pb-8 border-b border-line ${(listCategories.filter((y: any) => y.slug == category)[0]?.sub_cat.length === 0 || (!dataType && !category)) && "hidden"}`}>
                                 <div className="heading6">Sub Kategori</div>
                                 <div className="list-type mt-4">
                                     {listCategories.filter((y: any) => y.slug == category).map((item: any, index: string) => {
@@ -235,25 +354,28 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
 
 
                         </div>
-                        <div className="list-product-block order-1 lg:order-2 lg:w-3/4 md:w-2/3 w-full md:pl-3">
+
+                        <div className="list-product-block order-1 lg:order-2 lg:w-3/4 w-full md:pl-3">
                             <div className="filter-heading flex items-center justify-between gap-5 flex-wrap">
-                                <div className="left flex has-line items-center flex-wrap gap-5">
-                                    {/* <div className="choose-layout flex items-center gap-2">
-                                        <div className="item three-col w-8 h-8 border border-line rounded flex items-center justify-center cursor-pointer active">
-                                            <div className='flex items-center gap-0.5'>
-                                                <span className='w-[3px] h-4 bg-secondary2 rounded-sm'></span>
-                                                <span className='w-[3px] h-4 bg-secondary2 rounded-sm'></span>
-                                                <span className='w-[3px] h-4 bg-secondary2 rounded-sm'></span>
-                                            </div>
-                                        </div>
-                                        <Link href={`/shop/sidebar-list?type=${dataType || ""}&category=${category || ""}`} className="item row w-8 h-8 border border-line rounded flex items-center justify-center cursor-pointer">
-                                            <div className='flex flex-col items-center gap-0.5'>
-                                                <span className='w-4 h-[3px] bg-secondary2 rounded-sm'></span>
-                                                <span className='w-4 h-[3px] bg-secondary2 rounded-sm'></span>
-                                                <span className='w-4 h-[3px] bg-secondary2 rounded-sm'></span>
-                                            </div>
-                                        </Link>
-                                    </div> */}
+                                <div className="left flex has-line items-center w-full lg:w-fit justify-between lg:justify-normal flex-wrap gap-5">
+                                    <div
+                                        className="filter-sidebar-btn lg:hidden flex items-center gap-2 cursor-pointer"
+                                        onClick={() => handleSidebarOpen(!openSidebar)}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M4 21V14" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M4 10V3" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M12 21V12" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M12 8V3" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M20 21V16" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M20 12V3" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M1 14H7" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M9 8H15" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M17 16H23" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                        <span>Filters</span>
+                                    </div>
+
                                     <div className="check-sale flex items-center gap-2">
                                         <input
                                             type="checkbox"
@@ -265,7 +387,8 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
                                         <label htmlFor="filter-sale" className='cation1 cursor-pointer' >Tersedia</label>
                                     </div>
                                 </div>
-                                <div className="right flex items-center gap-3">
+
+                                <div className="right hidden lg:flex items-center gap-3">
                                     <div className="select-block relative">
                                         <select
                                             id="select-filter"
@@ -315,7 +438,7 @@ const Shopbreadcrumb: React.FC<Props> = ({dataType, gender, category }) => {
                                 }
                             </div>
 
-                            <div className="list-product hide-product-sold grid lg:grid-cols-3 grid-cols-2 sm:gap-[30px] gap-[20px] mt-7">
+                            <div className="list-product hide-product-sold grid md:grid-cols-3 grid-cols-2 sm:gap-[30px] gap-[20px] mt-7">
                                 {produk?.data?.length > 0 ? produk?.data?.map((item: any, index: string) => (
                                     <Product key={index} data={item} type='grid' style={''} />
                                 )) : <div className="col-span-2 text-xl">Produk tidak ditemukan</div>}

@@ -13,21 +13,21 @@ const AboutUs = () => {
 
     const [body, setBody] = useState<any>(true)
     const [title, setTitle] = useState<any>(true)
-        const [loading, setLoading] = useState(true)
-    
+    const [loading, setLoading] = useState(true)
+
 
     useEffect(() => {
         Promise.all([FetchData.GetWebSettings(`?name=about-us`), FetchData.GetWebSettings(`?name=about-us-title`)])
-        .then((res) => {
-            setBody(res[0]?.data[0]?.value)
-            setTitle(res[1]?.data[0]?.value)
-            setLoading(false)
-        })
-    },[])
+            .then((res) => {
+                setBody(res[0]?.data[0]?.value)
+                setTitle(res[1]?.data[0]?.value)
+                setLoading(false)
+            })
+    }, [])
 
     return (
         <>
-                    {loading && <Loading />}
+            {loading && <Loading />}
 
             <div id="header" className='relative w-full'>
                 <MenuOne props="bg-transparent" />
@@ -42,12 +42,12 @@ const AboutUs = () => {
                                 <div className="body1 text-center md:mt-7 mt-5">{body}</div>
                             </div>
                         </div>
-                      
+
                     </div>
                 </div>
             </div>
             <Benefit props="md:pt-20 pt-10" />
-            <Brand />
+            {/* <Brand /> */}
             <Footer />
         </>
     )
