@@ -62,8 +62,7 @@ const ContactUs = () => {
                                             className="border-line px-4 py-3 w-full rounded-lg"
                                             id="email"
                                             type="email"
-                                            placeholder="Your Email *"
-                                            required
+                                            placeholder="Your Email"
                                             value={form.email}
                                             onChange={handleChange}
                                         />
