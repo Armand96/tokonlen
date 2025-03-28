@@ -94,6 +94,7 @@ const Shopbreadcrumb: React.FC<Props> = ({ dataType, gender, category }) => {
 
         });
         setOpenSidebar(false)
+        document.documentElement.style.overflowY = "auto"
     }, [category, dataType, selectedSize, selectedBrand, isAvailable, selectedSort]);
 
 

@@ -89,7 +89,7 @@ const Index = () => {
 	const handleSearch = (v) => {
 		setLoading(true);
 		setCategory(v)
-		fetchData(0, search, v.label == "Semua" ? undefined : v.label);
+		fetchData(0, search, v.value == "Semua" ? undefined : v.value);
 	}
 
   return (

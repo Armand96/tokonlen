@@ -63,6 +63,7 @@ class DashboardController extends Controller
                 }
             ])
             ->orderByDesc('links_visitors_count')
+            ->with('category')
             ->limit(10)
             ->get();
 
