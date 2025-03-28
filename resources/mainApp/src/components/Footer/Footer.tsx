@@ -59,6 +59,26 @@ const Footer = () => {
                                             ))
                                         }
                                     </div>
+
+                                    <div className="item flex flex-col">
+                                        <div className="text-button-uppercase text-center lg:text-left text-lg">Follow Us</div>
+                                        <div className="list-social flex justify-center lg:justify-normal items-center gap-6 mt-4">
+                                        <Link href={'https://www.facebook.com/'} target='_blank'>
+                                            <div className="icon-facebook text-2xl text-black"></div>
+                                        </Link>
+                                        <Link href={'https://www.instagram.com/'} target='_blank'>
+                                            <div className="icon-instagram text-2xl text-black"></div>
+                                        </Link>
+                                        <Link href={'https://www.twitter.com/'} target='_blank'>
+                                            <div className="icon-twitter text-2xl text-black"></div>
+                                        </Link>
+                                        <Link href={'https://www.youtube.com/'} target='_blank'>
+                                            <div className="icon-youtube text-2xl text-black"></div>
+                                        </Link>
+                                    </div>
+                                    </div>
+
+                                 
                                 </div>
                               
                             </div>

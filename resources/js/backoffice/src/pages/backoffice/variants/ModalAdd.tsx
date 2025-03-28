@@ -62,6 +62,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
 
   }, [])
 
+  console.log(selectedProducts?.detail?.variant?.filter((prev) => prev.variant.toLowerCase() == formData?.variant?.toLowerCase()))
 
   const postDataAdd = async () => {
 
@@ -73,6 +74,18 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
       is_active: formData?.is_active,
       stock: formData?.stock
     }))
+
+    let findExsting = selectedProducts?.detail?.variant?.filter((prev) => prev.variant.toLowerCase() == formData?.variant?.toLowerCase())
+
+    if(findExsting){
+      postDataCreate = postDataCreate.filter((newData) => findExsting?.flatMap((x) => (x.size)).includes(newData.size) == false)
+    }
+
+    if(postDataCreate.length == 0){
+      Swal.fire('Warning', 'size yang dipilih telah terdaftar di nama variant ini', 'warning');
+      return
+    }
+
 
     try {
       setLoading(true);
@@ -278,7 +291,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
         </div>
         <div className='flex justify-end p-4 border-t gap-x-4'>
           <button className='btn bg-light text-gray-800' onClick={() => toggleModal()}>Close</button>
-          <button className='btn bg-primary text-white' onClick={() => isCreate ? postDataAdd() : postEdit()}>Submit</button>
+          <button className='btn bg-primary text-white' disabled={!selectedProducts || !formData?.stock || !formData?.image_files || !selectedSized } onClick={() => isCreate ? postDataAdd() : postEdit()}>Submit</button>
         </div>
       </div>
     </ModalLayout>
