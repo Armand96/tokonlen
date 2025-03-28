@@ -18,8 +18,8 @@ class DashboardController extends Controller
             'topTenVisitedProductMonthly' => $this->topTenVariantClicked(date('Y-m-01'), date('Y-m-t')),
             'topTenVisitedVariantMonthly' => $this->topTenVariantClicked(date('Y-m-01'), date('Y-m-t')),
             'totalProduct' => $this->getTotalProduct(),
-            'totalCategory' => $this->getTotalCategory(),
-            'totalProductVariantDisc' => $this->getTotalProductDiscount() + $this->getTotalVariantDiscount(),
+            'totalDisc' => $this->getTotalProductDiscount() + $this->getTotalVariantDiscount(),
+            'totalVariant' => $this->getTotalVariants() ,
         ];
 
         return $data;
@@ -41,6 +41,11 @@ class DashboardController extends Controller
     }
 
     public function getTotalVariantDiscount(): int
+    {
+        return Variant::whereHas('discount')->count();
+    }
+
+    public function getTotalVariants(): int
     {
         return Variant::whereHas('discount')->count();
     }

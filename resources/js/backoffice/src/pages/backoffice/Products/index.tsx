@@ -108,7 +108,7 @@ const Index = () => {
         <h3 className='text-lg mb-2'>Search</h3>
         <div className="mb-3 bg-gray-50 px-4 py-6 flex ">
           <div className="flex gap-x-6">
-            <FormInput label="Nama Product" type="input" containerClass="mb-3" labelClassName="mb-2" className="form-input" value={search} onChange={(v) => setSearch(v.target.value)} name={'search'} />
+            <FormInput label="Nama Product" type="input" containerClass="mb-3" labelClassName="mb-2" className="form-input w-[200px]" value={search} onChange={(v) => setSearch(v.target.value)} name={'search'} />
             <div className="flex flex-col flex-1">
 						<label className="mb-2" htmlFor="choices-text-remove-button">
 							Kategori
