@@ -2,8 +2,10 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
-        "dev": "vite"
+        "build": "vite build --mode prod",
+        "dev": "vite",
+        "dev:server": "vite --mode prod"
+
     },
     "devDependencies": {
         "@headlessui/react": "^1.7.15",

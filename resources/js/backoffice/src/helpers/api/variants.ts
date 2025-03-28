@@ -3,11 +3,11 @@ import { APICore } from "./apiCore";
 const api = new APICore()
 
 function PostVariants(body: any, update: any = "") {
-    return api.create(`api/admin/variant/${update}`, body)
+    return api.create(`api/admin/variant${update && `/${update}`}`, body)
 }
 
 function PostVariantsBulks(body: any, update: any = "") {
-    return api.create(`api/admin/variant_bulk_insert/${update}`, body)
+    return api.create(`api/admin/variant_bulk_insert${update && `/${update}`}`, body)
 }
 
 

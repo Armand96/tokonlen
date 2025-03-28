@@ -65,14 +65,27 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
 
   const postDataAdd = async () => {
 
-    let postDataCreate: PostVariantsTypes[] = selectedSized.map((size) => ({
-      variant: formData?.variant,
-      size: size,
-      product_id: selectedProducts?.value,
-      additional_price: formData?.additional_price || 0,
-      is_active: formData?.is_active,
-      stock: formData?.stock
-    }))
+    let postDataCreate: PostVariantsTypes[] | PostVariantsTypes | null = null
+
+
+    if(selectedSized.length == 0){
+        postDataCreate = {
+          variant: formData?.variant,
+          product_id: selectedProducts?.value,
+          additional_price: formData?.additional_price || 0,
+          is_active: formData?.is_active,
+          stock: formData?.stock
+        }
+    }else{
+      postDataCreate = selectedSized.map((size) => ({
+        variant: formData?.variant,
+        size: size,
+        product_id: selectedProducts?.value,
+        additional_price: formData?.additional_price || 0,
+        is_active: formData?.is_active,
+        stock: formData?.stock
+      }))
+    }
 
     try {
       setLoading(true);
@@ -85,9 +98,9 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
 
 
       let response;
-      response = await PostVariantsBulks({
+      response = selectedSized.length > 0 ? await PostVariantsBulks({
         variants: postDataCreate,
-      });
+      }) : await PostVariants(postDataCreate)
 
       let idResponse = response.data.data.map((item: any) => item.id);
 

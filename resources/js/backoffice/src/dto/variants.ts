@@ -16,7 +16,7 @@
 interface PostVariantsTypes {
   "product_id": number,
   "variant": string,
-  "size": string,
+  "size"?: string,
   "additional_price": number,
   "stock":number,
   "is_active": boolean,
