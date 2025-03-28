@@ -1,0 +1,1 @@
+import{E as n}from"./remixicon-C_NSdncx.js";const a=new n;function o(e,t=""){return a.create(`api/admin/size/${t}`,e)}function s(e=""){const t=`api/admin/size${e}`;return a.get(t).then(i=>i.data)}export{s as G,o as P};

@@ -1,0 +1,1 @@
+import{E as a}from"./remixicon-C_NSdncx.js";const n=new a;function r(t,e=""){return n.createWithFile(`api/admin/link_type/${e}`,t)}function o(t=""){const e=`api/admin/link_type${t}`;return n.get(e).then(i=>i.data)}export{o as g,r as p};

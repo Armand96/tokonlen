@@ -135,7 +135,7 @@ const Index = () => {
                 <Select isDisabled={isCreate ? false : true} className="select2 z-5" value={selectedCategories} options={categoriesOptions} onChange={(v) => { setSelectedCategories(v); setFormData({ ...formData, parent_id: v.value }) }} />
               </div>
 
-              <div className='mb-3'>
+              <div className={`mb-3 ${formData?.parent_id && "hidden" }`}>
               <h6 className='text-sm mb-2'>Tampilkan di header</h6>
                 <input type='checkbox' checked={formData.is_show_header === 1 ? true : false} onChange={(e) => setFormData({ ...formData, is_show_header: e.target.checked ? 1 : 0 })} />
                 <label className='ml-2'>Ya</label>

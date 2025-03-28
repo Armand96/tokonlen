@@ -1,0 +1,1 @@
+import{E as o}from"./remixicon-C_NSdncx.js";const a=new o;function n(t,e=""){return a.createWithFile(`api/admin/category/${e}`,t)}function s(t=""){const e=`api/admin/category${t}`;return a.get(e).then(r=>r.data)}export{s as G,n as P};

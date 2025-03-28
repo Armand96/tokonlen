@@ -1,0 +1,1 @@
+import{c as r,j as o,P as s,s as t,B as n,A as a}from"./remixicon-C_NSdncx.js";const e=document.getElementById("root");e&&r.createRoot(e).render(o.jsx(s,{store:t,children:o.jsx(n,{basename:"/admin",children:o.jsx(a,{})})}));
