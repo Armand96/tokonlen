@@ -3,7 +3,7 @@ import { APICore } from "./apiCore";
 const api = new APICore()
 
 function PostCategories(body: any, update: any = "") {
-    return api.createWithFile(`api/admin/category/${update}`, body)
+    return api.createWithFile(`api/admin/category${update && `/${update}`}`, body)
 }
 
 function GetCategories(params:any = "") {

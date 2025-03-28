@@ -3,7 +3,7 @@ import { APICore } from "./apiCore";
 const api = new APICore()
 
 function postBanner(body: any, update: any = "") {
-    return api.createWithFile(`api/admin/banner/${update}`, body)
+    return api.createWithFile(`api/admin/banner${update && `/${update}`}`, body)
 }
 
 

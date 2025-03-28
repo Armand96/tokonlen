@@ -3,7 +3,7 @@ import { APICore } from './apiCore'
 const api = new APICore()
 
 function PostSize(body: any, update: any = "") {
-	return api.create(`api/admin/size/${update}`, body)
+	return api.create(`api/admin/size${update && `/${update}`}`, body)
 }
 
 

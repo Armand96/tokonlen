@@ -128,6 +128,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
                 link: item?.link,
                 link_type_id: item?.detail?.id,
                 product_id: productId,
+                variant_id: 0
               })
             })
 
@@ -142,6 +143,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
                 link: item?.link,
                 link_type_id: item?.detail?.id,
                 product_id: productId,
+                variant_id: 0
               })
             })
 

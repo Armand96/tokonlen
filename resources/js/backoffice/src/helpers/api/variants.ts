@@ -17,11 +17,11 @@ function GetVariants(params:any = "") {
 }
 
 function PostVariantsImage(body: any, update: any = "") {
-    return api.createWithFile(`api/admin/variant_image_single/${update}`, body)
+    return api.createWithFile(`api/admin/variant_image_single${update && `/${update}`}`, body)
 }
 
 function PostDeleteVariantsImage(body: any, update: any = "") {
-    return api.create(`api/admin/mass_delete_variant_image/${update}`, body)
+    return api.create(`api/admin/mass_delete_variant_image${update && `/${update}`}`, body)
 }
 
 export { PostVariants, GetVariants, PostVariantsImage, PostVariantsBulks, PostDeleteVariantsImage }

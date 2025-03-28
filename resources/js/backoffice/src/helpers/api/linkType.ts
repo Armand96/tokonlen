@@ -3,7 +3,7 @@ import { APICore } from "./apiCore";
 const api = new APICore()
 
 function postLinkType(body: any, update: any = "") {
-    return api.createWithFile(`api/admin/link_type/${update}`, body)
+    return api.createWithFile(`api/admin/link_type${update && `/${update}`}`, body)
 }
 
 function getLinkType(params:any = "") {

@@ -3,7 +3,7 @@ import { APICore } from "./apiCore";
 const api = new APICore()
 
 function PostDiscount(body: any, update: any = "") {
-    return api.create(`api/admin/discount/${update}`, body)
+    return api.create(`api/admin/discount${update && `/${update}`}`, body)
 }
 
 

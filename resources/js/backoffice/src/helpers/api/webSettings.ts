@@ -3,11 +3,11 @@ import { APICore } from "./apiCore";
 const api = new APICore()
 
 function postWebSettings(body: any, update: any = "") {
-    return api.create(`api/admin/web_setting/${update}`, body)
+    return api.create(`api/admin/web_setting${update && `/${update}`}`, body)
 }
 
 function postWebSettingsWithFile(body: any, update: any = "") {
-    return api.createWithFile(`api/admin/web_setting_with_upload/${update}`, body)
+    return api.createWithFile(`api/admin/web_setting_with_upload${update && `/${update}`}`, body)
 }
 
 
