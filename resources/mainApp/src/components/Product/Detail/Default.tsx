@@ -2,14 +2,12 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { ProductType } from '@/type/ProductType'
 import Product from '../Product'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Thumbs, } from 'swiper/modules';
 import 'swiper/css/bundle';
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import SwiperCore from 'swiper/core';
-import ModalSizeguide from '@/components/Modal/ModalSizeguide'
 import FetchData from '@/services/FetchData';
 import Helpers from '@/Helpers/Helpers'
 import Loading from '@/components/Other/Loading'
@@ -54,6 +52,12 @@ const Default: React.FC<Props> = ({ productId }) => {
             document.title = `${resp?.data?.name} - Zhindaya `;
             FetchData.GetProduk(`?category_id=${resp?.data?.category_id}`).then((res) => {
                 setRelatedProduk(res?.data)
+                if(resp?.data?.variants.length > 0){
+                    setActiveVariant(resp?.data?.variants[0])
+                    setActiveSize(resp?.data?.variants[0]?.sizes[0]?.size)
+                    setDiscount({...resp?.data?.variants[0]?.sizes[0]?.discount, final_price: resp?.data?.variants[0]?.sizes[0]?.final_price})
+                }
+
             })
 
             setLoading(false)
@@ -62,7 +66,6 @@ const Default: React.FC<Props> = ({ productId }) => {
             setPhoneNumber(res?.data[0]?.value)
         })
     }, [])
-
 
     const handleActiveSize = (item: string) => {
         setActiveSize(item)
@@ -89,7 +92,7 @@ const Default: React.FC<Props> = ({ productId }) => {
             "product_id": produk?.id,
             "ip_address": id,
             "user_agent": navigator.userAgent
-        }).then((res) => {
+        }).then(() => {
             window.open(item.link, '_blank')
             setLoading(false)
         }).catch(() => {
@@ -115,9 +118,6 @@ const Default: React.FC<Props> = ({ productId }) => {
             confirmButtonColor: 'green'
         })
     }
-
-
-
 
     return (
         <>
@@ -262,7 +262,8 @@ const Default: React.FC<Props> = ({ productId }) => {
                                                         handleActiveColor(item)
                                                     }}
                                                 >
-                                                    {item?.sizes?.filter((x: any) => x.discount !== null).length > 0 ? <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div> : <div className={` py-2 text-xs rounded-t-xl inset-0 text-center`}></div>}
+                                                    {item?.sizes?.filter((x: any) => x.discount !== null).length > 0 && <div className={`bg-red text-white text-xs rounded-t-xl inset-0 text-center`}>%</div>}
+
                                                     <Image
                                                         src={Helpers.GetImage(item?.sizes[0]?.images[0]?.image)}
                                                         width={100}
@@ -270,14 +271,15 @@ const Default: React.FC<Props> = ({ productId }) => {
                                                         alt='color'
                                                         className='rounded-xl'
                                                     />
-                                                    <div className="tag-action bg-black text-white caption2 capitalize px-1.5 py-0.5 rounded-sm ">
+                                                    <div className="tag-action bg-black text-white caption2 capitalize px-1.5 py-0.5 rounded-sm whitespace-nowrap">
                                                         {item.name}
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="choose-size mt-5">
+                              
+                                    <div className={`choose-size mt-5 ${activeVariant && activeVariant?.sizes[0]?.size?.includes("All") && "hidden"}`}>
                                         <div className={`heading  items-center justify-between ${activeVariant.sizes ? "flex" : "hidden"}`}>
                                             <div className="text-title">Ukuran: <span className='text-title size'>{activeSize}</span></div>
                                             {/* <div

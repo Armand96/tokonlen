@@ -254,7 +254,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, detailData, reloadData
             {
               sizeList?.map((item: any, key: any) => (
                 <div className="" key={key}>
-                  <input type='checkbox' disabled={!isCreate || selectedProducts?.detail?.variant?.flatMap((variant) => variant.size)?.includes(item?.format_size)} checked={isCreate ? selectedSized.includes(item?.format_size || formData?.size) : item?.format_size == formData.size} onClick={() => selectedSized.includes(item?.format_size) ? setSelectedSized([...selectedSized.filter((x) => x !== item?.format_size || item?.size)]) : setSelectedSized([...selectedSized, item?.format_size])} />
+                  <input type='checkbox' disabled={!isCreate} checked={isCreate ? selectedSized.includes(item?.format_size || formData?.size) : item?.format_size == formData.size} onClick={() => selectedSized.includes(item?.format_size) ? setSelectedSized([...selectedSized.filter((x) => x !== item?.format_size || item?.size)]) : setSelectedSized([...selectedSized, item?.format_size])} />
                   <label className='ml-2'  >{item?.format_size}</label>
                 </div>
               ))
