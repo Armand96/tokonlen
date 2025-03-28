@@ -1,5 +1,5 @@
 1:HL["/mainApp/_next/static/css/bd8ceafe28b24e56.css","style",{"crossOrigin":""}]
-0:["Z_HReDGtg12wLE4m7BWZA",[[["",{"children":["product",{"children":["detail",{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],"$L2",[[["$","link","0",{"rel":"stylesheet","href":"/mainApp/_next/static/css/bd8ceafe28b24e56.css","precedence":"next","crossOrigin":""}]],"$L3"]]]]
+0:["25DuXVRsvzfVM01fjrdg5",[[["",{"children":["product",{"children":["detail",{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],"$L2",[[["$","link","0",{"rel":"stylesheet","href":"/mainApp/_next/static/css/bd8ceafe28b24e56.css","precedence":"next","crossOrigin":""}]],"$L3"]]]]
 4:HL["/mainApp/_next/static/css/73c00cd95dc66651.css","style",{"crossOrigin":""}]
 5:I[5811,["127","static/chunks/127-d30cc88874a9e8fc.js","185","static/chunks/app/layout-41da5f09b315f844.js"],"WishlistProvider"]
 6:I[8363,["127","static/chunks/127-d30cc88874a9e8fc.js","185","static/chunks/app/layout-41da5f09b315f844.js"],"ModalWishlistProvider"]
