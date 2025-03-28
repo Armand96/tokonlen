@@ -55,7 +55,9 @@ const Default: React.FC<Props> = ({ productId }) => {
                 if(resp?.data?.variants.length > 0){
                     setActiveVariant(resp?.data?.variants[0])
                     setActiveSize(resp?.data?.variants[0]?.sizes[0]?.size)
-                    setDiscount({...resp?.data?.variants[0]?.sizes[0]?.discount, final_price: resp?.data?.variants[0]?.sizes[0]?.final_price})
+                    if(resp?.data?.variants[0]?.sizes[0]?.discount !== null){
+                        setDiscount({...resp?.data?.variants[0]?.sizes[0]?.discount, final_price: resp?.data?.variants[0]?.sizes[0]?.final_price})
+                    }
                 }
 
             })
