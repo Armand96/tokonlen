@@ -13,17 +13,19 @@ const TopVisitedVariant = ({ data }: any) => {
 					<thead className="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 						<tr>
 							<th className="py-1.5 px-4">Produk</th>
-							<th className="py-1.5 px-4">Harga</th>
-							<th className="py-1.5 px-4">Kategori</th>
+							<th className="py-1.5 px-4">Variant</th>
+							<th className="py-1.5 px-4">Size</th>
+							<th className="py-1.5 px-4">Harga Tambahan</th>
 							<th className="py-1.5 px-4">Jumlah view</th>
 						</tr>
 					</thead>
 					<tbody>
 						{(data?.topTenVisitedVariant || []).map((product, idx) => (
 							<tr key={idx}>
-								<td className="p-4 text-wrap">{product?.name}</td>
-								<td className="p-4">{HelperFunction.FormatToRupiah(product?.final_price)}</td>
-								<td className="p-4">{product?.category?.name}</td>
+								<td className="p-4 text-wrap">{product?.product?.name}</td>
+								<td className="p-4">{product?.variant}</td>
+								<td className="p-4">{product?.size}</td>
+								<td className="p-4">{HelperFunction.FormatToRupiah(product?.additional_price)}</td>
 								<td className="p-4">{product?.links_visitors_count}</td>
 							</tr>
 						))}

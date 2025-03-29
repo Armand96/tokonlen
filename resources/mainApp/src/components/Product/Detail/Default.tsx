@@ -316,7 +316,7 @@ const Default: React.FC<Props> = ({ productId }) => {
                                         <div className="heading6 px-5 bg-white absolute  -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">Atau lanjutkan via</div>
                                         <div className="list grid justify-items-center grid-flow-col md:grid-cols-6 ">
                                             {
-                                                produk?.links?.map((link: any, key: any) => (
+                                               (activeVariant?.sizes?.filter((x: any) => x?.size === activeSize)[0]?.links ||  produk?.links)?.map((link: any, key: any) => (
                                                     <Image
                                                         key={key}
                                                         src={Helpers.GetImage(link?.link_type?.image)}
