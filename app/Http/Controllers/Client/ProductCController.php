@@ -114,7 +114,7 @@ class ProductCController extends Controller
     {
         // DB::enableQueryLog();
         if ($product) {
-            $product = Product::with(['images', 'variant.images', 'variant.links.linkType','links.linkType.', 'discount', 'category.parentCat', 'category.subCat', 'variant' => function($q) {
+            $product = Product::with(['images', 'variant.images', 'variant.links.linkType', 'links.linkType', 'discount', 'category.parentCat', 'category.subCat', 'variant' => function($q) {
                 $q->where('is_active', true);
             }])->where('is_active', true)->where('id', $product->id)->first();
 
