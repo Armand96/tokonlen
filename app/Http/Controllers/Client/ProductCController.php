@@ -61,7 +61,7 @@ class ProductCController extends Controller
         }
 
 
-        $query->where('is_active', true)->with(['image', 'discount', 'variant.images', 'variant.discount', 'category.parentCat', 'category.subCat', 'links.linkType']);
+        $query->where('is_active', true)->with(['image', 'discount', 'variant.images', 'variant.links', 'variant.discount', 'category.parentCat', 'category.subCat', 'links.linkType']);
         $query->with('variant', function ($query) {
             $query->where('is_active', true);
         });
@@ -94,7 +94,8 @@ class ProductCController extends Controller
                             'image' =>$size->image,
                             'is_active' => $size->is_active,
                             'final_price'=>$size->final_price,
-                            'discount_price'=>$size->discount_price
+                            'discount_price'=>$size->discount_price,
+                            'links'=>$size->links
                         ];
                     })->values()
                 ];
@@ -113,7 +114,7 @@ class ProductCController extends Controller
     {
         // DB::enableQueryLog();
         if ($product) {
-            $product = Product::with(['images', 'variant.images', 'links.linkType', 'discount', 'category.parentCat', 'category.subCat', 'variant' => function($q) {
+            $product = Product::with(['images', 'variant.images', 'variant.links','links.linkType', 'discount', 'category.parentCat', 'category.subCat', 'variant' => function($q) {
                 $q->where('is_active', true);
             }])->where('is_active', true)->where('id', $product->id)->first();
 
@@ -129,7 +130,8 @@ class ProductCController extends Controller
                             'images' =>$size->images,
                             'is_active' => $size->is_active,
                             'final_price'=>$size->final_price,
-                            'discount_price'=>$size->discount_price
+                            'discount_price'=>$size->discount_price,
+                            'links'=>$size->links
                         ];
                     })->values()
                 ];
