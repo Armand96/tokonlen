@@ -8,6 +8,7 @@ use App\Http\Requests\ResponseSuccess;
 use App\Http\Requests\Variant\VariantBulkCreateReq;
 use App\Http\Requests\Variant\VariantCreateReq;
 use App\Http\Requests\Variant\VariantUpdateReq;
+use App\Models\ProductLink;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,7 +39,7 @@ class VariantController extends Controller
         // filter by product_id
         if ($req->has('product_name')) {
             $query->whereHas('product', function ($qry) use ($req) {
-                $qry->where('name', 'like', '%'.$req->product_name.'%');
+                $qry->where('name', 'like', '%' . $req->product_name . '%');
             });
         }
         // filter by is_active
@@ -69,11 +70,11 @@ class VariantController extends Controller
         try {
             $validated = $request->validated();
             $variant = Variant::create($validated);
-            return response()->json(new ResponseSuccess($variant,"Success","Success Create Variant"));
+            return response()->json(new ResponseSuccess($variant, "Success", "Success Create Variant"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()));
+            return response()->json(new ResponseFail((object) null, "Server Error", $th->getMessage()));
         }
     }
 
@@ -101,11 +102,11 @@ class VariantController extends Controller
         try {
             $validated = $request->validated();
             $variant->update($validated);
-            return response()->json(new ResponseSuccess($variant,"Success","Success Update Variant"));
+            return response()->json(new ResponseSuccess($variant, "Success", "Success Update Variant"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()));
+            return response()->json(new ResponseFail((object) null, "Server Error", $th->getMessage()));
         }
     }
 
@@ -116,11 +117,11 @@ class VariantController extends Controller
     {
         try {
             $variant->update(['is_active' => false]);
-            return response()->json(new ResponseSuccess($variant,"Success", "Success Set Variant To Inactive"));
+            return response()->json(new ResponseSuccess($variant, "Success", "Success Set Variant To Inactive"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()));
+            return response()->json(new ResponseFail((object) null, "Error", $th->getMessage()));
         }
     }
 
@@ -133,17 +134,30 @@ class VariantController extends Controller
 
             foreach ($variants as $key => $value) {
                 $data = Variant::create($value);
+
+                // check product link
+                $dataLink = ProductLink::where('product_id', $value['product_id'])->get();
+                foreach ($dataLink as $key => $dLink) {
+                    $dataInsert = array(
+                        'product_id' => 0,
+                        'variant_id' => $data->id,
+                        'link' => $dLink->link,
+                        'link_type_id' => $dLink->link_type_id,
+                    );
+                    ProductLink::create($dataInsert);
+                }
+
                 array_push($returnVariants, $data);
             }
 
             DB::commit();
 
-            return response()->json(new ResponseSuccess($returnVariants,"Success","Success Create Bulk Variant"));
+            return response()->json(new ResponseSuccess($returnVariants, "Success", "Success Create Bulk Variant"));
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
             Log::error($th->getMessage());
-            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()));
+            return response()->json(new ResponseFail((object) null, "Error", $th->getMessage()));
         }
     }
 }

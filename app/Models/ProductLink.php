@@ -9,7 +9,6 @@ class ProductLink extends Model
     protected $fillable = [
         'product_id',
         'variant_id',
-        'name',
         'link',
         'link_type_id',
     ];
