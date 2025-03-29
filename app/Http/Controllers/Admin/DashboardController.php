@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $data = [
             'topTenVisitedProduct' => $this->topTenProductClicked(),
             'topTenVisitedVariant' => $this->topTenVariantClicked(),
-            'topTenVisitedProductMonthly' => $this->topTenVariantClicked(date('Y-m-01'), date('Y-m-t')),
+            'topTenVisitedProductMonthly' => $this->topTenProductClicked(date('Y-m-01'), date('Y-m-t')),
             'topTenVisitedVariantMonthly' => $this->topTenVariantClicked(date('Y-m-01'), date('Y-m-t')),
             'totalProduct' => $this->getTotalProduct(),
             'totalDisc' => $this->getTotalProductDiscount() + $this->getTotalVariantDiscount(),
