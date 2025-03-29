@@ -98,7 +98,6 @@ class ProductLinkController extends Controller
             return response()->json(new ResponseSuccess($productLink, "Success", "Success Create Product Link"));
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
             Log::error($th->getMessage());
             //throw $th;
             return response()->json(new ResponseFail((object) null, "Server Error", $th->getMessage()));

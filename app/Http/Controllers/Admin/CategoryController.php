@@ -60,6 +60,11 @@ class CategoryController extends Controller
         try {
             $validatedData = $createCategory->validated();
 
+            $isMaxShow = Category::where('is_show_header', true)->count();
+            if ($isMaxShow >= 4) {
+                return response()->json(new ResponseFail((object) null, "Bad Request", "Kategori yang ditampilkan di depan sudah maksimal, mohon untuk mengurangi kategori yang ditampilkan terleih dahulu"), 400);
+            }
+
             if ($createCategory->hasFile('image_file')) {
                 $imageName = time() . '.' . $createCategory->file('image_file')->extension();
                 $path = $createCategory->file('image_file')->storeAs('categories', $imageName, 'public');
@@ -68,13 +73,13 @@ class CategoryController extends Controller
                 $validatedData['image'] = '';
             }
             $category = Category::create($validatedData);
-            return response()->json(new ResponseSuccess($category,"Success","Success Create Category"));
+            return response()->json(new ResponseSuccess($category, "Success", "Success Create Category"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
             $isExist = Storage::disk('public')->exists($path) ?? false;
             if ($isExist) Storage::disk('public')->delete($path);
-            return response()->json(new ResponseFail((object) null,"Server Error", $th->getMessage()), 500);
+            return response()->json(new ResponseFail((object) null, "Server Error", $th->getMessage()), 500);
         }
     }
 
@@ -103,6 +108,11 @@ class CategoryController extends Controller
         try {
             $validatedData = $updateCategory->validated();
 
+            $isMaxShow = Category::where('is_show_header', true)->count();
+            if ($isMaxShow >= 4) {
+                return response()->json(new ResponseFail((object) null, "Bad Request", "Kategori yang ditampilkan di depan sudah maksimal, mohon untuk mengurangi kategori yang ditampilkan terleih dahulu"), 400);
+            }
+
             if ($updateCategory->hasFile('image_file')) {
 
                 $isExist = Storage::disk('public')->exists($category->image) ?? false;
@@ -113,11 +123,11 @@ class CategoryController extends Controller
                 $validatedData['image'] = $path;
             }
             $category->update($validatedData);
-            return response()->json(new ResponseSuccess($category,"Success", "Success Update Category"));
+            return response()->json(new ResponseSuccess($category, "Success", "Success Update Category"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()), 500);
+            return response()->json(new ResponseFail((object) null, "Error", $th->getMessage()), 500);
         }
     }
 
@@ -128,11 +138,11 @@ class CategoryController extends Controller
     {
         try {
             $category->update(['is_active' => false]);
-            return response()->json(new ResponseSuccess($category,"Success", "Success Set Category To Inactive"));
+            return response()->json(new ResponseSuccess($category, "Success", "Success Set Category To Inactive"));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             //throw $th;
-            return response()->json(new ResponseFail((object) null,"Error", $th->getMessage()), 500);
+            return response()->json(new ResponseFail((object) null, "Error", $th->getMessage()), 500);
         }
     }
 }
