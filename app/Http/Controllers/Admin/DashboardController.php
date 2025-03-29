@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $data = [
             'topTenVisitedProduct' => $this->topTenProductClicked(),
             'topTenVisitedVariant' => $this->topTenVariantClicked(),
-            'topTenVisitedProductMonthly' => $this->topTenVariantClicked(date('Y-m-01'), date('Y-m-t')),
+            'topTenVisitedProductMonthly' => $this->topTenProductClicked(date('Y-m-01'), date('Y-m-t')),
             'topTenVisitedVariantMonthly' => $this->topTenVariantClicked(date('Y-m-01'), date('Y-m-t')),
             'totalProduct' => $this->getTotalProduct(),
             'totalDisc' => $this->getTotalProductDiscount() + $this->getTotalVariantDiscount(),
@@ -54,6 +54,7 @@ class DashboardController extends Controller
     {
         $data = Product::doesntHave('variant')
             ->whereHas('links')
+            ->where('visited',  '>', 0)
             ->with(['links', 'image'])
             ->withCount([
                 'links as links_count',
@@ -91,6 +92,7 @@ class DashboardController extends Controller
                     });
                 }
             ])
+            ->having('links_visitors_count', '>', 0)
             ->orderByDesc('links_visitors_count')
             ->limit(10)
             ->get();
