@@ -19,20 +19,20 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-      <GlobalProvider>
-        <html lang="en">
-          <head>
+    <GlobalProvider>
+      <html lang="en">
+        <head>
           <link rel="canonical" href="https://zhindaya.com" />
-          </head>
-          <body >
+        </head>
+        <body >
           <Suspense fallback={<Loading />} >
             {children}
-            </Suspense>
-            <ModalSearch />
-            <WhatsApp />
-          </body>
-        </html>
-      </GlobalProvider>
+          </Suspense>
+          <ModalSearch />
+          <WhatsApp />
+        </body>
+      </html>
+    </GlobalProvider>
 
   )
 }

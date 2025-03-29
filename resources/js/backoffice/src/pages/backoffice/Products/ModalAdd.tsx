@@ -119,37 +119,7 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
       if (response?.data?.data?.id) {
         const productId = response.data.data.id;
 
-        if (formData.link.length > 0) {
-
-          if (detailData) {
-            console.log(deleteOldLink)
-            const imageLinks = formData.link?.filter((link) => !link.id)?.map((item) => {
-              PostProductLink({
-                link: item?.link,
-                link_type_id: item?.detail?.id,
-                product_id: productId,
-                variant_id: 0
-              })
-            })
-
-
-
-
-            await Promise.all(imageLinks);
-
-          } else {
-            await formData.link?.map((item) => {
-              PostProductLink({
-                link: item?.link,
-                link_type_id: item?.detail?.id,
-                product_id: productId,
-                variant_id: 0
-              })
-            })
-
-          }
-
-        }
+      
 
 
         if (formData.image_files?.length > 0) {
@@ -177,6 +147,36 @@ export const ModalAdd = ({ isOpen, toggleModal, isCreate, setLoading, detailData
             '_method': 'DELETE'
           }, id)
         })
+
+        if (formData.link.length > 0) {
+
+          if (detailData) {
+            console.log(deleteOldLink)
+            const imageLinks = formData.link?.filter((link) => !link.id)?.map((item) => {
+              PostProductLink({
+                link: item?.link,
+                link_type_id: item?.detail?.id,
+                product_id: productId,
+                variant_id: 0
+              })
+            })
+
+            await Promise.all(imageLinks);
+
+          } else {
+            await formData.link?.map((item) => {
+              PostProductLink({
+                link: item?.link,
+                link_type_id: item?.detail?.id,
+                product_id: productId,
+                variant_id: 0
+              })
+            })
+
+          }
+
+        }
+
 
         await imageDelete.map((id) => {
           PostDeleteProductImage({
