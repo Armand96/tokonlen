@@ -100,30 +100,30 @@ const Shopbreadcrumb: React.FC<Props> = ({ dataType, gender, category }) => {
 
  
 
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-           const resize = () => {
-            if(window.innerWidth >= 1024){
-                document.documentElement.style.overflowY = "auto"
-            }else if(window.innerWidth <= 1024 && openSidebar){
-                document.documentElement.style.overflowY = "hidden"
-            }
-           }
+    // useEffect(() => {
+    //     if (typeof window !== "undefined") {
+    //        const resize = () => {
+    //         if(window.innerWidth >= 1024){
+    //             document.documentElement.style.overflowY = "auto"
+    //         }else if(window.innerWidth <= 1024 && openSidebar){
+    //             document.documentElement.style.overflowY = "hidden"
+    //         }
+    //        }
 
-            window.addEventListener("resize", resize);
+    //         window.addEventListener("resize", resize);
 
-            return () => window.removeEventListener("resize", resize);
-        }
-    }, []);
+    //         return () => window.removeEventListener("resize", resize);
+    //     }
+    // }, []);
 
 
 
     const handleSidebarOpen = (isOpen: boolean) => {
-        if (isOpen) {
-            document.documentElement.style.overflowY = "hidden"
-        } else {
-            document.documentElement.style.overflowY = "auto"
-        }
+        // if (isOpen) {
+        //     document.documentElement.style.overflowY = "hidden"
+        // } else {
+        //     document.documentElement.style.overflowY = "auto"
+        // }
 
         setOpenSidebar(isOpen)
     }

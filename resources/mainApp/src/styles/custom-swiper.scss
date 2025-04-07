@@ -56,7 +56,11 @@
 
 
 .swiper-float .swiper-wrapper {
-    overflow-y: auto !important ;
+    // overflow-y: auto !important ;
+    display: flex !important ;
+    margin-top: 12px ;
+    flex-direction: row !important;
+    position: static !important ;
     cursor: pointer;
 }
 

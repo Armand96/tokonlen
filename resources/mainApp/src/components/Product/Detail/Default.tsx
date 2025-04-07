@@ -127,7 +127,7 @@ const Default: React.FC<Props> = ({ productId }) => {
             <div className="product-detail default">
                 <div className="featured-product underwear md:py-20 py-10">
                     <div className="container flex justify-between gap-y-6 flex-wrap">
-                        <div className="list-img md:w-1/2 md:pr-[45px] overflow-y-hidden w-full ">
+                        <div className="list-img md:w-1/2 md:pr-[45px] overflow-y-hidden  w-full ">
                             {
                                 produk?.images && (
                                     <>
@@ -163,6 +163,7 @@ const Default: React.FC<Props> = ({ productId }) => {
                                             spaceBetween={0}
                                             slidesPerView={4}
                                             freeMode={true}
+                                            loop
                                             watchSlidesProgress={true}
                                             modules={[Navigation, Thumbs]}
                                             className="mySwiper swiper-float"
@@ -180,7 +181,6 @@ const Default: React.FC<Props> = ({ productId }) => {
                                             </SwiperSlide>
                                             ))}
                                         </Swiper>
-
 
                                         <div className={`popup-img ${openPopupImg ? 'open' : ''}`}>
                                             <span
