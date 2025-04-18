@@ -51,6 +51,12 @@ const Index = () => {
     const categoriesList: Dropdown[] = await GetCategories(`?data_per_page=100000`).then((res) => {
       return HelperFunction.FormatOptions(res.data, 'name', 'id')
     })
+
+    if(!isCreate){
+        const selected = categoriesList.filter((item) => item.value == formData.parent_id)[0]
+        setSelectedCategories(selected)
+    }
+
     setCategoriesOptions(categoriesList)
     setDataPaginate(res);
     setLoading(false);
@@ -132,7 +138,7 @@ const Index = () => {
                 <label className="mb-2" htmlFor="choices-text-remove-button">
                   Parent Categories
                 </label>
-                <Select isDisabled={isCreate ? false : true} className="select2 z-5" value={selectedCategories} options={categoriesOptions} onChange={(v) => { setSelectedCategories(v); setFormData({ ...formData, parent_id: v.value }) }} />
+                <Select className="select2 z-5" value={selectedCategories} options={categoriesOptions} onChange={(v) => { setSelectedCategories(v); setFormData({ ...formData, parent_id: v.value }) }} />
               </div>
 
               <div className={`mb-3 ${formData?.parent_id && "hidden" }`}>
