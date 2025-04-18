@@ -52,16 +52,18 @@ const Index = () => {
       return HelperFunction.FormatOptions(res.data, 'name', 'id')
     })
 
-    if(!isCreate){
-        const selected = categoriesList.filter((item) => item.value == formData.parent_id)[0]
-        setSelectedCategories(selected)
-        setCategoriesOptions([...categoriesList, { value: null, label: "Parent Categories" }])
-    }
 
 
     setCategoriesOptions(categoriesList)
     setDataPaginate(res);
     setLoading(false);
+
+
+    if(!isCreate){
+        const selected = categoriesList.filter((item) => item.value == formData.parent_id)[0]
+        setSelectedCategories(selected)
+        setCategoriesOptions([...categoriesList, { value: null, label: "Parent Categories" }])
+    }
   };
 
   useEffect(() => {
