@@ -138,7 +138,18 @@ class CategoryController extends Controller
                 $path = $updateCategory->file('image_file')->storeAs('categories', $imageName, 'public');
                 $validatedData['image'] = $path;
             }
-            $category->update($validatedData);
+
+            if($validatedData['parent_id'] == null || $validatedData['parent_id'] == "null") {
+                $category = Category::find($category->id);
+                $category->parent_id = null;
+                if($validatedData['name']) $category->name = $validatedData['name'];
+                if(isset($validatedData['image'])) $category->image = $validatedData['image'];
+                if($validatedData['is_show_header']) $category->is_show_header = $validatedData['is_show_header'];
+                if($validatedData['is_active']) $category->is_active = $validatedData['is_active'];
+                $category->save();
+            } else {
+                $category->update($validatedData);
+            }
             DB::commit();
             return response()->json(new ResponseSuccess($category, "Success", "Success Update Category"));
         } catch (\Throwable $th) {
