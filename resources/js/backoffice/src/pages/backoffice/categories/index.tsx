@@ -69,7 +69,6 @@ const Index = () => {
   const postData = async () => {
     setLoading(true);
     if (!isCreate) {
-      delete formData.parent_id
       delete formData.image_thumb
       delete formData.image
       delete formData.slug
