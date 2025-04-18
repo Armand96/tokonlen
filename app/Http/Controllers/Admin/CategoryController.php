@@ -61,9 +61,9 @@ class CategoryController extends Controller
             $validatedData = $createCategory->validated();
 
             $isMaxShow = Category::where('is_show_header', true)->count();
-            if ($isMaxShow >= 4) {
-                return response()->json(new ResponseFail((object) null, "Bad Request", "Kategori yang ditampilkan di depan sudah maksimal, mohon untuk mengurangi kategori yang ditampilkan terleih dahulu"), 400);
-            }
+            // if ($isMaxShow >= 4) {
+            //     return response()->json(new ResponseFail((object) null, "Bad Request", "Kategori yang ditampilkan di depan sudah maksimal, mohon untuk mengurangi kategori yang ditampilkan terleih dahulu"), 400);
+            // }
 
             if ($createCategory->hasFile('image_file')) {
                 $imageName = time() . '.' . $createCategory->file('image_file')->extension();
