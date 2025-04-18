@@ -8,7 +8,10 @@ use App\Http\Requests\Category\CategoryUpdateReq;
 use App\Http\Requests\ResponseFail;
 use App\Http\Requests\ResponseSuccess;
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\Variant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -60,7 +63,7 @@ class CategoryController extends Controller
         try {
             $validatedData = $createCategory->validated();
 
-            $isMaxShow = Category::where('is_show_header', true)->count();
+            // $isMaxShow = Category::where('is_show_header', true)->count();
             // if ($isMaxShow >= 4) {
             //     return response()->json(new ResponseFail((object) null, "Bad Request", "Kategori yang ditampilkan di depan sudah maksimal, mohon untuk mengurangi kategori yang ditampilkan terleih dahulu"), 400);
             // }
@@ -106,9 +109,22 @@ class CategoryController extends Controller
     {
         $path = "";
         try {
+            DB::beginTransaction();
             $validatedData = $updateCategory->validated();
 
-            $isMaxShow = Category::where('is_show_header', true)->count();
+            // dd($validatedData);
+            $updatedProduct = [
+                'is_active' => $validatedData['is_active']
+            ];
+            $childCategoryIds = Category::where('parent_id', $category->id)->pluck('id')->toArray();
+            Category::where('parent_id', $category->id)->update($updatedProduct);
+
+            // dd($childCategory);
+            $productIds = Product::where('category_id', $category->id)->orWhereIn('category_id', $childCategoryIds)->pluck('id')->toArray();
+            Product::where('category_id', $category->id)->orWhereIn('category_id', $childCategoryIds)->update($updatedProduct);
+            Variant::whereIn('product_id', $productIds)->update($updatedProduct);
+
+            // $isMaxShow = Category::where('is_show_header', true)->count();
             // if ($isMaxShow >= 4) {
             //     return response()->json(new ResponseFail((object) null, "Bad Request", "Kategori yang ditampilkan di depan sudah maksimal, mohon untuk mengurangi kategori yang ditampilkan terleih dahulu"), 400);
             // }
@@ -123,8 +139,10 @@ class CategoryController extends Controller
                 $validatedData['image'] = $path;
             }
             $category->update($validatedData);
+            DB::commit();
             return response()->json(new ResponseSuccess($category, "Success", "Success Update Category"));
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error($th->getMessage());
             //throw $th;
             return response()->json(new ResponseFail((object) null, "Error", $th->getMessage()), 500);
