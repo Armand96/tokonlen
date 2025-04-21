@@ -15,7 +15,7 @@ const Index = () => {
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<any | PostCategoriesTypes>({ name: '', image_file: '', parent_id: 0, is_active: 1, is_show_header: false });
-  const [isCreate, setIsCreate] = useState<boolean>(false);
+  const [isCreate, setIsCreate] = useState<boolean>(true);
   const [dataPaginate, setDataPaginate] = useState<any>(null);
   const [categoriesOptions, setCategoriesOptions] = useState<any[]>()
   const [selectedCategories, setSelectedCategories] = useState<any>()
@@ -59,12 +59,15 @@ const Index = () => {
     setLoading(false);
 
 
-    if(!isCreate){
-        const selected = categoriesList.filter((item) => item.value == formData.parent_id)[0]
-        setSelectedCategories(selected)
-        setCategoriesOptions([...categoriesList, { value: null, label: "Parent Categories" }])
-    }
+    // if(!isCreate){
+    //     const selected = categoriesList.filter((item) => item.value == formData.parent_id)[0]
+    //     setSelectedCategories(selected)
+    //     // setCategoriesOptions([...categoriesList, { value: null, label: "Parent Categories" }])
+    // }
   };
+
+
+  console.log('categoriesOptions', isCreate)
 
   useEffect(() => {
     fetchData()
@@ -95,7 +98,11 @@ const Index = () => {
     setModal(true);
     setFormData(detail);
     setIsCreate(false);
+    if(detail.parent_id == null){
+      setSelectedCategories({ value: null, label: "Parent Categories" })
+    }else{
     setSelectedCategories(categoriesOptions?.filter((item) => item.value == detail.parent_id)[0])
+    }
   }
 
   const columns = [
@@ -126,11 +133,11 @@ const Index = () => {
       <ModalPreview toggleModal={() => setPreviewImage(false)} isOpen={previewImage} img={formData?.image} />
       {loading && <LoadingScreen />}
       {modal && (
-        <ModalLayout showModal={modal} toggleModal={() => setModal(false)} placement='justify-center items-start'>
+        <ModalLayout showModal={modal} toggleModal={() => {setModal(false);}} placement='justify-center items-start'>
           <div className='m-3 sm:mx-auto flex flex-col bg-white shadow-sm rounded'>
             <div className='flex justify-between items-center py-2.5 px-4 border-b'>
               <h3 className='text-lg'>{isCreate ? 'Tambah Data' : 'Edit Data'}</h3>
-              <button className='h-8 w-8' onClick={() => setModal(false)}>
+              <button className='h-8 w-8' onClick={() => {setModal(false);}}>
                 <i className='ri-close-line text-2xl' />
               </button>
             </div>
@@ -141,7 +148,7 @@ const Index = () => {
                 <label className="mb-2" htmlFor="choices-text-remove-button">
                   Parent Categories
                 </label>
-                <Select className="select2 z-5" value={selectedCategories} options={categoriesOptions} onChange={(v) => { setSelectedCategories(v); setFormData({ ...formData, parent_id: v.value }) }} />
+                <Select isDisabled={ selectedCategories?.label === "Parent Categories"  } className="select2 z-5" value={selectedCategories} options={categoriesOptions} onChange={(v) => { setSelectedCategories(v); setFormData({ ...formData, parent_id: v.value }) }} />
               </div>
 
               <div className={`mb-3 ${formData?.parent_id && "hidden" }`}>
